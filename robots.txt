@@ -1,0 +1,7 @@
+# robots.txt for IA-TEMS & UkrPellet
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://ukrpellet.ua/sitemap.xml
