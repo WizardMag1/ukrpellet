@@ -1,5 +1,5 @@
 /**
- * IA-TEMS & UkrPellet — Ad Tracking & UTM Attribution Engine
+ * UkrEcoPelleta & ТОВ «УКРЕКОПЕЛЕТА» — Ad Tracking & UTM Attribution Engine
  * Supports: Meta Pixel (Facebook & Instagram), Google Analytics 4, Google Ads Conversions, UTM Capture
  */
 
@@ -171,7 +171,7 @@
       });
     }
 
-    console.log('%c[UkrPellet Ads]%c Tracking engine ready. Run %cwindow.testAdConversion()%c to test.', 
+    console.log('%c[UkrEcoPelleta Ads]%c Tracking engine ready. Run %cwindow.testAdConversion()%c to test.', 
       'color: #22c55e; font-weight: bold;', 
       'color: inherit;', 
       'color: #0284c7; font-weight: bold;', 

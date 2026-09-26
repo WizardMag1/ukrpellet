@@ -1,5 +1,5 @@
 /**
- * IA-TEMS & UkrPellet — Main Application Scripts
+ * UkrEcoPelleta & ТОВ «УКРЕКОПЕЛЕТА» — Main Application Scripts
  * Mobile navigation, modal dialogues, toast feedback, form submission, ad tracking
  */
 

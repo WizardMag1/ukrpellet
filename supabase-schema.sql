@@ -1,5 +1,5 @@
 -- ============================================================================
--- IA-TEMS & UkrPellet — Supabase Database Schema
+-- UkrEcoPelleta & ТОВ «УКРЕКОПЕЛЕТА» — Supabase Database Schema
 -- Run this in your Supabase SQL Editor (100% Free Plan)
 -- ============================================================================
 

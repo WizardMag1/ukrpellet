@@ -1,5 +1,5 @@
 /**
- * IA-TEMS & UkrPellet — Ad & Analytics Configuration
+ * UkrEcoPelleta & ТОВ «УКРЕКОПЕЛЕТА» — Ad & Analytics Configuration
  * Simply fill in your Pixel and Analytics IDs below to activate tracking.
  */
 

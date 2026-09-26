@@ -1,5 +1,5 @@
 ﻿/**
- * IA-TEMS & UkrPellet — Bilingual Localization Engine (Ukrainian & English)
+ * UkrEcoPelleta & ТОВ «УКРЕКОПЕЛЕТА» — Bilingual Localization Engine (Ukrainian & English)
  */
 
 const translations = {
@@ -22,14 +22,14 @@ const translations = {
     "nav.quote_btn": "Швидкий розрахунок",
 
     // Brand
-    "brand.title": "Ukr<span>Pellet</span>",
+    "brand.title": "UkrEco<span>Pelleta</span>",
     "brand.corp_sub": "ТОВ «УКРЕКОПЕЛЕТА»",
     "brand.badge_nikopol": "Виробник • м. Нікополь",
 
     // Hero Corporate (index.html)
     "hero.corp_badge": "Екологічне біопаливо європейського стандарту",
     "hero.corp_title": "Промислове виробництво деревних паливних гранул в Україні",
-    "hero.corp_desc": "ТОВ «УКРЕКОПЕЛЕТА» (UkrPellet) — надійний український виробник твердого біопалива. Сучасні автоматизовані лінії гранулювання у м. Нікополь, стабільні оптові поставки, суворий контроль якості та енергонезалежність для вашого бізнесу.",
+    "hero.corp_desc": "ТОВ «УКРЕКОПЕЛЕТА» (UkrEcoPelleta) — надійний український виробник твердого біопалива. Сучасні автоматизовані лінії гранулювання у м. Нікополь, стабільні оптові поставки, суворий контроль якості та енергонезалежність для вашого бізнесу.",
     "hero.corp_btn_catalog": "Каталог пелет та оптові умови",
     "hero.corp_btn_about": "Про наші потужності",
 
@@ -55,7 +55,7 @@ const translations = {
     // Corporate Overview ("What we have & what we do")
     "corp.tag": "Потужності та напрямки діяльності",
     "corp.title": "Що ми маємо та чим займаємось",
-    "corp.lead": "IA-TEMS об'єднує повний виробничий цикл переробки натуральної деревини в якісне біопаливо з власною складською та логістичною інфраструктурою.",
+    "corp.lead": "ТОВ «УКРЕКОПЕЛЕТА» (UkrEcoPelleta) об'єднує повний виробничий цикл переробки натуральної деревини в якісне біопаливо з власною складською та логістичною інфраструктурою.",
     
     "corp.f1_title": "Сучасне обладнання у м. Нікополь",
     "corp.f1_desc": "Потужні лінії подрібнення, барабанні сушарки з автоматичним контролем температури та високоточні преси-гранулятори, що забезпечують стабільну щільність кожної гранули.",
@@ -212,7 +212,7 @@ const translations = {
     "form.success_msg": "Дякуємо! Ваша заявка прийнята. Менеджер зв'яжеться з вами найближчим часом.",
 
     // Footer
-    "footer.about_corp": "UkrPellet / ТОВ «УКРЕКОПЕЛЕТА» — виробничий комплекс твердого біопалива у Дніпропетровській області. Стабільне тепло для вашого виробництва.",
+    "footer.about_corp": "UkrEcoPelleta / ТОВ «УКРЕКОПЕЛЕТА» — виробничий комплекс твердого біопалива у Дніпропетровській області. Стабільне тепло для вашого виробництва.",
     "footer.nav_title": "Навігація",
     "footer.products_title": "Продукція",
     "footer.pellets_6mm": "Пелети деревні 6 мм (A1)",
@@ -221,7 +221,7 @@ const translations = {
     "footer.contacts_title": "Контакти заводу",
     "footer.address": "м. Нікополь, Дніпропетровська обл., Україна",
     "footer.working_hours": "Пн-Пт: 08:00 – 18:00, Сб: 09:00 – 15:00",
-    "footer.rights": "© 2026 ТОВ «УКРЕКОПЕЛЕТА» / UkrPellet. Всі права захищено."
+    "footer.rights": "© 2026 ТОВ «УКРЕКОПЕЛЕТА» / UkrEcoPelleta. Всі права захищено."
   },
 
   en: {
@@ -243,14 +243,14 @@ const translations = {
     "nav.quote_btn": "Quick Quote",
 
     // Brand
-    "brand.title": "Ukr<span>Pellet</span>",
+    "brand.title": "UkrEco<span>Pelleta</span>",
     "brand.corp_sub": "UKREKOPELLET, LLC",
     "brand.badge_nikopol": "Manufacturer • Nikopol, UA",
 
     // Hero Corporate (index.html)
     "hero.corp_badge": "Eco-friendly Biofuel of European Standard",
     "hero.corp_title": "Industrial Wood Fuel Pellet Manufacturing in Ukraine",
-    "hero.corp_desc": "UKREKOPELLET, LLC (UkrPellet) is a reliable Ukrainian solid biofuel producer. Automated pelletizing lines in Nikopol, steady wholesale supplies, strict quality lab control, and energy independence for your enterprise.",
+    "hero.corp_desc": "UKREKOPELLET, LLC (UkrEcoPelleta) is a reliable Ukrainian solid biofuel producer. Automated pelletizing lines in Nikopol, steady wholesale supplies, strict quality lab control, and energy independence for your enterprise.",
     "hero.corp_btn_catalog": "Wood Pellet Catalog & Wholesale Terms",
     "hero.corp_btn_about": "Our Production Capacity",
 
@@ -276,7 +276,7 @@ const translations = {
     // Corporate Overview ("What we have & what we do")
     "corp.tag": "Capabilities & Core Operations",
     "corp.title": "What We Have & What We Do",
-    "corp.lead": "IA-TEMS integrates a complete manufacturing cycle transforming natural wood into high-grade biomass fuel, backed by extensive storage and logistics infrastructure.",
+    "corp.lead": "UKREKOPELLET, LLC (UkrEcoPelleta) integrates a complete manufacturing cycle transforming natural wood into high-grade biomass fuel, backed by extensive storage and logistics infrastructure.",
     
     "corp.f1_title": "Modern Equipment in Nikopol",
     "corp.f1_desc": "Heavy-duty chipping lines, automated drum dryers with precise thermal control, and high-pressure granulators guaranteeing consistent density and shape for every pellet.",
@@ -433,7 +433,7 @@ const translations = {
     "form.success_msg": "Thank you! Your request has been received. Our sales manager will contact you shortly.",
 
     // Footer
-    "footer.about_corp": "UkrPellet / UKREKOPELLET, LLC is an industrial solid biofuel complex in Dnipropetrovsk region. Reliable heat for your enterprise.",
+    "footer.about_corp": "UkrEcoPelleta / UKREKOPELLET, LLC is an industrial solid biofuel complex in Dnipropetrovsk region. Reliable heat for your enterprise.",
     "footer.nav_title": "Navigation",
     "footer.products_title": "Products",
     "footer.pellets_6mm": "Wood Pellets 6 mm (A1)",
@@ -442,7 +442,7 @@ const translations = {
     "footer.contacts_title": "Plant Contacts",
     "footer.address": "Nikopol, Dnipropetrovsk region, Ukraine",
     "footer.working_hours": "Mon-Fri: 08:00 – 18:00, Sat: 09:00 – 15:00",
-    "footer.rights": "© 2026 UKREKOPELLET, LLC / UkrPellet. All rights reserved."
+    "footer.rights": "© 2026 UKREKOPELLET, LLC / UkrEcoPelleta. All rights reserved."
   }
 };
 

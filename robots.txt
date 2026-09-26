@@ -1,4 +1,4 @@
-# robots.txt for IA-TEMS & UkrPellet
+# robots.txt for UkrEcoPelleta & ТОВ «УКРЕКОПЕЛЕТА»
 User-agent: *
 Allow: /
 Disallow: /api/

@@ -1,4 +1,4 @@
-// Vercel Edge-compatible serverless function for UkrPellet
+// Vercel Edge-compatible serverless function for UkrEcoPelleta
 // - Saves B2B lead to Supabase REST API (free auth + PostgreSQL DB)
 // - Sends rich HTML notification to company email via Resend API
 // - Fires instant Telegram Bot alert on mobile
@@ -9,7 +9,7 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || '';
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '';
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
-const LEAD_EMAIL_FROM = process.env.LEAD_EMAIL_FROM || 'UkrPellet Leads <onboarding@resend.dev>';
+const LEAD_EMAIL_FROM = process.env.LEAD_EMAIL_FROM || 'UkrEcoPelleta Leads <onboarding@resend.dev>';
 const LEAD_EMAIL_TO = process.env.LEAD_EMAIL_TO || 'sales@ukrpellet.ua';
 
 export default async function handler(req, res) {
@@ -99,7 +99,7 @@ export default async function handler(req, res) {
   <div class="card">
     <div class="header">
       <h1>🟢 Нова B2B Заявка на пелети</h1>
-      <p>Сайт UkrPellet / ТОВ «УКРЕКОПЕЛЕТА» • ${timestamp}</p>
+      <p>Сайт UkrEcoPelleta / ТОВ «УКРЕКОПЕЛЕТА» • ${timestamp}</p>
     </div>
     <div class="body">
       <table class="info-table">
@@ -147,7 +147,7 @@ export default async function handler(req, res) {
       </div>
     </div>
     <div class="footer">
-      Повідомлення згенеровано автоматично формою сайту UkrPellet (Нікополь, Дніпропетровська обл.).
+      Повідомлення згенеровано автоматично формою сайту UkrEcoPelleta (Нікополь, Дніпропетровська обл.).
     </div>
   </div>
 </body>
@@ -180,7 +180,7 @@ export default async function handler(req, res) {
   // ── 3. Send Telegram Bot notification ─────────────────────────────────────
   if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
     const msg = [
-      '🟢 НОВА B2B ЗАЯВКА (UkrEcoPellet)',
+      '🟢 НОВА B2B ЗАЯВКА (UkrEcoPelleta)',
       '────────────────────────',
       `👤 Ім'я: ${lead.name || '—'}`,
       `📞 Телефон: ${lead.phone || '—'}`,

@@ -1,8 +1,8 @@
 {
-  "name": "ia-tems-ukrpellet",
+  "name": "ukrekopelleta",
   "version": "1.0.0",
   "type": "module",
-  "description": "Corporate website for IA-TEMS & Regional Wood Pellet Sales Landing for Dnipro region (UkrPellet)",
+  "description": "Corporate website for UkrEcoPelleta & Regional Wood Pellet Sales Landing for Dnipro region (ТОВ «УКРЕКОПЕЛЕТА»)",
   "scripts": {
     "start": "npx serve . -l 3000",
     "dev": "npx serve . -l 3000",
@@ -11,11 +11,12 @@
   "keywords": [
     "wood-pellets",
     "biofuel",
-    "ukrpellet",
+    "ukrekopelleta",
+    "ukrekopellet",
     "nikopol",
     "dnipro",
-    "ia-tems"
+    "biomass"
   ],
-  "author": "IA-TEMS / UkrPellet",
+  "author": "UkrEcoPelleta / ТОВ «УКРЕКОПЕЛЕТА»",
   "license": "ISC"
 }

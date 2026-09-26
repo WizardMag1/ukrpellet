@@ -1,5 +1,5 @@
 /**
- * IA-TEMS & UkrPellet — Interactive Pellet Volume & Regional Logistics Calculator
+ * UkrEcoPelleta & ТОВ «УКРЕКОПЕЛЕТА» — Interactive Pellet Volume & Regional Logistics Calculator
  */
 
 document.addEventListener('DOMContentLoaded', () => {
