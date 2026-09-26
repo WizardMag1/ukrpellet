@@ -48,6 +48,21 @@
       "source": "/pelety-optom.html",
       "destination": "/pelety-optom",
       "permanent": true
+    },
+    {
+      "source": "/pelety-kryvyi-rih.html",
+      "destination": "/pelety-kryvyi-rih",
+      "permanent": true
+    },
+    {
+      "source": "/pelety-kamianske.html",
+      "destination": "/pelety-kamianske",
+      "permanent": true
+    },
+    {
+      "source": "/pelety-pavlohrad.html",
+      "destination": "/pelety-pavlohrad",
+      "permanent": true
     }
   ],
   "headers": [

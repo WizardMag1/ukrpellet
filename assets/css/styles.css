@@ -119,7 +119,7 @@ ul, ol {
 }
 
 /* Typography Helpers */
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, .footer-heading {
   font-family: var(--font-family-heading);
   color: var(--color-text-main);
   line-height: 1.25;
@@ -1237,7 +1237,8 @@ dialog.contact-modal::backdrop {
   margin-bottom: 3.5rem;
 }
 
-.footer-col h4 {
+.footer-col h4,
+.footer-col .footer-heading {
   color: #ffffff;
   font-size: 1.1rem;
   margin-bottom: 1.25rem;
