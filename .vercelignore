@@ -7,3 +7,4 @@ supabase-schema.sql
 .env
 .env.*
 .claude/
+cloudflare/

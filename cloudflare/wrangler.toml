@@ -1,0 +1,14 @@
+name = "ukrecopelleta-edge"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+workers_dev = false
+
+# Custom domains: Cloudflare creates the DNS records for these automatically
+routes = [
+  { pattern = "ukrecopelleta.org", custom_domain = true },
+  { pattern = "www.ukrecopelleta.org", custom_domain = true }
+]
+
+[vars]
+ORIGIN = "ukrpellet-ua.vercel.app"
+CANONICAL_HOST = "ukrecopelleta.org"

@@ -1,6 +1,9 @@
 # Deploy & ranking checklist — ukrecopelleta.org
 
-Hosting: **Vercel** (static pages + `api/lead.js`), with **Cloudflare** in front for DNS, SSL and caching.
+Hosting: **Vercel** project `ukrecopelleta` builds the site (static pages + `api/lead.js`) from `master`.
+The domain **ukrecopelleta.org** is served by the Cloudflare Worker `ukrecopelleta-edge` (`cloudflare/`), attached as a
+custom domain. It 301-redirects `www` to the main domain and proxies all requests to `ukrpellet-ua.vercel.app`. To redeploy the Worker:
+`cd cloudflare && npx wrangler deploy`. Site changes only need `git push`; the Worker needs no changes.
 Before every deploy, run `npm run check`. It must print `✓ SEO check passed`; CI runs the same check.
 
 ## A. First deploy (one time, ~30 min)
