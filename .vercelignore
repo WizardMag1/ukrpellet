@@ -6,3 +6,4 @@ scripts/
 supabase-schema.sql
 .env
 .env.*
+.claude/

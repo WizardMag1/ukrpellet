@@ -49,6 +49,9 @@
 ## Основні розділи сайту
 - Головний корпоративний портал: https://ukrecopeleta.com.ua/
 - Оптовий лендінг та онлайн-калькулятор пелет: https://ukrecopeleta.com.ua/pellets
+- Купити пелети в Нікополі (самовивіз від 1 біг-бега): https://ukrecopeleta.com.ua/pelety-nikopol
+- Пелети в Дніпрі та Дніпропетровській області (доставка від 15 т): https://ukrecopeleta.com.ua/pelety-dnipro
+- Пелети оптом від виробника по Україні: https://ukrecopeleta.com.ua/pelety-optom
 - Публічна оферта оптової поставки: https://ukrecopeleta.com.ua/oferta
 - Політика конфіденційності: https://ukrecopeleta.com.ua/privacy
 - Карта сайту (Sitemap): https://ukrecopeleta.com.ua/sitemap.xml

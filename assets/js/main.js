@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 3. Modal Dialog Controller
   const contactModal = document.getElementById('contact-dialog');
-  const openModalBtns = document.querySelectorAll('[data-open-modal]');
+  const openModalBtns = document.querySelectorAll('[data-open-modal], .js-open-modal');
   const closeModalBtns = document.querySelectorAll('[data-close-modal]');
 
   openModalBtns.forEach(btn => {
