@@ -4,8 +4,8 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const DOMAIN = 'https://ukrecopeleta.com.ua';
-const STALE = ['ocrecopiliata', 'ukrpellet.ua', 'ia-tems.com', 'iatems.ua'];
+const DOMAIN = 'https://ukrecopelleta.org';
+const STALE = ['ocrecopiliata', 'ukrpellet.ua', 'ukrecopeleta.com.ua', 'ia-tems.com', 'iatems.ua'];
 const SCAN_EXT = ['.html', '.js', '.txt', '.xml', '.json', '.webmanifest'];
 const SKIP_DIRS = ['node_modules', '.git', 'docs', 'scripts', '.vercel'];
 

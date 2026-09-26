@@ -8,10 +8,10 @@
       "has": [
         {
           "type": "host",
-          "value": "www.ukrecopeleta.com.ua"
+          "value": "www.ukrecopelleta.org"
         }
       ],
-      "destination": "https://ukrecopeleta.com.ua/:path",
+      "destination": "https://ukrecopelleta.org/:path",
       "permanent": true
     },
     {

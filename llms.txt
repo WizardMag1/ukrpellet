@@ -41,20 +41,20 @@
 
 ## Контактна інформація
 - **Телефон відділу продажу**: +38 (066) 403-53-96 (+380664035396)
-- **Email**: sales@ukrecopeleta.com.ua
+- **Email**: sales@ukrecopelleta.org
 - **Прямий зв'язок у Telegram**: https://t.me/+380664035396
-- **Офіційний сайт**: https://ukrecopeleta.com.ua
+- **Офіційний сайт**: https://ukrecopelleta.org
 - **Графік роботи**: Понеділок – П'ятниця: 08:00 – 18:00. Субота: за попередньою домовленістю. Неділя: вихідний.
 
 ## Основні розділи сайту
-- Головний корпоративний портал: https://ukrecopeleta.com.ua/
-- Оптовий лендінг та онлайн-калькулятор пелет: https://ukrecopeleta.com.ua/pellets
-- Купити пелети в Нікополі (самовивіз від 1 біг-бега): https://ukrecopeleta.com.ua/pelety-nikopol
-- Пелети в Дніпрі та Дніпропетровській області (доставка від 15 т): https://ukrecopeleta.com.ua/pelety-dnipro
-- Пелети оптом від виробника по Україні: https://ukrecopeleta.com.ua/pelety-optom
-- Пелети Кривий Ріг (доставка від 15 т): https://ukrecopeleta.com.ua/pelety-kryvyi-rih
-- Пелети Кам'янське (доставка від 15 т): https://ukrecopeleta.com.ua/pelety-kamianske
-- Пелети Павлоград (доставка від 15 т): https://ukrecopeleta.com.ua/pelety-pavlohrad
-- Публічна оферта оптової поставки: https://ukrecopeleta.com.ua/oferta
-- Політика конфіденційності: https://ukrecopeleta.com.ua/privacy
-- Карта сайту (Sitemap): https://ukrecopeleta.com.ua/sitemap.xml
+- Головний корпоративний портал: https://ukrecopelleta.org/
+- Оптовий лендінг та онлайн-калькулятор пелет: https://ukrecopelleta.org/pellets
+- Купити пелети в Нікополі (самовивіз від 1 біг-бега): https://ukrecopelleta.org/pelety-nikopol
+- Пелети в Дніпрі та Дніпропетровській області (доставка від 15 т): https://ukrecopelleta.org/pelety-dnipro
+- Пелети оптом від виробника по Україні: https://ukrecopelleta.org/pelety-optom
+- Пелети Кривий Ріг (доставка від 15 т): https://ukrecopelleta.org/pelety-kryvyi-rih
+- Пелети Кам'янське (доставка від 15 т): https://ukrecopelleta.org/pelety-kamianske
+- Пелети Павлоград (доставка від 15 т): https://ukrecopelleta.org/pelety-pavlohrad
+- Публічна оферта оптової поставки: https://ukrecopelleta.org/oferta
+- Політика конфіденційності: https://ukrecopelleta.org/privacy
+- Карта сайту (Sitemap): https://ukrecopelleta.org/sitemap.xml

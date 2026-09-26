@@ -10,8 +10,8 @@ const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '';
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 const LEAD_EMAIL_FROM = process.env.LEAD_EMAIL_FROM || 'UkrEcoPelleta Leads <onboarding@resend.dev>';
-const LEAD_EMAIL_TO = process.env.LEAD_EMAIL_TO || 'sales@ukrecopeleta.com.ua';
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'https://ukrecopeleta.com.ua';
+const LEAD_EMAIL_TO = process.env.LEAD_EMAIL_TO || 'sales@ukrecopelleta.org';
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'https://ukrecopelleta.org';
 
 // Escape user input before embedding it in the HTML email
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));

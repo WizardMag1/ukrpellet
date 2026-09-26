@@ -38,7 +38,7 @@ Complete free-tier infrastructure for instant B2B lead capture and alerts.
 
 ## 4. Connect Your Domain (Optional)
 - Vercel Dashboard → Project → Settings → Domains
-- Add `ukrecopeleta.com.ua` (CNAME → `cname.vercel-dns.com`)
+- Add `ukrecopelleta.org` (CNAME → `cname.vercel-dns.com`)
 
 ## 5. Test the Lead Pipeline
 - Open your deployed site → fill the form → submit
