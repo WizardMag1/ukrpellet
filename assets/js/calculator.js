@@ -58,10 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Check regional delivery constraints
-    // Minimum order: 15 big-bags × ~975 kg ≈ 14.6 tonnes. Threshold ≈ 14.5 т.
+    // Minimum order: strictly at least 15 tonnes (from 15 big-bags)
     const selectedCity = citySelect ? citySelect.value : 'dnipro';
     const isNikopolPickup = selectedCity === 'nikopol_pickup';
-    const meetsMinOrder = bigBags >= 15;
+    const meetsMinOrder = tons >= 15;
 
     if (minOrderAlert) {
       if (isNikopolPickup) {
@@ -69,10 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
         minOrderAlert.innerHTML = `<span>✔ Самовивіз у м. Нікополь: можливе відвантаження від 1 біг-бега за попереднім узгодженням.</span>`;
       } else if (meetsMinOrder) {
         minOrderAlert.className = 'min-order-indicator min-order-ok';
-        minOrderAlert.innerHTML = `<span data-i18n="calc.min_alert_ok">✔ Об'єм відповідає умовам регіональної доставки (від 15 біг-бегів ≈ 14–15 т).</span>`;
+        minOrderAlert.innerHTML = `<span data-i18n="calc.min_alert_ok">✔ Об'єм відповідає умовам регіональної доставки (не менше 15 тонн / від 15 біг-бегів).</span>`;
       } else {
         minOrderAlert.className = 'min-order-indicator min-order-warn';
-        minOrderAlert.innerHTML = `<span data-i18n="calc.min_alert_warn">⚠ Увага: для доставки по області мінімальна партія становить 15 біг-бегів (≈ 14–15 т). Для менших обсягів доступний самовивіз у м. Нікополь або індивідуальне узгодження.</span>`;
+        minOrderAlert.innerHTML = `<span data-i18n="calc.min_alert_warn">⚠ Увага: для доставки по області мінімальна партія становить не менше 15 тонн (від 15 біг-бегів). Для менших обсягів доступний самовивіз у м. Нікополь або індивідуальне узгодження.</span>`;
       }
     }
   }
