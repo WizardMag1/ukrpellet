@@ -6,7 +6,7 @@ const translations = {
   uk: {
     // Top Bar
     "topbar.hub": "Виробнича база: м. Нікополь, Дніпропетровська обл.",
-    "topbar.min_order": "Опт по області: від 15 біг-бегів (≈ 9–10 тонн)",
+    "topbar.min_order": "Опт по області: від 15 біг-бегів (≈ 14–15 тонн)",
     "topbar.phone": "+38 (066) 403-53-96",
     "topbar.email": "sales@ukrpellet.ua",
 
@@ -38,7 +38,7 @@ const translations = {
     "hero.pellet_title": "Деревні паливні пелети оптом від виробника у м. Нікополь",
     "hero.pellet_desc": "Високоефективні гранули без хімічних домішок для промислових котелень, підприємств та приватних комплексів. Пряма відвантаження зі складу, паспорт якості, доставка по Дніпропетровській області та Україні.",
     "hero.pellet_regional_strong": "Регіональне постачання: Дніпропетровська область та прилеглі райони",
-    "hero.pellet_regional_sub": "Мінімальне замовлення для доставки по області — від 15 біг-бегів (≈ 9–10 тонн). Самовивіз у м. Нікополь — за домовленістю.",
+    "hero.pellet_regional_sub": "Мінімальне замовлення для доставки по області — від 15 біг-бегів (≈ 14–15 тонн). Самовивіз у м. Нікополь — за домовленістю.",
     "hero.pellet_calc_btn": "Розрахувати партію",
     "hero.pellet_order_btn": "Замовити дзвінок",
 
@@ -49,7 +49,7 @@ const translations = {
     "stat.calorific_lbl": "Теплота згоряння",
     "stat.ash_val": "< 0.6%",
     "stat.ash_lbl": "Мінімальна зольність",
-    "stat.fleet_val": "≈ 9–10 т",
+    "stat.fleet_val": "≈ 14–15 т",
     "stat.fleet_lbl": "Мін. партія доставки по області",
 
     // Corporate Overview ("What we have & what we do")
@@ -107,12 +107,12 @@ const translations = {
     // Packaging Section
     "pack.tag": "Варіанти фасування",
     "pack.title": "Зручна тара під ваші потреби",
-    "pack.b1_title": "Біг-Бег (600–650 кг)",
+    "pack.b1_title": "Біг-Бег (950–1000 кг)",
     "pack.b1_badge": "Основний стандарт для B2B",
     "pack.b1_desc": "Посилені чотиристоропні мішки (Big-Bag) з вологозахисним поліетиленовим вкладишем. Оптимально для промислових котелень, зерносушарок та великих складів.",
-    "pack.b1_feature1": "Маса: 600–650 кг (залежно від щільності навантаження)",
+    "pack.b1_feature1": "Маса: 950–1000 кг (залежно від щільності навантаження)",
     "pack.b1_feature2": "Зручне вивантаження краном-маніпулятором або навантажувачем",
-    "pack.b1_feature3": "Оптимально для формування партій від 15 біг-бегів (≈ 9–10 тонн)",
+    "pack.b1_feature3": "Оптимально для формування партій від 15 біг-бегів (≈ 14–15 тонн)",
 
     "pack.b2_title": "Пакети по 15 кг на піддонах",
     "pack.b2_badge": "За запитом",
@@ -127,7 +127,7 @@ const translations = {
     "calc.lead": "Вкажіть необхідну кількість тонн або оберіть місто у Дніпропетровській області для попереднього розрахунку.",
     
     "calc.label_tons": "Кількість тонн:",
-    "calc.label_bags": "Кількість Біг-Бегів (600–650 кг/шт):",
+    "calc.label_bags": "Кількість Біг-Бегів (950–1000 кг/шт):",
     "calc.label_region": "Місто / Напрямок доставки:",
     "calc.option_dnipro": "м. Дніпро (доставка вантажівкою)",
     "calc.option_kamianske": "м. Кам'янське",
@@ -143,8 +143,8 @@ const translations = {
     "calc.res_tons": "Загальний тоннаж:",
     "calc.res_bags": "Кількість Біг-Бегів:",
     "calc.res_energy": "Орієнтовна теплоенергія:",
-    "calc.min_alert_ok": "✔ Об'єм відповідає умовам регіональної доставки (від 15 біг-бегів ≈ 9–10 т).",
-    "calc.min_alert_warn": "⚠ Увага: для доставки по області мінімальна партія становить 15 біг-бегів (≈ 9–10 т). Для менших обсягів доступний самовивіз у м. Нікополь або індивідуальне узгодження.",
+    "calc.min_alert_ok": "✔ Об'єм відповідає умовам регіональної доставки (від 15 біг-бегів ≈ 14–15 т).",
+    "calc.min_alert_warn": "⚠ Увага: для доставки по області мінімальна партія становить 15 біг-бегів (≈ 14–15 т). Для менших обсягів доступний самовивіз у м. Нікополь або індивідуальне узгодження.",
     "calc.submit_btn": "Отримати точну ціну з доставкою",
 
     // Regional Delivery Info
@@ -160,7 +160,7 @@ const translations = {
     "deliv.city_ua": "Вся Україна",
     "deliv.city_pl": "Польща (Експортний напрямок)",
     "deliv.rule_title": "Умови регіонального відвантаження:",
-    "deliv.rule_1": "<strong>Мінімальний обсяг:</strong> від 15 біг-бегів (≈ 9–10 тонн) для доставки автотранспортом по Дніпропетровській області.",
+    "deliv.rule_1": "<strong>Мінімальний обсяг:</strong> від 15 біг-бегів (≈ 14–15 тонн) для доставки автотранспортом по Дніпропетровській області.",
     "deliv.rule_2": "<strong>Самовивіз:</strong> зі складу заводу в Нікополі можливий партіями за погодженням з відділом збуту.",
     "deliv.rule_3": "<strong>Транспорт:</strong> тентовані довгоміри (фури 22-24 т) з бічним та заднім завантаженням.",
     "deliv.rule_4": "<strong>Документи:</strong> повний пакет супровідної документації, ТТН та паспорт якості.",
@@ -169,7 +169,7 @@ const translations = {
     "faq.tag": "Часті запитання",
     "faq.title": "Все, що потрібно знати перед замовленням",
     "faq.q1": "Чому мінімальне замовлення для області складає 15 біг-бегів?",
-    "faq.a1": "15 біг-бегів (≈ 9–10 тонн, по 600–650 кг) — це оптимальне логістичне завантаження для великогабаритного вантажного транспорту, що дозволяє зберегти для вас мінімальну собівартість перевезення на тонну палива. Для самовивозу безпосередньо зі складу в м. Нікополь умови можуть бути гнучкішими.",
+    "faq.a1": "15 біг-бегів (≈ 14–15 тонн, по 950–1000 кг) — це оптимальне логістичне завантаження для великогабаритного вантажного транспорту, що дозволяє зберегти для вас мінімальну собівартість перевезення на тонну палива. Для самовивозу безпосередньо зі складу в м. Нікополь умови можуть бути гнучкішими.",
     "faq.q2": "Яка деревина використовується для виробництва?",
     "faq.a2": "Ми використовуємо екологічно чисту технічну деревину та відходи лісопиляння без кори, домішок і хімічних сполучників. Основна сировина — чиста сосна або комбінація сосни з акацією та берестом. Точний склад та поточні характеристики надаються нашим менеджером при оформленні заявки.",
     "faq.q3": "Як швидко здійснюється доставка до Дніпра чи Кривого Рогу?",
@@ -211,7 +211,7 @@ const translations = {
     "footer.products_title": "Продукція",
     "footer.pellets_6mm": "Пелети деревні 6 мм (A1)",
     "footer.pellets_8mm": "Пелети промислові 8 мм",
-    "footer.big_bags": "Фасування в Біг-Беги (600–650 кг)",
+    "footer.big_bags": "Фасування в Біг-Беги (950–1000 кг)",
     "footer.contacts_title": "Контакти заводу",
     "footer.address": "м. Нікополь, Дніпропетровська обл., Україна",
     "footer.working_hours": "Пн-Пт: 08:00 – 18:00, Сб: 09:00 – 15:00",
@@ -221,7 +221,7 @@ const translations = {
   en: {
     // Top Bar
     "topbar.hub": "Production Facility: Nikopol, Dnipropetrovsk region, Ukraine",
-    "topbar.min_order": "Regional Wholesale: from 15 Big Bags (≈ 9–10 tonnes)",
+    "topbar.min_order": "Regional Wholesale: from 15 Big Bags (≈ 14–15 tonnes)",
     "topbar.phone": "+38 (066) 403-53-96",
     "topbar.email": "sales@ukrpellet.ua",
 
@@ -253,7 +253,7 @@ const translations = {
     "hero.pellet_title": "Premium Wood Fuel Pellets Direct from Manufacturer in Nikopol",
     "hero.pellet_desc": "High-efficiency biofuel pellets without synthetic additives for industrial heating boilers, agricultural facilities, and commercial buildings. Direct warehouse shipping, quality certificates, delivery across Dnipropetrovsk region and Ukraine.",
     "hero.pellet_regional_strong": "Regional Logistics: Dnipro Region & Surrounding Areas",
-    "hero.pellet_regional_sub": "Minimum order for regional delivery: 15 Big Bags (≈ 9–10 tonnes). Warehouse pickup in Nikopol available upon prior agreement.",
+    "hero.pellet_regional_sub": "Minimum order for regional delivery: 15 Big Bags (≈ 14–15 tonnes). Warehouse pickup in Nikopol available upon prior agreement.",
     "hero.pellet_calc_btn": "Calculate Your Batch",
     "hero.pellet_order_btn": "Request Call",
 
@@ -264,7 +264,7 @@ const translations = {
     "stat.calorific_lbl": "Calorific Heating Value",
     "stat.ash_val": "< 0.6%",
     "stat.ash_lbl": "Low Ash Content",
-    "stat.fleet_val": "≈ 9–10 t",
+    "stat.fleet_val": "≈ 14–15 t",
     "stat.fleet_lbl": "Min Regional Delivery Order",
 
     // Corporate Overview ("What we have & what we do")
@@ -322,12 +322,12 @@ const translations = {
     // Packaging Section
     "pack.tag": "Packaging Options",
     "pack.title": "Convenient Packaging for Your Operations",
-    "pack.b1_title": "Big-Bag (600–650 kg)",
+    "pack.b1_title": "Big-Bag (950–1000 kg)",
     "pack.b1_badge": "Primary B2B Standard",
     "pack.b1_desc": "Heavy-duty 4-loop Big Bags equipped with moisture-resistant polyethylene liners. Ideal for industrial boiler houses, grain dryers, and large heating facilities.",
-    "pack.b1_feature1": "Weight: 600–650 kg (depending on fill density)",
+    "pack.b1_feature1": "Weight: 950–1000 kg (depending on fill density)",
     "pack.b1_feature2": "Convenient crane or forklift unloading",
-    "pack.b1_feature3": "Optimal for 15+ Big-Bag freight orders (≈ 9–10 tonnes)",
+    "pack.b1_feature3": "Optimal for 15+ Big-Bag freight orders (≈ 14–15 tonnes)",
 
     "pack.b2_title": "15 kg Poly Bags on Pallets",
     "pack.b2_badge": "Upon Request",
@@ -342,7 +342,7 @@ const translations = {
     "calc.lead": "Enter required tonnage or select your destination in the Dnipro region for an instant estimate.",
     
     "calc.label_tons": "Tonnage required:",
-    "calc.label_bags": "Number of Big Bags (600–650 kg each):",
+    "calc.label_bags": "Number of Big Bags (950–1000 kg each):",
     "calc.label_region": "Delivery Destination:",
     "calc.option_dnipro": "Dnipro City (Freight Truck)",
     "calc.option_kamianske": "Kamianske",
@@ -358,8 +358,8 @@ const translations = {
     "calc.res_tons": "Total Weight:",
     "calc.res_bags": "Big Bags Count:",
     "calc.res_energy": "Estimated Heat Energy:",
-    "calc.min_alert_ok": "✔ Volume fulfills regional delivery minimum (15+ Big Bags, ≈ 9–10 tonnes).",
-    "calc.min_alert_warn": "⚠ Notice: Minimum order for delivery across Dnipro region is 15 Big Bags (≈ 9–10 tonnes). Smaller quantities are available via self-pickup in Nikopol.",
+    "calc.min_alert_ok": "✔ Volume fulfills regional delivery minimum (15+ Big Bags, ≈ 14–15 tonnes).",
+    "calc.min_alert_warn": "⚠ Notice: Minimum order for delivery across Dnipro region is 15 Big Bags (≈ 14–15 tonnes). Smaller quantities are available via self-pickup in Nikopol.",
     "calc.submit_btn": "Get Formal Quote with Freight",
 
     // Regional Delivery Info
@@ -375,7 +375,7 @@ const translations = {
     "deliv.city_ua": "All Ukraine",
     "deliv.city_pl": "Poland (Export Route)",
     "deliv.rule_title": "Regional Shipping Terms:",
-    "deliv.rule_1": "<strong>Minimum Order:</strong> from 15 Big Bags (≈ 9–10 tonnes) for regional truck transport across Dnipropetrovsk oblast.",
+    "deliv.rule_1": "<strong>Minimum Order:</strong> from 15 Big Bags (≈ 14–15 tonnes) for regional truck transport across Dnipropetrovsk oblast.",
     "deliv.rule_2": "<strong>Self-Pickup:</strong> from the Nikopol plant warehouse available upon prior coordination with sales staff.",
     "deliv.rule_3": "<strong>Fleet:</strong> 22-24 ton curtain-side semi-trailers with top, side, and rear loading access.",
     "deliv.rule_4": "<strong>Documentation:</strong> full certified shipping dossier, consignment note (TTN), and laboratory test certificate.",
@@ -384,7 +384,7 @@ const translations = {
     "faq.tag": "Frequently Asked Questions",
     "faq.title": "Everything You Need to Know Before Ordering",
     "faq.q1": "Why is the minimum order for regional delivery 15 Big Bags?",
-    "faq.a1": "15 Big Bags (≈ 9–10 tonnes, 600–650 kg each) represents the optimal freight utilization for heavy commercial trucks, giving you the lowest possible logistics cost per tonne. For self-pickup at our Nikopol warehouse, smaller quantities can be arranged.",
+    "faq.a1": "15 Big Bags (≈ 14–15 tonnes, 950–1000 kg each) represents the optimal freight utilization for heavy commercial trucks, giving you the lowest possible logistics cost per tonne. For self-pickup at our Nikopol warehouse, smaller quantities can be arranged.",
     "faq.q2": "What type of wood is used in the pellet production?",
     "faq.a2": "We use clean natural wood residuals without bark, sand, or chemical binders. The primary raw material is pure pine or a combination of pine with acacia and elm. Detailed test data and composition are confirmed with our manager upon your order request.",
     "faq.q3": "How quickly can you deliver to Dnipro or Kryvyi Rih?",
@@ -426,7 +426,7 @@ const translations = {
     "footer.products_title": "Products",
     "footer.pellets_6mm": "Wood Pellets 6 mm (A1)",
     "footer.pellets_8mm": "Industrial Pellets 8 mm",
-    "footer.big_bags": "Big-Bag Packaging (600–650 kg)",
+    "footer.big_bags": "Big-Bag Packaging (950–1000 kg)",
     "footer.contacts_title": "Plant Contacts",
     "footer.address": "Nikopol, Dnipropetrovsk region, Ukraine",
     "footer.working_hours": "Mon-Fri: 08:00 – 18:00, Sat: 09:00 – 15:00",

@@ -16,15 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!tonsSlider || !tonsInput) return;
 
   function updateCalculations() {
-    let tons = parseFloat(tonsInput.value) || 9;
+    let tons = parseFloat(tonsInput.value) || 15;
     if (tons < 1) tons = 1;
     if (tons > 500) tons = 500;
 
     tonsSlider.value = tons;
     tonsInput.value = tons;
 
-    // Big Bags: each holds ~600–650 kg of pellets, use midpoint ~625 kg/bag
-    const KG_PER_BAG = 625; // midpoint of 600–650 kg range
+    // Big Bags: each holds ~950–1000 kg of pellets, use midpoint ~975 kg/bag
+    const KG_PER_BAG = 975; // midpoint of 950–1000 kg range
     const bigBags = Math.round(tons * 1000 / KG_PER_BAG);
     
     // Thermal energy (approx 4.9 kWh/kg => ~4.9 MWh / ton => ~4.2 Gcal / ton)
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (resEnergy) resEnergy.textContent = `~${mwh} МВт·год (${gcal} Гкал)`;
 
     // Check regional delivery constraints
-    // Minimum order: 15 big-bags × ~625 kg ≈ 9.4 tonnes. Threshold ≈ 9.5 т.
+    // Minimum order: 15 big-bags × ~975 kg ≈ 14.6 tonnes. Threshold ≈ 14.5 т.
     const selectedCity = citySelect ? citySelect.value : 'dnipro';
     const isNikopolPickup = selectedCity === 'nikopol_pickup';
     const meetsMinOrder = bigBags >= 15;
@@ -76,10 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const modal = document.getElementById('contact-dialog');
       const volumeInput = document.getElementById('modal-volume');
       const cityInput = document.getElementById('modal-city');
-      const bagsNow = Math.round((parseFloat(tonsInput.value) || 0) * 1000 / 625);
+      const bagsNow = Math.round((parseFloat(tonsInput.value) || 0) * 1000 / 975);
 
       if (volumeInput) {
-        volumeInput.value = `${tonsInput.value} т (~${bagsNow} біг-бегів по 600–650 кг)`;
+        volumeInput.value = `${tonsInput.value} т (~${bagsNow} біг-бегів по 950–1000 кг)`;
       }
 
       if (cityInput && citySelect) {
