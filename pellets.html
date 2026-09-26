@@ -56,13 +56,18 @@
     "manufacturer": {
       "@type": "Organization",
       "name": "ТОВ «УКРЕКОПЕЛЕТА»",
-      "telephone": "+380664035396",
+      "telephone": "+380****5396",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Нікополь",
         "addressRegion": "Дніпропетровська область",
         "addressCountry": "UA"
       }
+    },
+    "location": {
+      "@type": "GeoCoordinates",
+      "latitude": 47.58261,
+      "longitude": 34.33747
     },
     "offers": {
       "@type": "AggregateOffer",
@@ -309,6 +314,17 @@
               </select>
             </div>
 
+            <div class="calc-group">
+              <label for="calc-eff-select" class="calc-label" data-i18n="calc.label_eff">
+                Клас ефективності котла (E):
+              </label>
+              <select id="calc-eff-select" class="calc-select">
+                <option value="e1" data-i18n="calc.option_e1">E1 — преміум-котел / зерносушилка (ККД ~92%)</option>
+                <option value="e2" data-i18n="calc.option_e2" selected>E2 — стандартний пелетний котел (ККД ~85%)</option>
+                <option value="e3" data-i18n="calc.option_e3">E3 — промисловий котел / імер (ККД ~78%)</option>
+              </select>
+            </div>
+
             <!-- Minimum order notice dynamic banner -->
             <div id="min-order-alert" class="min-order-indicator min-order-ok">
               <span data-i18n="calc.min_alert_ok">✔ Об'єм відповідає умовам регіональної доставки (від 15 біг-бегів).</span>
@@ -333,8 +349,13 @@
               </div>
 
               <div class="calc-summary-row">
-                <span style="color: rgba(255,255,255,0.7);" data-i18n="calc.res_energy">Орієнтовна теплоенергія:</span>
+                <span style="color: rgba(255,255,255,0.7); font-size: 0.8rem;" data-i18n="calc.res_energy">Орієнтовна теплоенергія:</span>
                 <span class="calc-summary-val" id="res-energy-val" style="font-size: 1.15rem; color: #4ade80;">~74.3 МВт·год</span>
+              </div>
+
+              <div class="calc-summary-row" style="border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 0.75rem; margin-top: 0.75rem;">
+                <span style="color: rgba(255,255,255,0.7); font-size: 0.8rem;" data-i18n="calc.res_heat_output">Корисне тепло за вашим класом:</span>
+                <span class="calc-summary-val" id="res-heat-output" style="font-size: 1.15rem; color: #fbbf24;">—</span>
               </div>
             </div>
 
@@ -456,6 +477,22 @@
           <span class="city-tag">🚚 Марганець / Покров</span>
           <span class="city-tag">🇺🇦 Вся Україна</span>
           <span class="city-tag">🇵🇱 Польща (Експортний напрямок)</span>
+        </div>
+
+        <!-- Google Maps: exact plant pin 47.58261, 34.33747 (Нікополь) -->
+        <div style="margin-top: 1.5rem; border: 1.5px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; background: #fff;">
+          <div style="padding: 0.75rem 1rem; background: #f8faf9; font-size: 0.9rem; color: var(--color-text); border-bottom: 1px solid var(--color-border);">
+            📍 <strong>Точне розташування виробничої бази:</strong> 47°34′57.4″N&nbsp;34°20′14.9″E (Нікополь)
+          </div>
+          <iframe
+            title="Virobnicha baza UkrEcoPellet, Nikopol"
+            src="https://www.google.com/maps?q=47.58261,34.33747&z=14&output=embed"
+            width="100%" height="220" style="border:0;" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          <div style="padding: 0.6rem 1rem; text-align: center;">
+            <a class="footer-link" style="font-size: 0.9rem;" target="_blank" rel="noopener noreferrer"
+               href="https://www.google.com/maps?q=47.58261,34.33747">🗺️ Відкрити на Google Maps</a>
+          </div>
         </div>
       </div>
 
@@ -600,7 +637,7 @@
         <h4 data-i18n="footer.contacts_title">Контакти заводу</h4>
         <div class="footer-links">
           <div class="footer-link">
-            📍 <span data-i18n="footer.address">м. Нікополь, Дніпропетровська обл., Україна</span>
+            📍 <a href="https://maps.google.com/?q=47.582611,34.337472" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;" data-i18n="footer.address">м. Нікополь, Дніпропетровська обл., Україна (47°34'57.4"N 34°20'14.9"E)</a>
           </div>
           <a href="tel:+380664035396" class="footer-link">📞 +38 (066) 403-53-96</a>
           <a href="mailto:sales@ukrpellet.ua" class="footer-link">✉️ sales@ukrpellet.ua</a>

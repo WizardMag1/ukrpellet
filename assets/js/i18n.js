@@ -139,6 +139,12 @@ const translations = {
     "calc.option_other_ua": "Інші міста Дніпропетровської обл. / Україна",
     "calc.option_poland": "Експорт до Польщі (за запитом)",
 
+    "calc.label_eff": "Клас ефективності котла (E):",
+    "calc.option_e1": "E1 — преміум-котел / зерносушилка (ККД ~92%)",
+    "calc.option_e2": "E2 — стандартний пелетний котел (ККД ~85%)",
+    "calc.option_e3": "E3 — промисловий котел / сушарка (ККД ~78%)",
+    "calc.res_heat_output": "Корисне тепло за вашим класом:",
+
     "calc.res_header": "Попередній підсумок:",
     "calc.res_tons": "Загальний тоннаж:",
     "calc.res_bags": "Кількість Біг-Бегів:",
@@ -353,6 +359,12 @@ const translations = {
     "calc.option_nikopol_deliv": "Nikopol & Local District",
     "calc.option_other_ua": "Other Dnipro region cities / Ukraine",
     "calc.option_poland": "Export to Poland (Upon Request)",
+
+    "calc.label_eff": "Boiler efficiency class (E):",
+    "calc.option_e1": "E1 — premium boiler / grain dryer (EER ~92%)",
+    "calc.option_e2": "E2 — standard pellet boiler (EER ~85%)",
+    "calc.option_e3": "E3 — industrial boiler / dryer (EER ~78%)",
+    "calc.res_heat_output": "Usable heat for your class:",
 
     "calc.res_header": "Preliminary Summary:",
     "calc.res_tons": "Total Weight:",

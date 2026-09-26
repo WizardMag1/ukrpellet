@@ -10,10 +10,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const resTons = document.getElementById('res-total-tons');
   const resBags = document.getElementById('res-big-bags');
   const resEnergy = document.getElementById('res-energy-val');
+  const resHeatOutput = document.getElementById('res-heat-output');
   const minOrderAlert = document.getElementById('min-order-alert');
   const calcOrderBtn = document.getElementById('calc-order-btn');
+  const effSelect = document.getElementById('calc-eff-select');
+
+  // Heat-output classes: net usable heat fraction per boiler/dryer type
+  const EFF_CLASS = {
+    e1: 0.92, // premium pellet boiler / grain dryer
+    e2: 0.85, // standard pellet boiler (default)
+    e3: 0.78  // industrial boiler / dryer
+  };
 
   if (!tonsSlider || !tonsInput) return;
+
+  function currentEff() {
+    return effSelect && EFF_CLASS[effSelect.value] ? EFF_CLASS[effSelect.value] : EFF_CLASS.e2;
+  }
 
   function updateCalculations() {
     let tons = parseFloat(tonsInput.value) || 15;
@@ -26,14 +39,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Big Bags: each holds ~950–1000 kg of pellets, use midpoint ~975 kg/bag
     const KG_PER_BAG = 975; // midpoint of 950–1000 kg range
     const bigBags = Math.round(tons * 1000 / KG_PER_BAG);
-    
-    // Thermal energy (approx 4.9 kWh/kg => ~4.9 MWh / ton => ~4.2 Gcal / ton)
-    const mwh = (tons * 4.95).toFixed(1);
-    const gcal = (tons * 4.25).toFixed(1);
+
+    // Thermal energy (approx 4.9 kWh/kg => ~4.95 MWh / ton => ~4.25 Gcal / ton)
+    const eff = currentEff();
+    const grossMwh = tons * 4.95;
+    const grossGcal = tons * 4.25;
+    const mwh = (grossMwh).toFixed(1);
+    const gcal = (grossGcal).toFixed(1);
+    const usableMwh = (grossMwh * eff).toFixed(1);
+    const usableGcal = (grossGcal * eff).toFixed(1);
 
     if (resTons) resTons.textContent = `${tons} т / tons`;
     if (resBags) resBags.textContent = `${bigBags} шт / pcs`;
     if (resEnergy) resEnergy.textContent = `~${mwh} МВт·год (${gcal} Гкал)`;
+    if (resHeatOutput) {
+      const effKey = effSelect ? effSelect.value : 'e2';
+      resHeatOutput.textContent = `E${effKey.toUpperCase().slice(1)} → ~${usableMwh} МВт·год (${usableGcal} Гкал) корисного тепла`;
+    }
 
     // Check regional delivery constraints
     // Minimum order: 15 big-bags × ~975 kg ≈ 14.6 tonnes. Threshold ≈ 14.5 т.
@@ -47,10 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
         minOrderAlert.innerHTML = `<span>✔ Самовивіз у м. Нікополь: можливе відвантаження від 1 біг-бега за попереднім узгодженням.</span>`;
       } else if (meetsMinOrder) {
         minOrderAlert.className = 'min-order-indicator min-order-ok';
-        minOrderAlert.innerHTML = `<span data-i18n="calc.min_alert_ok">✔ Об'єм відповідає умовам регіональної доставки (від 15 біг-бегів ≈ 9–10 т).</span>`;
+        minOrderAlert.innerHTML = `<span data-i18n="calc.min_alert_ok">✔ Об'єм відповідає умовам регіональної доставки (від 15 біг-бегів ≈ 14–15 т).</span>`;
       } else {
         minOrderAlert.className = 'min-order-indicator min-order-warn';
-        minOrderAlert.innerHTML = `<span data-i18n="calc.min_alert_warn">⚠ Увага: для доставки по області мінімальна партія становить 15 біг-бегів (≈ 9–10 т). Для менших обсягів доступний самовивіз у м. Нікополь або індивідуальне узгодження.</span>`;
+        minOrderAlert.innerHTML = `<span data-i18n="calc.min_alert_warn">⚠ Увага: для доставки по області мінімальна партія становить 15 біг-бегів (≈ 14–15 т). Для менших обсягів доступний самовивіз у м. Нікополь або індивідуальне узгодження.</span>`;
       }
     }
   }
@@ -66,6 +88,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (citySelect) {
     citySelect.addEventListener('change', () => {
+      updateCalculations();
+    });
+  }
+
+  if (effSelect) {
+    effSelect.addEventListener('change', () => {
       updateCalculations();
     });
   }
