@@ -154,6 +154,8 @@ const translations = {
     "calc.min_alert_pickup": "Самовивіз зі складу в Нікополі: можна від 1 біг-бега, за попереднім узгодженням.",
     "calc.min_alert_warn": "Доставка по області — від 15 тонн. Меншу партію можна забрати самовивозом у Нікополі або узгодити окремо.",
     "calc.submit_btn": "Отримати точну ціну з доставкою",
+    "calc.load_plan": "План завантаження",
+    "calc.min_marker": "мінімальна партія для доставки — 15 т",
 
     // Regional Delivery Info
     "deliv.tag": "Географія постачання",
@@ -379,6 +381,8 @@ const translations = {
     "calc.min_alert_pickup": "Pickup from the Nikopol warehouse: from 1 big bag, arranged in advance.",
     "calc.min_alert_warn": "Regional delivery starts at 15 t. Smaller lots can be picked up in Nikopol or arranged separately.",
     "calc.submit_btn": "Get Formal Quote with Freight",
+    "calc.load_plan": "Load plan",
+    "calc.min_marker": "minimum lot for delivery — 15 t",
 
     // Regional Delivery Info
     "deliv.tag": "Regional Logistics",

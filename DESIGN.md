@@ -47,6 +47,25 @@ Write and design like a plant manager talks: facts, numbers, the phone number. N
 - Spec values go in the spec sheet (`.specs-grid`), not in floating badges over photos.
 - Don't repeat the same figures twice on one screen.
 
+## Motion
+
+Motion answers what the visitor does. It never decorates.
+
+| Where | What | Timing |
+|---|---|---|
+| Calculator (the one focal moment) | Big-bags drop into truck rows as tonnage changes; mark at 15 t; numbers roll | bags `--spring-load`, numbers 320 ms |
+| Buttons | Press in slightly | `--spring-press` |
+| Quote form, mobile menu | Rise into place; close faster than they open | `--spring-firm` in, 150 ms out |
+| FAQ answer | Text eases down 6px as it opens | 280 ms |
+| Hero photo | Settles into its frame once on load (visible from frame 1, no fade) | 700 ms |
+
+- Springs come from Motion's `spring()` (Motion AI Kit) and are pasted into CSS as `linear()` tokens,
+  so no animation library ships to visitors. No overshoot: this is an industrial B2B site.
+- Animate only `transform` and `opacity`. Never `height`/`width`/`top` (Impeccable flags it).
+- No fade-in-on-scroll for sections, no hover lifts, no count-up stats, no looping animation.
+- `prefers-reduced-motion`: remove movement, keep colour/opacity state changes and instant values.
+- Check new motion at 1/10 speed (Chrome DevTools → Animations → 10%) before shipping.
+
 ## Things that make a page read as AI-generated — do not add
 
 - Emoji as icons (🔥 🧮 📍 🚚 💡 ✔ …) in buttons, nav, lists or footer

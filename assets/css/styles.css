@@ -102,6 +102,13 @@
   --container-max: 1200px;
   --header-height: 72px;
   --transition-fast: 0.15s ease;
+
+  /* Motion. Springs generated with Motion's spring() (Motion AI Kit, css-spring):
+     industrial B2B site, so no overshoot on UI; a slight settle only for bags landing. */
+  --spring-firm: 650ms linear(0, 0.0792, 0.2371, 0.4044, 0.5525, 0.6726, 0.7652, 0.8341, 0.8842, 0.9199, 0.9451, 0.9626, 0.9747, 0.9829, 0.9886, 0.9924, 0.9949, 0.9966, 0.9978, 0.9985, 0.999, 1); /* spring(0.35, 0) */
+  --spring-load: 400ms linear(0, 0.1197, 0.3413, 0.5535, 0.7191, 0.8345, 0.9088, 0.9534, 0.9786, 0.9918, 0.9981, 1.0007, 1); /* spring(0.3, 0.1) */
+  --spring-press: 350ms linear(0, 0.3049, 0.6506, 0.8453, 0.936, 0.9746, 0.9902, 0.9963, 0.9986, 0.9995, 1, 1); /* spring(0.15, 0) */
+  --ease-arrive: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Reset & base */
@@ -120,9 +127,10 @@ html {
   overflow-x: clip;
 }
 
+/* Reduced motion = no spatial movement, but state changes (colour, opacity) stay legible.
+   Component rules below opt out of transforms individually. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { transition: none !important; animation: none !important; }
 }
 
 body {
@@ -363,7 +371,19 @@ h1, h2, h3, h4, h5, h6, .footer-heading {
   min-height: 48px;
   line-height: 1.2;
   text-align: center;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--spring-press);
+}
+
+/* Press feedback: the button gives slightly under the finger */
+.btn:active,
+.messenger-btn:active {
+  transform: scale(0.97);
+  transition-duration: 0.08s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:active,
+  .messenger-btn:active { transform: none; }
 }
 
 .btn-primary,
@@ -513,6 +533,27 @@ h1, h2, h3, h4, h5, h6, .footer-heading {
   height: 440px;
   object-fit: cover;
   border-radius: var(--radius-lg);
+}
+
+/* Arrival: the first photo on the page settles into its frame once. The image is visible from the
+   first frame (no opacity fade), so it never delays Largest Contentful Paint. */
+.hero-section .hero-media-card img {
+  animation: photo-settle 0.7s var(--ease-arrive) both;
+}
+
+@keyframes photo-settle {
+  from {
+    clip-path: inset(4% 4% 4% 4% round var(--radius-lg));
+    transform: scale(1.04);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round var(--radius-lg));
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-section .hero-media-card img { animation: none; }
 }
 
 /* Key figures sit under the photo as a caption, not as a glass overlay */
@@ -831,6 +872,7 @@ input[type="range"] {
 }
 
 .min-order-indicator {
+  transition: background-color 0.2s ease, color 0.2s ease;
   padding: 0.75rem 1rem;
   border-radius: var(--radius-md);
   font-size: 0.925rem;
@@ -844,6 +886,143 @@ input[type="range"] {
 .min-order-warn {
   background: var(--warn-bg);
   color: var(--warn);
+}
+
+/* Load plan: one row per truck, one cell per big-bag */
+.load-plan {
+  margin-top: 1rem;
+  padding: 1rem 1rem 0.85rem;
+  background: var(--paper-alt);
+  border-radius: var(--radius-md);
+}
+
+.load-plan-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.25rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.load-plan-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.load-plan-summary {
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.load-plan-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.truck {
+  display: grid;
+  grid-template-columns: 1.25rem 1fr;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.truck-label {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.truck-bed {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  background: var(--paper);
+}
+
+/* Delivery minimum: a mark after the 15th bag of the first truck */
+.truck:first-child .truck-bed::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  bottom: -5px;
+  left: calc(3px + (100% - 6px + 2px) * 15 / 24 - 2px);
+  width: 2px;
+  background: var(--ink);
+}
+
+.load-plan.is-pickup .truck:first-child .truck-bed::after,
+.load-plan.is-pickup .load-plan-legend {
+  display: none;
+}
+
+.bag {
+  position: relative;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+/* The bag drops into its slot */
+.bag::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--pellet);
+  transform: translateY(-110%);
+  transition: transform 0.12s ease-in, background-color 0.2s ease;
+}
+
+.bag.is-filled::after {
+  transform: none;
+  transition: transform var(--spring-load), background-color 0.2s ease;
+}
+
+.load-plan.is-under .bag::after {
+  background: #d9b98f;
+}
+
+.truck-more {
+  padding-left: 1.75rem;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+
+.load-plan-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.7rem;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
+.load-plan-min-key {
+  width: 2px;
+  height: 14px;
+  background: var(--ink);
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bag::after,
+  .bag.is-filled::after {
+    transform: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  .bag.is-filled::after {
+    opacity: 1;
+  }
 }
 
 /* ==========================================================================
@@ -942,17 +1121,52 @@ input[type="range"] {
   display: none;
 }
 
+.faq-summary {
+  position: relative;
+  padding-right: 2.25rem;
+}
+
+/* Plus sign drawn with two bars; opening folds the vertical bar away into a minus */
+.faq-summary::before,
 .faq-summary::after {
-  content: '+';
-  flex-shrink: 0;
-  font-size: 1.4rem;
-  font-weight: 400;
-  line-height: 1;
-  color: var(--forest);
+  content: '';
+  position: absolute;
+  right: 0.35rem;
+  top: 50%;
+  width: 14px;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--forest);
+  border-radius: 1px;
+}
+
+.faq-summary::after {
+  transform: rotate(90deg);
+  transition: transform var(--spring-firm);
 }
 
 .faq-item[open] .faq-summary::after {
-  content: '−';
+  transform: rotate(90deg) scaleX(0);
+}
+
+/* Opening an answer: the text eases down into place (transform + opacity only, no layout animation) */
+.faq-item[open] .faq-content {
+  animation: faq-reveal 0.28s var(--ease-arrive);
+}
+
+@keyframes faq-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-item[open] .faq-content { animation-name: faq-fade; }
+
+  @keyframes faq-fade {
+    from { opacity: 0; }
+  }
 }
 
 .faq-content {
@@ -983,7 +1197,7 @@ input[type="range"] {
   font-weight: 600;
   color: #ffffff;
   min-height: 48px;
-  transition: filter var(--transition-fast);
+  transition: filter var(--transition-fast), transform var(--spring-press);
 }
 
 .messenger-btn:hover {
@@ -1053,6 +1267,43 @@ dialog.contact-modal {
 
 dialog.contact-modal::backdrop {
   background: rgba(20, 48, 31, 0.6);
+}
+
+/* Quote form: rises into place on a firm spring; closes faster than it opens */
+dialog.contact-modal,
+dialog.contact-modal::backdrop {
+  transition: opacity 0.15s ease, transform 0.15s ease, overlay 0.15s allow-discrete, display 0.15s allow-discrete;
+  opacity: 0;
+}
+
+dialog.contact-modal {
+  transform: translateY(12px) scale(0.98);
+}
+
+dialog.contact-modal[open],
+dialog.contact-modal[open]::backdrop {
+  opacity: 1;
+  transition: opacity 0.2s ease, transform var(--spring-firm), overlay 0.2s allow-discrete, display 0.2s allow-discrete;
+}
+
+dialog.contact-modal[open] {
+  transform: none;
+}
+
+@starting-style {
+  dialog.contact-modal[open],
+  dialog.contact-modal[open]::backdrop {
+    opacity: 0;
+  }
+
+  dialog.contact-modal[open] {
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.contact-modal,
+  dialog.contact-modal[open] { transform: none; }
 }
 
 .modal-header {
@@ -1215,14 +1466,14 @@ dialog.contact-modal::backdrop {
     visibility: hidden;
     opacity: 0;
     transform: translateY(-8px);
-    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
   }
 
   .nav-menu.open {
     visibility: visible;
     opacity: 1;
     transform: none;
-    transition: opacity 0.18s ease, transform 0.18s ease;
+    transition: opacity 0.2s ease, transform var(--spring-firm);
   }
 
   .nav-link {
