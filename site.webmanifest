@@ -1,0 +1,22 @@
+{
+  "name": "UkrEcoPelleta — Виробництво деревних паливних пелет",
+  "short_name": "UkrEcoPelleta",
+  "description": "Виробництво та оптові поставки якісних деревних паливних пелет ENplus A1 у Дніпропетровській області та Україні від заводу у м. Нікополь.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fcfbf9",
+  "theme_color": "#1e5631",
+  "icons": [
+    {
+      "src": "/assets/images/brand-icon.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/images/favicon.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml"
+    }
+  ]
+}

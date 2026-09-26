@@ -56,5 +56,5 @@ jobs:
 
       - name: Ping Search Engines with Sitemap (Optional)
         run: |
-          curl -s -I "https://www.bing.com/ping?sitemap=https%3A%2F%2Fukrpellet.ua%2Fsitemap.xml" || true
+          curl -s -I "https://www.bing.com/ping?sitemap=https%3A%2F%2Focrecopiliata.org%2Fsitemap.xml" || true
           echo "✅ Sitemap submitted to Bing"

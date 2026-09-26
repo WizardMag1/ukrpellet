@@ -6,7 +6,8 @@
   "scripts": {
     "start": "npx serve . -l 3000",
     "dev": "npx serve . -l 3000",
-    "preview": "npx serve ."
+    "preview": "npx serve .",
+    "test:seo": "node verify-schema.cjs"
   },
   "keywords": [
     "wood-pellets",

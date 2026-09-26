@@ -4,29 +4,29 @@
   
   <!-- Corporate Portal -->
   <url>
-    <loc>https://ukrpellet.ua/</loc>
+    <loc>https://ocrecopiliata.org/</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="uk" href="https://ukrpellet.ua/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://ukrpellet.ua/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://ukrpellet.ua/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://ocrecopiliata.org/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ocrecopiliata.org/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ocrecopiliata.org/" />
   </url>
 
-  <!-- Pellets Sales Landing (Dnipro Wholesale) -->
+  <!-- Pellets Sales Landing (Dnipro Wholesale 15 tons) -->
   <url>
-    <loc>https://ukrpellet.ua/pellets.html</loc>
+    <loc>https://ocrecopiliata.org/pellets</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="uk" href="https://ukrpellet.ua/pellets.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://ukrpellet.ua/pellets.html?lang=en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://ukrpellet.ua/pellets.html" />
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://ocrecopiliata.org/pellets" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ocrecopiliata.org/pellets?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ocrecopiliata.org/pellets" />
   </url>
 
-  <!-- Public Oferta -->
+  <!-- Public Oferta Contract -->
   <url>
-    <loc>https://ukrpellet.ua/oferta.html</loc>
+    <loc>https://ocrecopiliata.org/oferta</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -34,7 +34,7 @@
 
   <!-- Privacy Policy -->
   <url>
-    <loc>https://ukrpellet.ua/privacy.html</loc>
+    <loc>https://ocrecopiliata.org/privacy</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

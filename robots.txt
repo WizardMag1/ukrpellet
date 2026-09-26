@@ -1,5 +1,5 @@
 # robots.txt for UkrEcoPelleta & ТОВ «УКРЕКОПЕЛЕТА»
-# https://ukrpellet.ua
+# https://ocrecopiliata.org
 
 User-agent: *
 Allow: /
@@ -34,8 +34,8 @@ User-agent: cohere-ai
 Allow: /
 
 # Sitemaps & LLM Context
-Sitemap: https://ukrpellet.ua/sitemap.xml
+Sitemap: https://ocrecopiliata.org/sitemap.xml
 
 # Machine-Readable LLM Profile (Standard: https://llmstxt.org)
-# llms.txt: https://ukrpellet.ua/llms.txt
-# llms-full.txt: https://ukrpellet.ua/llms-full.txt
+# llms.txt: https://ocrecopiliata.org/llms.txt
+# llms-full.txt: https://ocrecopiliata.org/llms-full.txt
