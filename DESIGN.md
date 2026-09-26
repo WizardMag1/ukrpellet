@@ -65,3 +65,19 @@ Write and design like a plant manager talks: facts, numbers, the phone number. N
 3. Optional independent audit: `npx impeccable detect http://localhost:3000/` — sales pages should
    report 0 findings.
 4. `npm run check` (SEO checks).
+
+## Design tools installed in this repo
+
+Load automatically in Claude Code sessions opened in this repo (local and cloud):
+
+| Tool | Where | Use |
+|---|---|---|
+| Impeccable (pbakaus, Apache-2.0, `9d715cc`) | `.claude/skills/impeccable/` | `/impeccable audit`, `polish`, `critique`, `quieter`, `typeset`, `layout` |
+| Hallmark (nutlope, MIT, `13ac0ec`) | `.claude/skills/hallmark/` | `hallmark study <url>` to learn from a reference site. Don't run `hallmark redesign` on these pages: it replaces this design system with one of its own themes |
+| Frontend Design (Anthropic, Apache-2.0) | `.claude/skills/frontend-design/` | Base rules the current design follows |
+| Playwright MCP | `.mcp.json` | Claude opens the page in a browser to check its own work |
+| shadcn MCP | `.mcp.json` | React component registry. This site is plain HTML, so only useful if it moves to React |
+| Motion MCP (+ Motion+) | `.mcp.json` | Animation docs; audits need a paid Motion+ sign-in |
+
+Claude Code asks you to approve the `.mcp.json` servers the first time. To install the same tools
+for all your projects: `bash scripts/setup-design-tools.sh`.
