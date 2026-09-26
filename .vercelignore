@@ -8,3 +8,4 @@ supabase-schema.sql
 .env.*
 .claude/
 cloudflare/
+.mcp.json

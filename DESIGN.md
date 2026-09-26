@@ -105,5 +105,8 @@ Load automatically in Claude Code sessions opened in this repo (local and cloud)
 | shadcn MCP | `.mcp.json` | React component registry. This site is plain HTML, so only useful if it moves to React |
 | Motion MCP (+ Motion+) | `.mcp.json` | Animation docs; audits need a paid Motion+ sign-in |
 
+| Claude SEO (AgriciDaniel, MIT) | `.claude/settings.json` (plugin) | `/seo audit`, `/seo local`, `/seo schema`, `/seo geo`. Run `/seo setup` once. Loads in local Claude Code only (plugins don't load in cloud sessions) |
+| Chrome DevTools MCP (Google) | `.mcp.json` | Performance traces for Core Web Vitals |
+
 Claude Code asks you to approve the `.mcp.json` servers the first time. To install the same tools
-for all your projects: `bash scripts/setup-design-tools.sh`.
+for all your projects: `bash scripts/setup-design-tools.sh` and `bash scripts/setup-seo-tools.sh`.
