@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Open Telegram with pre-filled lead summary (popup to your number)
       const contacts = window.APP_CONFIG?.CONTACTS;
-      const tgUrl = contacts?.telegram_url || 'https://t.me/+380994937366';
+      const tgUrl = contacts?.telegram_url || 'https://t.me/+380664035396';
       const leadMsg = [
         '🟢 Нова B2B заявка з сайту',
         `👤 Ім'я: ${payload.name || '—'}`,

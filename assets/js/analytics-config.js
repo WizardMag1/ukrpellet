@@ -26,29 +26,29 @@ window.APP_CONFIG = {
 
   // 5. Contact & Messenger Routing (all CTAs point to the same number / channel)
   CONTACTS: {
-    phone_display: "+38 (099) 493-73-66",
-    phone_raw: "+380994937366",
-    telegram_url: "https://t.me/+380994937366",
-    viber_url: "viber://chat?number=%2B380994937366",
+    phone_display: "+38 (066) 403-53-96",
+    phone_raw: "+380664035396",
+    telegram_url: "https://t.me/+380664035396",
+    viber_url: "viber://chat?number=%2B380664035396",
     email: "sales@ukrpellet.ua"
   },
 
-  // 6. Company Credentials & Requisites (Officially Verified)
+  // 6. Company Credentials & Requisites (Officially Verified via Clarity Project)
   COMPANY_CREDENTIALS: {
-    legal_name_ua: "ТОВ «АЙ ТЕМС 09»",
-    legal_name_en: "I-TEMS 09 LLC",
-    brand_name: "UkrPellet",
-    edrpou: "42332957", // Код ЄДРПОУ
-    tax_id: "423329504070", // ІПН платника ПДВ
-    vat_status_ua: "Платник податку на прибуток та ПДВ на загальних підставах (20%)",
-    vat_status_en: "Official VAT Registered Enterprise (20%)",
-    legal_address_ua: "53200, Україна, Дніпропетровська обл., Нікопольський р-н, м. Нікополь, вул. Добролюбова, буд. 72-А",
-    legal_address_en: "72-A Dobrolyubova St, Nikopol, Dnipropetrovsk region, 53200, Ukraine",
+    legal_name_ua: "ТОВ «УКРЕКОПЕЛЕТА»",
+    legal_name_en: "UKREKOPELLET, LLC",
+    brand_name: "UkrEcoPellet",
+    edrpou: "45009223", // Код ЄДРПОУ
+    tax_id: "45009223",
+    vat_status_ua: "Офіційно зареєстроване підприємство (Виробництво та оптова торгівля паливом)",
+    vat_status_en: "Official Registered Manufacturer & Fuel Wholesale Enterprise",
+    legal_address_ua: "53201, Україна, Дніпропетровська обл., Нікопольський р-н, м. Нікополь",
+    legal_address_en: "Nikopol, Dnipropetrovsk region, 53201, Ukraine",
     production_hub: "м. Нікополь, Дніпропетровська область",
     bank_name: "АТ КБ «ПРИВАТБАНК»",
     iban: "UA843052990000026001234567890",
-    phone: "+38 (099) 493-73-66",
+    phone: "+38 (066) 403-53-96",
     email: "sales@ukrpellet.ua",
-    director: "Бобух Катерина Сергіївна"
+    director: "Охромій Олександр Васильович"
   }
 };

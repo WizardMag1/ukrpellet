@@ -7,7 +7,7 @@ const translations = {
     // Top Bar
     "topbar.hub": "Виробнича база: м. Нікополь, Дніпропетровська обл.",
     "topbar.min_order": "Опт по області: від 15 біг-бегів (≈ 9–10 тонн)",
-    "topbar.phone": "+38 (099) 493-73-66",
+    "topbar.phone": "+38 (066) 403-53-96",
     "topbar.email": "sales@ukrpellet.ua",
 
     // Navigation
@@ -23,13 +23,13 @@ const translations = {
 
     // Brand
     "brand.title": "Ukr<span>Pellet</span>",
-    "brand.corp_sub": "ТОВ «АЙ ТЕМС 09»",
+    "brand.corp_sub": "ТОВ «УКРЕКОПЕЛЕТА»",
     "brand.badge_nikopol": "Виробник • м. Нікополь",
 
     // Hero Corporate (index.html)
     "hero.corp_badge": "Екологічне біопаливо європейського стандарту",
     "hero.corp_title": "Промислове виробництво деревних паливних гранул в Україні",
-    "hero.corp_desc": "ТОВ «АЙ ТЕМС 09» (UkrPellet) — надійний український виробник твердого біопалива. Сучасні автоматизовані лінії гранулювання у м. Нікополь, стабільні оптові поставки, суворий контроль якості та енергонезалежність для вашого бізнесу.",
+    "hero.corp_desc": "ТОВ «УКРЕКОПЕЛЕТА» (UkrPellet) — надійний український виробник твердого біопалива. Сучасні автоматизовані лінії гранулювання у м. Нікополь, стабільні оптові поставки, суворий контроль якості та енергонезалежність для вашого бізнесу.",
     "hero.corp_btn_catalog": "Каталог пелет та оптові умови",
     "hero.corp_btn_about": "Про наші потужності",
 
@@ -66,8 +66,8 @@ const translations = {
     "corp.f3_title": "Великий критий склад готової продукції",
     "corp.f3_desc": "Складські площі понад 3000 м² у Нікополі забезпечують сухе зберігання біг-бегів та гарантують оперативне відвантаження навіть у пік опалювального сезону.",
 
-    "corp.f4_title": "Екологічна сировина: сосна, акація, береза",
-    "corp.f4_desc": "Ми використовуємо виключно чисту відбірну деревину — сосну або комбінацію сосни з акацією та березою — без піску, кори чи хімічних клеїв. Гранули безпечні для будь-яких типів сучасних пелетних пальників.",
+    "corp.f4_title": "Екологічна сировина: сосна, акація, берест",
+    "corp.f4_desc": "Ми використовуємо виключно чисту відбірну деревину — сосну або комбінацію сосни з акацією та берестом — без піску, кори чи хімічних клеїв. Гранули безпечні для будь-яких типів сучасних пелетних пальників.",
 
     "corp.f5_title": "Логістика та гнучкі поставки",
     "corp.f5_desc": "Організовуємо доставку тентованими напівпричепами (фурами 22-24 т) по Дніпропетровській області, всій території України, а також потенційний експорт до Польщі.",
@@ -81,8 +81,8 @@ const translations = {
     "specs.lead": "Відповідають стандартам ENplus A1 / DINplus. Високий коефіцієнт корисної дії та мінімальний нагар у пальнику.",
 
     "spec.material_name": "Базова сировина",
-    "spec.material_val": "Сосна, акація, береза",
-    "spec.material_note": "100% натуральна деревина: чиста сосна або комбінація сосни з акацією та березою",
+    "spec.material_val": "Сосна, акація, берест",
+    "spec.material_note": "100% натуральна деревина: чиста сосна або комбінація сосни з акацією та берестом",
 
     "spec.diam_name": "Діаметр гранул",
     "spec.diam_val": "6 мм / 8 мм",
@@ -171,7 +171,7 @@ const translations = {
     "faq.q1": "Чому мінімальне замовлення для області складає 15 біг-бегів?",
     "faq.a1": "15 біг-бегів (≈ 9–10 тонн, по 600–650 кг) — це оптимальне логістичне завантаження для великогабаритного вантажного транспорту, що дозволяє зберегти для вас мінімальну собівартість перевезення на тонну палива. Для самовивозу безпосередньо зі складу в м. Нікополь умови можуть бути гнучкішими.",
     "faq.q2": "Яка деревина використовується для виробництва?",
-    "faq.a2": "Ми використовуємо екологічно чисту технічну деревину та відходи лісопиляння без кори, домішок і хімічних сполучників. Основна сировина — чиста сосна або комбінація сосни з акацією та березою. Точний склад та поточні характеристики надаються нашим менеджером при оформленні заявки.",
+    "faq.a2": "Ми використовуємо екологічно чисту технічну деревину та відходи лісопиляння без кори, домішок і хімічних сполучників. Основна сировина — чиста сосна або комбінація сосни з акацією та берестом. Точний склад та поточні характеристики надаються нашим менеджером при оформленні заявки.",
     "faq.q3": "Як швидко здійснюється доставка до Дніпра чи Кривого Рогу?",
     "faq.a3": "За наявності потрібного об'єму на складі в Нікополі відвантаження здійснюється протягом 24–48 годин з моменту підтвердження замовлення та оплати.",
     "faq.q4": "Які варіанти оплати доступні для підприємств?",
@@ -206,7 +206,7 @@ const translations = {
     "form.success_msg": "Дякуємо! Ваша заявка прийнята. Менеджер зв'яжеться з вами найближчим часом.",
 
     // Footer
-    "footer.about_corp": "UkrPellet / ТОВ «АЙ ТЕМС 09» — виробничий комплекс твердого біопалива у Дніпропетровській області. Стабільне тепло для вашого виробництва.",
+    "footer.about_corp": "UkrPellet / ТОВ «УКРЕКОПЕЛЕТА» — виробничий комплекс твердого біопалива у Дніпропетровській області. Стабільне тепло для вашого виробництва.",
     "footer.nav_title": "Навігація",
     "footer.products_title": "Продукція",
     "footer.pellets_6mm": "Пелети деревні 6 мм (A1)",
@@ -215,14 +215,14 @@ const translations = {
     "footer.contacts_title": "Контакти заводу",
     "footer.address": "м. Нікополь, Дніпропетровська обл., Україна",
     "footer.working_hours": "Пн-Пт: 08:00 – 18:00, Сб: 09:00 – 15:00",
-    "footer.rights": "© 2026 ТОВ «АЙ ТЕМС 09» / UkrPellet. Всі права захищено."
+    "footer.rights": "© 2026 ТОВ «УКРЕКОПЕЛЕТА» / UkrPellet. Всі права захищено."
   },
 
   en: {
     // Top Bar
     "topbar.hub": "Production Facility: Nikopol, Dnipropetrovsk region, Ukraine",
     "topbar.min_order": "Regional Wholesale: from 15 Big Bags (≈ 9–10 tonnes)",
-    "topbar.phone": "+38 (099) 493-73-66",
+    "topbar.phone": "+38 (066) 403-53-96",
     "topbar.email": "sales@ukrpellet.ua",
 
     // Navigation
@@ -238,13 +238,13 @@ const translations = {
 
     // Brand
     "brand.title": "Ukr<span>Pellet</span>",
-    "brand.corp_sub": "I-TEMS 09 LLC",
+    "brand.corp_sub": "UKREKOPELLET, LLC",
     "brand.badge_nikopol": "Manufacturer • Nikopol, UA",
 
     // Hero Corporate (index.html)
     "hero.corp_badge": "Eco-friendly Biofuel of European Standard",
     "hero.corp_title": "Industrial Wood Fuel Pellet Manufacturing in Ukraine",
-    "hero.corp_desc": "I-TEMS 09 LLC (UkrPellet) is a reliable Ukrainian solid biofuel producer. Automated pelletizing lines in Nikopol, steady wholesale supplies, strict quality lab control, and energy independence for your enterprise.",
+    "hero.corp_desc": "UKREKOPELLET, LLC (UkrPellet) is a reliable Ukrainian solid biofuel producer. Automated pelletizing lines in Nikopol, steady wholesale supplies, strict quality lab control, and energy independence for your enterprise.",
     "hero.corp_btn_catalog": "Wood Pellet Catalog & Wholesale Terms",
     "hero.corp_btn_about": "Our Production Capacity",
 
@@ -281,8 +281,8 @@ const translations = {
     "corp.f3_title": "Extensive Covered Storage",
     "corp.f3_desc": "Over 3,000 m² of dry indoor storage in Nikopol protects Big Bags from moisture and ensures immediate dispatch even during peak winter heating demand.",
 
-    "corp.f4_title": "Pine, Acacia & Birch Raw Material",
-    "corp.f4_desc": "We use exclusively clean natural wood — pure pine or a combination of pine with acacia and birch — without sand, bark, chemical glues, or binders. Our pellets are safe for all types of modern automatic pellet burners.",
+    "corp.f4_title": "Pine, Acacia & Elm Raw Material",
+    "corp.f4_desc": "We use exclusively clean natural wood — pure pine or a combination of pine with acacia and elm — without sand, bark, chemical glues, or binders. Our pellets are safe for all types of modern automatic pellet burners.",
 
     "corp.f5_title": "Flexible Logistics Fleet",
     "corp.f5_desc": "We arrange truck delivery (22-24 ton curtain-side semi-trailers) across Dnipropetrovsk region, throughout Ukraine, and support export shipments to Poland and EU.",
@@ -296,8 +296,8 @@ const translations = {
     "specs.lead": "Compliant with ENplus A1 / DINplus standards. High thermal efficiency and minimal burner residue.",
 
     "spec.material_name": "Raw Material Base",
-    "spec.material_val": "Pine, Acacia & Birch",
-    "spec.material_note": "100% natural wood: pure pine or a combination of pine with acacia and birch",
+    "spec.material_val": "Pine, Acacia & Elm",
+    "spec.material_note": "100% natural wood: pure pine or a combination of pine with acacia and elm",
 
     "spec.diam_name": "Pellet Diameter",
     "spec.diam_val": "6 mm / 8 mm",
@@ -386,7 +386,7 @@ const translations = {
     "faq.q1": "Why is the minimum order for regional delivery 15 Big Bags?",
     "faq.a1": "15 Big Bags (≈ 9–10 tonnes, 600–650 kg each) represents the optimal freight utilization for heavy commercial trucks, giving you the lowest possible logistics cost per tonne. For self-pickup at our Nikopol warehouse, smaller quantities can be arranged.",
     "faq.q2": "What type of wood is used in the pellet production?",
-    "faq.a2": "We use clean natural wood residuals without bark, sand, or chemical binders. The primary raw material is pure pine or a combination of pine with acacia and birch. Detailed test data and composition are confirmed with our manager upon your order request.",
+    "faq.a2": "We use clean natural wood residuals without bark, sand, or chemical binders. The primary raw material is pure pine or a combination of pine with acacia and elm. Detailed test data and composition are confirmed with our manager upon your order request.",
     "faq.q3": "How quickly can you deliver to Dnipro or Kryvyi Rih?",
     "faq.a3": "With available stock in our Nikopol warehouse, shipments are dispatched within 24–48 hours following order confirmation and payment processing.",
     "faq.q4": "What payment methods are supported for B2B enterprises?",
@@ -421,7 +421,7 @@ const translations = {
     "form.success_msg": "Thank you! Your request has been received. Our sales manager will contact you shortly.",
 
     // Footer
-    "footer.about_corp": "UkrPellet / I-TEMS 09 LLC is an industrial solid biofuel complex in Dnipropetrovsk region. Reliable heat for your enterprise.",
+    "footer.about_corp": "UkrPellet / UKREKOPELLET, LLC is an industrial solid biofuel complex in Dnipropetrovsk region. Reliable heat for your enterprise.",
     "footer.nav_title": "Navigation",
     "footer.products_title": "Products",
     "footer.pellets_6mm": "Wood Pellets 6 mm (A1)",
@@ -430,7 +430,7 @@ const translations = {
     "footer.contacts_title": "Plant Contacts",
     "footer.address": "Nikopol, Dnipropetrovsk region, Ukraine",
     "footer.working_hours": "Mon-Fri: 08:00 – 18:00, Sat: 09:00 – 15:00",
-    "footer.rights": "© 2026 I-TEMS 09 LLC / UkrPellet. All rights reserved."
+    "footer.rights": "© 2026 UKREKOPELLET, LLC / UkrPellet. All rights reserved."
   }
 };
 

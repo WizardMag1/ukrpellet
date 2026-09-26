@@ -99,7 +99,7 @@ export default async function handler(req, res) {
   <div class="card">
     <div class="header">
       <h1>🟢 Нова B2B Заявка на пелети</h1>
-      <p>Сайт UkrPellet / ТОВ «АЙ ТЕМС 09» • ${timestamp}</p>
+      <p>Сайт UkrPellet / ТОВ «УКРЕКОПЕЛЕТА» • ${timestamp}</p>
     </div>
     <div class="body">
       <table class="info-table">
@@ -180,7 +180,7 @@ export default async function handler(req, res) {
   // ── 3. Send Telegram Bot notification ─────────────────────────────────────
   if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
     const msg = [
-      '🟢 НОВА B2B ЗАЯВКА (UkrPellet)',
+      '🟢 НОВА B2B ЗАЯВКА (UkrEcoPellet)',
       '────────────────────────',
       `👤 Ім'я: ${lead.name || '—'}`,
       `📞 Телефон: ${lead.phone || '—'}`,
