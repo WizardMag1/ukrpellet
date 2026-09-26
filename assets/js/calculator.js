@@ -14,6 +14,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const minOrderAlert = document.getElementById('min-order-alert');
   const calcOrderBtn = document.getElementById('calc-order-btn');
   const effSelect = document.getElementById('calc-eff-select');
+  const productSelect = document.getElementById('calc-product-select');
+  const resPrice = document.getElementById('res-price-per-t');
+  const resTotal = document.getElementById('res-total-price');
+
+  // Indicative ex-warehouse prices live in analytics-config.js (APP_CONFIG.PRICING)
+  function pricePerTonne() {
+    const pricing = window.APP_CONFIG?.PRICING || {};
+    const product = productSelect ? productSelect.value : 'pine';
+    return product === 'acacia_elm' ? pricing.acacia_elm_uah_per_t : pricing.pine_uah_per_t;
+  }
 
   // Heat-output classes: net usable heat fraction per boiler/dryer type
   const EFF_CLASS = {
@@ -177,6 +187,14 @@ document.addEventListener('DOMContentLoaded', () => {
     roll(resEnergy, grossMwh, energyText);
     roll(resHeatOutput, grossMwh * eff, energyText);
 
+    const price = pricePerTonne();
+    if (price) {
+      const money = new Intl.NumberFormat(en ? 'en-US' : 'uk-UA', { maximumFractionDigits: 0 });
+      const uah = (v) => (en ? `UAH ${money.format(Math.round(v))}` : `${money.format(Math.round(v))} грн`);
+      roll(resPrice, price, uah);
+      roll(resTotal, price * tons, uah);
+    }
+
     // Check regional delivery constraints
     // Minimum order: strictly at least 15 tonnes (from 15 big-bags)
     const selectedCity = citySelect ? citySelect.value : 'dnipro';
@@ -213,6 +231,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  if (productSelect) {
+    productSelect.addEventListener('change', updateCalculations);
+  }
+
   // Pre-fill quote modal when clicking calculate order
   if (calcOrderBtn) {
     calcOrderBtn.addEventListener('click', () => {
@@ -222,7 +244,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const bagsNow = Math.round((parseFloat(tonsInput.value) || 0) * 1000 / 975);
 
       if (volumeInput) {
-        volumeInput.value = `${tonsInput.value} т (~${bagsNow} біг-бегів по 950–1000 кг)`;
+        const product = productSelect ? productSelect.options[productSelect.selectedIndex].text : '';
+        volumeInput.value = `${tonsInput.value} т (~${bagsNow} біг-бегів по 950–1000 кг)${product ? `, ${product}` : ''}`;
       }
 
       if (cityInput && citySelect) {
@@ -234,6 +257,12 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.showModal();
       }
     });
+  }
+
+  // City pages link here as /pellets?city=dnipro#calculator: start with that destination selected
+  const cityParam = new URLSearchParams(window.location.search).get('city');
+  if (citySelect && cityParam && citySelect.querySelector(`option[value="${CSS.escape(cityParam)}"]`)) {
+    citySelect.value = cityParam;
   }
 
   // Re-render unit labels and the delivery notice when the language switches

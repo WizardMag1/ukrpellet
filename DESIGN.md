@@ -75,6 +75,13 @@ Motion answers what the visitor does. It never decorates.
 - Two-colour wordmarks (the brand is set in one colour: **UkrEcoPelleta**)
 - Pulsing/animated attention borders, fade-up-on-scroll on every section
 
+## Prices
+
+Calculator prices live in one place: `assets/js/analytics-config.js` → `PRICING` (UAH per tonne, ex-warehouse,
+separately for pine and acacia + elm). They are **temporary**: Ukrainian producer big-bag average from Sep 2026
+(≈8 020 грн/т) + 5% = 8 420 грн/т. When real prices are set, also update the JSON-LD `lowPrice`/`highPrice`
+and the FAQ price answers on the pages so all three agree.
+
 ## Before you ship a change
 
 1. Bump `ASSET_VERSION` in `scripts/sync-layout.cjs` and run it. `/assets/*` is cached as

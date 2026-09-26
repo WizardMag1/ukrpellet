@@ -175,6 +175,30 @@ ul, ol {
   outline-offset: 2px;
 }
 
+/* Browser surfaces carry the palette too */
+::selection {
+  background: #ead7bb;
+  color: var(--ink);
+}
+
+input,
+textarea {
+  caret-color: var(--forest);
+}
+
+a {
+  text-underline-offset: 0.18em;
+}
+
+/* Figures that change or sit in columns keep their width */
+.calc-summary-val,
+.calc-number-input,
+.spec-val,
+.stat-value,
+.load-plan-summary {
+  font-variant-numeric: tabular-nums;
+}
+
 .section-dark :focus-visible,
 .site-footer :focus-visible,
 .calc-results-card :focus-visible {
@@ -197,6 +221,55 @@ h1, h2, h3, h4, h5, h6, .footer-heading {
 }
 
 .text-center { text-align: center; }
+
+/* Consecutive paragraphs need air between them */
+.lead + .lead {
+  margin-top: 0.9rem;
+}
+
+/* Short fact lists inside content sections */
+.fact-list {
+  list-style: disc;
+  margin: 1.25rem 0 0;
+  padding-left: 1.25rem;
+  max-width: 62ch;
+}
+
+.fact-list li {
+  padding-block: 0.2rem;
+}
+
+.fact-list li::marker {
+  color: var(--pellet-ink);
+}
+
+/* Links to the other regional pages */
+.see-also {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.see-also p {
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+.see-also ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
+.see-also a {
+  color: var(--forest);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.see-also a:hover {
+  text-decoration-thickness: 2px;
+}
 
 .container {
   width: 100%;
@@ -328,6 +401,7 @@ h1, h2, h3, h4, h5, h6, .footer-heading {
 }
 
 .lang-btn {
+  min-height: 36px;
   padding: 0.3rem 0.6rem;
   font-size: 0.8rem;
   font-weight: 600;
@@ -446,11 +520,6 @@ h1, h2, h3, h4, h5, h6, .footer-heading {
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   align-items: start;
   gap: 3.5rem;
-}
-
-/* City pages: one plain line of facts (distance, minimum lot) above the headline */
-.hero-badge-wrap {
-  margin-bottom: 0.9rem;
 }
 
 .badge-pill {
@@ -856,7 +925,8 @@ input[type="range"] {
   margin-left: auto;
 }
 
-#res-energy-val {
+#res-energy-val,
+#res-heat-output {
   font-size: 1.05rem;
 }
 
@@ -866,9 +936,16 @@ input[type="range"] {
   border-top: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+.calc-price-note {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* The lot total is the number the buyer came for */
 .calc-summary-row--key .calc-summary-val {
   color: var(--pellet);
-  font-size: 1.05rem;
+  font-size: 1.6rem;
 }
 
 .min-order-indicator {
@@ -1212,8 +1289,9 @@ input[type="range"] {
 
 .btn-quote { background: var(--forest); }
 .section-dark .btn-quote { background: var(--pellet); color: var(--ink); }
-.btn-telegram { background: #229ed9; }
-.btn-viber { background: #7360f2; }
+/* Brand blues darkened just enough for white text to pass WCAG AA (4.6:1) */
+.btn-telegram { background: #1b7dab; }
+.btn-viber { background: #715eed; }
 .btn-whatsapp { background: #1f9e52; }
 
 /* ==========================================================================
@@ -1328,6 +1406,11 @@ dialog.contact-modal[open] {
   justify-content: center;
   font-size: 1.25rem;
   color: var(--ink-muted);
+}
+
+.modal-close svg {
+  width: 20px;
+  height: 20px;
 }
 
 .modal-close:hover {
@@ -1731,6 +1814,23 @@ dialog.contact-modal[open] {
 @media (max-width: 420px) {
   .brand-subtitle {
     display: none;
+  }
+}
+
+/* 360px Android phones: slimmer header controls keep the full side margin */
+@media (max-width: 380px) {
+  .header-inner {
+    gap: 0.5rem;
+  }
+
+  .header-actions {
+    gap: 0.35rem;
+  }
+
+  .header-phone,
+  .mobile-toggle {
+    width: 40px;
+    height: 40px;
   }
 }
 

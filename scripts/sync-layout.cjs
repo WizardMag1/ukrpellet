@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ASSET_VERSION = '20260926-2';
+const ASSET_VERSION = '20260926-4';
 const ROOT = path.join(__dirname, '..');
 
 // pagePath: the clean URL the page is served at (vercel.json cleanUrls).
@@ -145,6 +145,14 @@ for (const [file, page] of Object.entries(PAGES)) {
   if (!page.interactive && !html.includes('/assets/js/main.js')) {
     html = html.replace('</body>', `  <script src="/assets/js/main.js?v=${ASSET_VERSION}"></script>\n</body>`);
   }
+
+  // 6. One <main> landmark around the page content, so screen readers can jump past the header.
+  if (!html.includes('<main')) {
+    html = html.replace(/(<\/header>\n)/, '$1\n  <main id="main">\n').replace(/\n([ \t]*)<footer /, '\n  </main>\n\n$1<footer ');
+  }
+
+  // 7. Analytics setup scripts must not block the first paint.
+  html = html.replace(/<script src="(\/assets\/js\/analytics(?:-config)?\.js\?v=[\w.-]+)"><\/script>/g, '<script defer src="$1"></script>');
 
   fs.writeFileSync(full, html);
   console.log(`✓ ${file}`);
