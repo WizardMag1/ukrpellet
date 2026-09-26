@@ -24,6 +24,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!tonsSlider || !tonsInput) return;
 
+  // i18n.js declares `translations` / `currentLang` as script globals; fall back to Ukrainian if absent.
+  function lang() {
+    return typeof currentLang !== 'undefined' ? currentLang : 'uk';
+  }
+
+  function t(key) {
+    const dict = typeof translations !== 'undefined' ? translations : null;
+    return (dict && (dict[lang()]?.[key] || dict.uk?.[key])) || '';
+  }
+
   function currentEff() {
     return effSelect && EFF_CLASS[effSelect.value] ? EFF_CLASS[effSelect.value] : EFF_CLASS.e2;
   }
@@ -49,13 +59,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const usableMwh = (grossMwh * eff).toFixed(1);
     const usableGcal = (grossGcal * eff).toFixed(1);
 
-    if (resTons) resTons.textContent = `${tons} т / tons`;
-    if (resBags) resBags.textContent = `${bigBags} шт / pcs`;
-    if (resEnergy) resEnergy.textContent = `~${mwh} МВт·год (${gcal} Гкал)`;
-    if (resHeatOutput) {
-      const effKey = effSelect ? effSelect.value : 'e2';
-      resHeatOutput.textContent = `E${effKey.toUpperCase().slice(1)} → ~${usableMwh} МВт·год (${usableGcal} Гкал) корисного тепла`;
-    }
+    const en = lang() === 'en';
+    const u = en
+      ? { t: 't', pcs: 'pcs', mwh: 'MWh', gcal: 'Gcal' }
+      : { t: 'т', pcs: 'шт', mwh: 'МВт·год', gcal: 'Гкал' };
+
+    if (resTons) resTons.textContent = `${tons} ${u.t}`;
+    if (resBags) resBags.textContent = `${bigBags} ${u.pcs}`;
+    if (resEnergy) resEnergy.textContent = `~${mwh} ${u.mwh} (${gcal} ${u.gcal})`;
+    if (resHeatOutput) resHeatOutput.textContent = `~${usableMwh} ${u.mwh} (${usableGcal} ${u.gcal})`;
 
     // Check regional delivery constraints
     // Minimum order: strictly at least 15 tonnes (from 15 big-bags)
@@ -64,16 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const meetsMinOrder = tons >= 15;
 
     if (minOrderAlert) {
-      if (isNikopolPickup) {
-        minOrderAlert.className = 'min-order-indicator min-order-ok';
-        minOrderAlert.innerHTML = `<span>✔ Самовивіз у м. Нікополь: можливе відвантаження від 1 біг-бега за попереднім узгодженням.</span>`;
-      } else if (meetsMinOrder) {
-        minOrderAlert.className = 'min-order-indicator min-order-ok';
-        minOrderAlert.innerHTML = `<span data-i18n="calc.min_alert_ok">✔ Об'єм відповідає умовам регіональної доставки (не менше 15 тонн / від 15 біг-бегів).</span>`;
-      } else {
-        minOrderAlert.className = 'min-order-indicator min-order-warn';
-        minOrderAlert.innerHTML = `<span data-i18n="calc.min_alert_warn">⚠ Увага: для доставки по області мінімальна партія становить не менше 15 тонн (від 15 біг-бегів). Для менших обсягів доступний самовивіз у м. Нікополь або індивідуальне узгодження.</span>`;
-      }
+      const key = isNikopolPickup ? 'calc.min_alert_pickup' : meetsMinOrder ? 'calc.min_alert_ok' : 'calc.min_alert_warn';
+      minOrderAlert.className = `min-order-indicator ${meetsMinOrder || isNikopolPickup ? 'min-order-ok' : 'min-order-warn'}`;
+      minOrderAlert.textContent = t(key);
     }
   }
 
@@ -120,6 +125,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // Re-render unit labels and the delivery notice when the language switches
+  window.addEventListener('languageChanged', updateCalculations);
 
   // Initial calculation run
   updateCalculations();

@@ -12,19 +12,20 @@ const translations = {
 
     // Navigation
     "nav.home": "Головна",
-    "nav.about": "Про компанію",
-    "nav.pellets": "Паливні пелети (Опт)",
+    "nav.about": "Про завод",
+    "nav.pellets": "Пелети",
     "nav.production": "Виробництво",
     "nav.calculator": "Калькулятор",
     "nav.logistics": "Доставка",
     "nav.faq": "FAQ",
     "nav.contacts": "Контакти",
-    "nav.quote_btn": "Швидкий розрахунок",
+    "nav.quote_btn": "Запит ціни",
 
     // Brand
-    "brand.title": "UkrEco<span>Pelleta</span>",
+    "brand.title": "UkrEcoPelleta",
+    "brand.tagline": "Пелетний завод у Нікополі",
     "brand.corp_sub": "ТОВ «УКРЕКОПЕЛЕТА»",
-    "brand.badge_nikopol": "Виробник • м. Нікополь",
+    "brand.badge_nikopol": "Виробник, м. Нікополь",
 
     // Hero Corporate (index.html)
     "hero.corp_badge": "Екологічне біопаливо європейського стандарту",
@@ -149,8 +150,9 @@ const translations = {
     "calc.res_tons": "Загальний тоннаж:",
     "calc.res_bags": "Кількість Біг-Бегів:",
     "calc.res_energy": "Орієнтовна теплоенергія:",
-    "calc.min_alert_ok": "✔ Об'єм відповідає умовам регіональної доставки (не менше 15 тонн / від 15 біг-бегів).",
-    "calc.min_alert_warn": "⚠ Увага: для доставки по області мінімальна партія становить не менше 15 тонн (від 15 біг-бегів). Для менших обсягів доступний самовивіз у м. Нікополь або індивідуальне узгодження.",
+    "calc.min_alert_ok": "Партія підходить для доставки по області (від 15 тонн).",
+    "calc.min_alert_pickup": "Самовивіз зі складу в Нікополі: можна від 1 біг-бега, за попереднім узгодженням.",
+    "calc.min_alert_warn": "Доставка по області — від 15 тонн. Меншу партію можна забрати самовивозом у Нікополі або узгодити окремо.",
     "calc.submit_btn": "Отримати точну ціну з доставкою",
 
     // Regional Delivery Info
@@ -208,7 +210,9 @@ const translations = {
     "form.comment_label": "Додаткові побажання (діаметр 6/8 мм, терміни)",
     "form.comment_placeholder": "Цікавить 6 мм, безготівковий розрахунок...",
     "form.submit": "Надіслати заявку",
-    "form.privacy_note": "🔒 Ваші дані захищені. Ми не розсилаємо спам.",
+    "form.privacy_note": "Ваші дані захищені. Ми не розсилаємо спам.",
+    "cta.pellets_terms": "Умови поставки",
+    "cta.all_specs": "Усі характеристики",
     "form.success_msg": "Дякуємо! Ваша заявка прийнята. Менеджер зв'яжеться з вами найближчим часом.",
 
     // Footer
@@ -233,19 +237,20 @@ const translations = {
 
     // Navigation
     "nav.home": "Home",
-    "nav.about": "About Company",
-    "nav.pellets": "Wood Pellets (Wholesale)",
+    "nav.about": "About the plant",
+    "nav.pellets": "Pellets",
     "nav.production": "Production",
     "nav.calculator": "Calculator",
-    "nav.logistics": "Logistics",
+    "nav.logistics": "Delivery",
     "nav.faq": "FAQ",
     "nav.contacts": "Contacts",
-    "nav.quote_btn": "Quick Quote",
+    "nav.quote_btn": "Request a price",
 
     // Brand
-    "brand.title": "UkrEco<span>Pelleta</span>",
+    "brand.title": "UkrEcoPelleta",
+    "brand.tagline": "Wood pellet plant in Nikopol",
     "brand.corp_sub": "UKREKOPELLET, LLC",
-    "brand.badge_nikopol": "Manufacturer • Nikopol, UA",
+    "brand.badge_nikopol": "Manufacturer, Nikopol, Ukraine",
 
     // Hero Corporate (index.html)
     "hero.corp_badge": "Eco-friendly Biofuel of European Standard",
@@ -370,8 +375,9 @@ const translations = {
     "calc.res_tons": "Total Weight:",
     "calc.res_bags": "Big Bags Count:",
     "calc.res_energy": "Estimated Heat Energy:",
-    "calc.min_alert_ok": "✔ Volume fulfills regional delivery minimum (at least 15 tonnes / from 15 Big Bags).",
-    "calc.min_alert_warn": "⚠ Notice: Minimum order for delivery across Dnipro region is at least 15 tonnes (from 15 Big Bags). Smaller quantities are available via self-pickup in Nikopol.",
+    "calc.min_alert_ok": "This lot qualifies for regional delivery (15 t minimum).",
+    "calc.min_alert_pickup": "Pickup from the Nikopol warehouse: from 1 big bag, arranged in advance.",
+    "calc.min_alert_warn": "Regional delivery starts at 15 t. Smaller lots can be picked up in Nikopol or arranged separately.",
     "calc.submit_btn": "Get Formal Quote with Freight",
 
     // Regional Delivery Info
@@ -429,7 +435,9 @@ const translations = {
     "form.comment_label": "Additional Notes (diameter 6/8 mm, timeframe)",
     "form.comment_placeholder": "Interested in 6mm, cashless settlement...",
     "form.submit": "Submit Request",
-    "form.privacy_note": "🔒 Your information is confidential. No spam guaranteed.",
+    "form.privacy_note": "Your information is confidential. No spam guaranteed.",
+    "cta.pellets_terms": "Delivery terms",
+    "cta.all_specs": "Full specifications",
     "form.success_msg": "Thank you! Your request has been received. Our sales manager will contact you shortly.",
 
     // Footer
