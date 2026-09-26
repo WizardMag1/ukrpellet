@@ -37,11 +37,11 @@ window.APP_CONFIG = {
   COMPANY_CREDENTIALS: {
     legal_name_ua: "ТОВ «УКРЕКОПЕЛЕТА»",
     legal_name_en: "UKREKOPELLET, LLC",
-    brand_name: "UkrEcoPellet",
+    brand_name: "UkrEcoPelleta",
     edrpou: "45009223", // Код ЄДРПОУ
     tax_id: "45009223",
-    vat_status_ua: "Офіційно зареєстроване підприємство (Виробництво та оптова торгівля паливом)",
-    vat_status_en: "Official Registered Manufacturer & Fuel Wholesale Enterprise",
+    tax_status_ua: "Офіційно зареєстроване підприємство (Виробництво та оптова торгівля паливом)",
+    tax_status_en: "Official Registered Manufacturer & Fuel Wholesale Enterprise",
     legal_address_ua: "53201, Україна, Дніпропетровська обл., Нікопольський р-н, м. Нікополь",
     legal_address_en: "Nikopol, Dnipropetrovsk region, 53201, Ukraine",
     production_hub: "м. Нікополь, Дніпропетровська область",

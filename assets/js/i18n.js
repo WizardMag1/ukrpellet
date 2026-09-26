@@ -72,8 +72,8 @@ const translations = {
     "corp.f5_title": "Логістика та гнучкі поставки",
     "corp.f5_desc": "Організовуємо доставку тентованими напівпричепами (фурами 22-24 т) по Дніпропетровській області, всій території України, а також потенційний експорт до Польщі.",
 
-    "corp.f6_title": "Офіційний B2B договір та ПДВ",
-    "corp.f6_desc": "Працюємо прозоро: безготівковий розрахунок з ПДВ, єдиний податок, повний пакет бухгалтерських і супровідних документів (ТТН, договір, специфікація).",
+    "corp.f6_title": "Офіційний B2B договір та розрахунок",
+    "corp.f6_desc": "Працюємо прозоро: офіційний безготівковий розрахунок, повний пакет бухгалтерських і супровідних документів (ТТН, договір, специфікація).",
 
     // Pellets Specs Section
     "specs.tag": "Характеристики продукції",
@@ -181,7 +181,7 @@ const translations = {
     "faq.q3": "Як швидко здійснюється доставка до Дніпра чи Кривого Рогу?",
     "faq.a3": "За наявності потрібного об'єму на складі в Нікополі відвантаження здійснюється протягом 24–48 годин з моменту підтвердження замовлення та оплати.",
     "faq.q4": "Які варіанти оплати доступні для підприємств?",
-    "faq.a4": "Працюємо за безготівковим розрахунком з ПДВ (платник податку на прибуток на загальних підставах), за договорами з ФОП, а також через спеціальні форми розрахунку за офіційним договором поставки.",
+    "faq.a4": "Працюємо за офіційним безготівковим розрахунком на банківський рахунок підприємства, за договорами з юридичними особами та ФОП, з наданням повного пакету бухгалтерських документів (ТТН, видаткова накладна, специфікація).",
     "faq.q5": "Чи можливий експорт до Польщі або інших країн ЄС?",
     "faq.a5": "Так, ми маємо досвід формування експортних партій з наданням міжнародних сертифікатів (FSC, радіологічний контроль, фітосанітарний сертифікат, EUR.1 за запитом).",
 
@@ -206,7 +206,7 @@ const translations = {
     "form.volume_label": "Орієнтовний об'єм (тонн / біг-бегів)",
     "form.volume_placeholder": "наприклад, 15 тонн",
     "form.comment_label": "Додаткові побажання (діаметр 6/8 мм, терміни)",
-    "form.comment_placeholder": "Цікавить 6 мм, оплата з ПДВ...",
+    "form.comment_placeholder": "Цікавить 6 мм, безготівковий розрахунок...",
     "form.submit": "Надіслати заявку",
     "form.privacy_note": "🔒 Ваші дані захищені. Ми не розсилаємо спам.",
     "form.success_msg": "Дякуємо! Ваша заявка прийнята. Менеджер зв'яжеться з вами найближчим часом.",
@@ -293,8 +293,8 @@ const translations = {
     "corp.f5_title": "Flexible Logistics Fleet",
     "corp.f5_desc": "We arrange truck delivery (22-24 ton curtain-side semi-trailers) across Dnipropetrovsk region, throughout Ukraine, and support export shipments to Poland and EU.",
 
-    "corp.f6_title": "Official B2B Contracts & VAT",
-    "corp.f6_desc": "Transparent corporate operations: cashless bank transfers with VAT, full consignment documentation, consignment notes (TTN), and formal supply contracts.",
+    "corp.f6_title": "Official B2B Contracts & Bank Settlement",
+    "corp.f6_desc": "Transparent corporate operations: official cashless bank transfers, complete documentation package, consignment notes (TTN), and formal supply contracts.",
 
     // Pellets Specs Section
     "specs.tag": "Product Specifications",
@@ -402,7 +402,7 @@ const translations = {
     "faq.q3": "How quickly can you deliver to Dnipro or Kryvyi Rih?",
     "faq.a3": "With available stock in our Nikopol warehouse, shipments are dispatched within 24–48 hours following order confirmation and payment processing.",
     "faq.q4": "What payment methods are supported for B2B enterprises?",
-    "faq.a4": "We support standard cashless bank transfers with VAT (official corporate taxpayer), contracts with registered individual entrepreneurs (FOP), and official commercial supply contracts.",
+    "faq.a4": "We support official cashless bank transfers, supply contracts with registered corporate entities and individual entrepreneurs (FOP), providing complete accounting and shipping documentation (TTN, invoices, specifications).",
     "faq.q5": "Do you export to Poland or other EU countries?",
     "faq.a5": "Yes, we handle international export shipments accompanied by relevant export customs documentation, radiological certificates, and phytosanitary clearance.",
 
@@ -427,7 +427,7 @@ const translations = {
     "form.volume_label": "Estimated Volume (tonnes / Big Bags)",
     "form.volume_placeholder": "e.g., 15 tonnes",
     "form.comment_label": "Additional Notes (diameter 6/8 mm, timeframe)",
-    "form.comment_placeholder": "Need 6mm, payment with VAT...",
+    "form.comment_placeholder": "Interested in 6mm, cashless settlement...",
     "form.submit": "Submit Request",
     "form.privacy_note": "🔒 Your information is confidential. No spam guaranteed.",
     "form.success_msg": "Thank you! Your request has been received. Our sales manager will contact you shortly.",
