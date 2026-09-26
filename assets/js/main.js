@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         city: cityInput?.value?.trim() || '',
         volume: volumeInput?.value?.trim() || '',
         comment: commentInput?.value?.trim() || '',
+        website: form.querySelector('[name="website"]')?.value || '',
         ...utmData
       };
 

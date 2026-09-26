@@ -41,14 +41,14 @@
 
 ## Контактна інформація
 - **Телефон відділу продажу**: +38 (066) 403-53-96 (+380664035396)
-- **Email**: sales@ukrpellet.ua
+- **Email**: sales@ukrecopeleta.com.ua
 - **Прямий зв'язок у Telegram**: https://t.me/+380664035396
-- **Офіційний сайт**: https://ocrecopiliata.org
+- **Офіційний сайт**: https://ukrecopeleta.com.ua
 - **Графік роботи**: Понеділок – П'ятниця: 08:00 – 18:00. Субота: за попередньою домовленістю. Неділя: вихідний.
 
 ## Основні розділи сайту
-- Головний корпоративний портал: https://ocrecopiliata.org/
-- Оптовий лендінг та онлайн-калькулятор пелет: https://ocrecopiliata.org/pellets
-- Публічна оферта оптової поставки: https://ocrecopiliata.org/oferta
-- Політика конфіденційності: https://ocrecopiliata.org/privacy
-- Карта сайту (Sitemap): https://ocrecopiliata.org/sitemap.xml
+- Головний корпоративний портал: https://ukrecopeleta.com.ua/
+- Оптовий лендінг та онлайн-калькулятор пелет: https://ukrecopeleta.com.ua/pellets
+- Публічна оферта оптової поставки: https://ukrecopeleta.com.ua/oferta
+- Політика конфіденційності: https://ukrecopeleta.com.ua/privacy
+- Карта сайту (Sitemap): https://ukrecopeleta.com.ua/sitemap.xml

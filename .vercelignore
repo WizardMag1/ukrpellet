@@ -1,0 +1,8 @@
+# Internal files that must never be served publicly
+*.md
+docs/
+scripts/
+.github/
+supabase-schema.sql
+.env
+.env.*

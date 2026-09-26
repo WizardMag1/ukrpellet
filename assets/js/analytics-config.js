@@ -30,7 +30,7 @@ window.APP_CONFIG = {
     phone_raw: "+380664035396",
     telegram_url: "https://t.me/+380664035396",
     viber_url: "viber://chat?number=%2B380664035396",
-    email: "sales@ukrpellet.ua"
+    email: "sales@ukrecopeleta.com.ua"
   },
 
   // 6. Company Credentials & Requisites (Officially Verified via Clarity Project)
@@ -48,7 +48,7 @@ window.APP_CONFIG = {
     bank_name: "АТ КБ «ПРИВАТБАНК»",
     iban: "UA843052990000026001234567890",
     phone: "+38 (066) 403-53-96",
-    email: "sales@ukrpellet.ua",
+    email: "sales@ukrecopeleta.com.ua",
     director: "Охромій Олександр Васильович"
   }
 };

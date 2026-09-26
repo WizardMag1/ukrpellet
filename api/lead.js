@@ -10,11 +10,16 @@ const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '';
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 const LEAD_EMAIL_FROM = process.env.LEAD_EMAIL_FROM || 'UkrEcoPelleta Leads <onboarding@resend.dev>';
-const LEAD_EMAIL_TO = process.env.LEAD_EMAIL_TO || 'sales@ukrpellet.ua';
+const LEAD_EMAIL_TO = process.env.LEAD_EMAIL_TO || 'sales@ukrecopeleta.com.ua';
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'https://ukrecopeleta.com.ua';
+
+// Escape user input before embedding it in the HTML email
+const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 export default async function handler(req, res) {
   // CORS configuration
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
+  res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Cache-Control', 'no-store');
@@ -27,7 +32,18 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const lead = req.body || {};
+  const raw = req.body || {};
+
+  // Honeypot: bots fill the hidden "website" field; pretend success and drop it
+  if (raw.website) {
+    return res.status(200).json({ success: true });
+  }
+
+  // Trim and cap every field; strings only
+  const lead = {};
+  for (const [k, v] of Object.entries(raw)) {
+    if (typeof v === 'string') lead[k] = v.trim().slice(0, 1000);
+  }
 
   // Basic validation: must have at least phone, name, or email
   if (!lead.phone && !lead.email && !lead.name) {
@@ -73,6 +89,7 @@ export default async function handler(req, res) {
     const emailSubject = `🟢 Нова оптова заявка: ${lead.name || lead.city || 'Клієнт'} (${lead.volume || 'пелети'})`;
     const cleanPhone = (lead.phone || '').replace(/[^\d+]/g, '');
 
+    const h = Object.fromEntries(Object.entries(lead).map(([k, v]) => [k, esc(v)]));
     const emailHtml = `
 <!DOCTYPE html>
 <html>
@@ -105,38 +122,38 @@ export default async function handler(req, res) {
       <table class="info-table">
         <tr>
           <td class="label">👤 Клієнт / Компанія:</td>
-          <td class="val highlight">${lead.name || '—'}</td>
+          <td class="val highlight">${h.name || '—'}</td>
         </tr>
         <tr>
           <td class="label">📞 Телефон:</td>
           <td class="val">
-            <a href="tel:${cleanPhone}" style="color: #1e5631; font-weight: 700; font-size: 16px;">${lead.phone || '—'}</a>
+            <a href="tel:${cleanPhone}" style="color: #1e5631; font-weight: 700; font-size: 16px;">${h.phone || '—'}</a>
           </td>
         </tr>
-        ${lead.email ? `
+        ${h.email ? `
         <tr>
           <td class="label">✉️ Email клієнта:</td>
-          <td class="val"><a href="mailto:${lead.email}">${lead.email}</a></td>
+          <td class="val"><a href="mailto:${h.email}">${h.email}</a></td>
         </tr>` : ''}
         <tr>
           <td class="label">📍 Населений пункт:</td>
-          <td class="val">${lead.city || '—'}</td>
+          <td class="val">${h.city || '—'}</td>
         </tr>
         <tr>
           <td class="label">⚖️ Запитуваний об'єм:</td>
-          <td class="val" style="font-weight: 600;">${lead.volume || '—'}</td>
+          <td class="val" style="font-weight: 600;">${h.volume || '—'}</td>
         </tr>
-        ${lead.comment ? `
+        ${h.comment ? `
         <tr>
           <td class="label">💬 Примітка / Запит:</td>
-          <td class="val">${lead.comment}</td>
+          <td class="val">${h.comment}</td>
         </tr>` : ''}
         <tr>
           <td class="label">📊 Джерело реклами:</td>
           <td class="val" style="font-size: 12px; color: #718096;">
-            UTM Source: <b>${lead.utm_source || 'direct / organic'}</b><br>
-            Кампанія: <b>${lead.utm_campaign || '—'}</b><br>
-            Ключове слово: <b>${lead.utm_term || '—'}</b>
+            UTM Source: <b>${h.utm_source || 'direct / organic'}</b><br>
+            Кампанія: <b>${h.utm_campaign || '—'}</b><br>
+            Ключове слово: <b>${h.utm_term || '—'}</b>
           </td>
         </tr>
       </table>

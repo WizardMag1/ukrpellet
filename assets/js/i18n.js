@@ -8,7 +8,7 @@ const translations = {
     "topbar.hub": "Виробнича база: м. Нікополь, Дніпропетровська обл.",
     "topbar.min_order": "Опт по області: від 15 тонн (від 15 біг-бегів)",
     "topbar.phone": "+38 (066) 403-53-96",
-    "topbar.email": "sales@ukrpellet.ua",
+    "topbar.email": "sales@ukrecopeleta.com.ua",
 
     // Navigation
     "nav.home": "Головна",
@@ -229,7 +229,7 @@ const translations = {
     "topbar.hub": "Production Facility: Nikopol, Dnipropetrovsk region, Ukraine",
     "topbar.min_order": "Regional Wholesale: at least 15 tonnes (from 15 Big Bags)",
     "topbar.phone": "+38 (066) 403-53-96",
-    "topbar.email": "sales@ukrpellet.ua",
+    "topbar.email": "sales@ukrecopeleta.com.ua",
 
     // Navigation
     "nav.home": "Home",

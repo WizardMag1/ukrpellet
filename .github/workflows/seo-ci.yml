@@ -3,58 +3,18 @@ name: SEO & Site Integrity CI
 on:
   push:
     branches: [ master ]
+  pull_request:
   workflow_dispatch:
 
 jobs:
-  seo-audit:
+  seo-check:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Validate JSON-LD Schema.org Blocks
-        run: |
-          node -e "
-          const fs = require('fs');
-          const files = ['index.html', 'pellets.html', 'oferta.html', 'privacy.html'];
-          let errors = 0;
-          files.forEach(file => {
-            if (!fs.existsSync(file)) return;
-            const html = fs.readFileSync(file, 'utf8');
-            const matches = [...html.matchAll(/<script type=\"application\/ld\+json\">([\s\S]*?)<\/script>/gi)];
-            matches.forEach((m, idx) => {
-              try {
-                JSON.parse(m[1].trim());
-              } catch (e) {
-                console.error('❌ Schema error in ' + file + ' block ' + idx + ': ' + e.message);
-                errors++;
-              }
-            });
-          });
-          if (errors > 0) process.exit(1);
-          console.log('✅ All Schema.org JSON-LD blocks are valid!');
-          "
-
-      - name: Verify SEO Core Files Exist
-        run: |
-          node -e "
-          const fs = require('fs');
-          const requiredFiles = ['robots.txt', 'sitemap.xml', 'llms.txt', 'llms-full.txt'];
-          requiredFiles.forEach(f => {
-            if (!fs.existsSync(f)) {
-              console.error('❌ Missing core SEO file: ' + f);
-              process.exit(1);
-            }
-          });
-          console.log('✅ All core SEO and LLM discovery files exist!');
-          "
-
-      - name: Ping Search Engines with Sitemap (Optional)
-        run: |
-          curl -s -I "https://www.bing.com/ping?sitemap=https%3A%2F%2Focrecopiliata.org%2Fsitemap.xml" || true
-          echo "✅ Sitemap submitted to Bing"
+      - name: SEO check (sitemap, canonicals, JSON-LD, links, stale domains)
+        run: npm run check
+      - name: Lead API syntax
+        run: node --check api/lead.js

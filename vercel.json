@@ -4,6 +4,17 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/:path(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.ukrecopeleta.com.ua"
+        }
+      ],
+      "destination": "https://ukrecopeleta.com.ua/:path",
+      "permanent": true
+    },
+    {
       "source": "/index.html",
       "destination": "/",
       "permanent": true
@@ -22,20 +33,21 @@
       "source": "/privacy.html",
       "destination": "/privacy",
       "permanent": true
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/pellets",
-      "destination": "/pellets.html"
     },
     {
-      "source": "/oferta",
-      "destination": "/oferta.html"
+      "source": "/pelety-nikopol.html",
+      "destination": "/pelety-nikopol",
+      "permanent": true
     },
     {
-      "source": "/privacy",
-      "destination": "/privacy.html"
+      "source": "/pelety-dnipro.html",
+      "destination": "/pelety-dnipro",
+      "permanent": true
+    },
+    {
+      "source": "/pelety-optom.html",
+      "destination": "/pelety-optom",
+      "permanent": true
     }
   ],
   "headers": [
@@ -49,8 +61,21 @@
       ]
     },
     {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
         {
           "key": "X-Content-Type-Options",
           "value": "nosniff"

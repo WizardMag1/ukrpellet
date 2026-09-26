@@ -4,29 +4,27 @@
   
   <!-- Corporate Portal -->
   <url>
-    <loc>https://ocrecopiliata.org/</loc>
+    <loc>https://ukrecopeleta.com.ua/</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="uk" href="https://ocrecopiliata.org/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://ocrecopiliata.org/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://ocrecopiliata.org/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://ukrecopeleta.com.ua/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ukrecopeleta.com.ua/" />
   </url>
 
   <!-- Pellets Sales Landing (Dnipro Wholesale 15 tons) -->
   <url>
-    <loc>https://ocrecopiliata.org/pellets</loc>
+    <loc>https://ukrecopeleta.com.ua/pellets</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="uk" href="https://ocrecopiliata.org/pellets" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://ocrecopiliata.org/pellets?lang=en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://ocrecopiliata.org/pellets" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://ukrecopeleta.com.ua/pellets" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ukrecopeleta.com.ua/pellets" />
   </url>
 
   <!-- Public Oferta Contract -->
   <url>
-    <loc>https://ocrecopiliata.org/oferta</loc>
+    <loc>https://ukrecopeleta.com.ua/oferta</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -34,7 +32,7 @@
 
   <!-- Privacy Policy -->
   <url>
-    <loc>https://ocrecopiliata.org/privacy</loc>
+    <loc>https://ukrecopeleta.com.ua/privacy</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
