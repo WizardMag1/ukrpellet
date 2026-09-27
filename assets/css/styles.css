@@ -1239,7 +1239,7 @@ input[type="range"] {
 .truck-bed {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(24, 1fr);
+  grid-template-columns: repeat(var(--bags-per-truck, 26), 1fr);
   gap: 2px;
   padding: 3px;
   border: 1px solid var(--line-strong);
@@ -1247,13 +1247,13 @@ input[type="range"] {
   background: var(--paper);
 }
 
-/* Delivery minimum: a mark after the 15th bag of the first truck */
+/* Delivery minimum: a mark after the bag that completes 15 t (bag count set by calculator.js) */
 .truck:first-child .truck-bed::after {
   content: '';
   position: absolute;
   top: -5px;
   bottom: -5px;
-  left: calc(3px + (100% - 6px + 2px) * 15 / 24 - 2px);
+  left: calc(3px + (100% - 6px + 2px) * var(--min-bags, 23) / var(--bags-per-truck, 26) - 2px);
   width: 2px;
   background: var(--ink);
 }
@@ -1553,6 +1553,60 @@ input[type="range"] {
 textarea.form-control {
   min-height: 100px;
   resize: vertical;
+}
+
+/* Radio questions in the quote form (receive, vehicle, unloading) */
+.form-choice {
+  border: 0;
+  padding: 0;
+  margin-inline: 0;
+  min-inline-size: 0;
+}
+
+.form-choice[hidden] {
+  display: none;
+}
+
+.form-choice-opt {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  font-size: 0.95rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.form-choice-opt + .form-choice-opt {
+  margin-top: 0.4rem;
+}
+
+.form-choice-opt input {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: 0;
+  accent-color: var(--forest);
+}
+
+.form-choice-opt:has(input:checked) {
+  border-color: var(--forest);
+  background: var(--paper-alt);
+}
+
+.form-choice-opt:has(input:focus-visible) {
+  outline: 2px solid var(--forest);
+  outline-offset: 1px;
+}
+
+.form-hint {
+  margin: -0.15rem 0 0.5rem;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
 }
 
 dialog.contact-modal {

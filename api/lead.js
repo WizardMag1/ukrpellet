@@ -70,7 +70,13 @@ export default async function handler(req, res) {
           email: lead.email || null,
           city: lead.city || null,
           volume: lead.volume || null,
-          comment: lead.comment || null,
+          // Logistics answers ride in the comment so the existing b2b_leads table needs no new columns
+          comment: [
+            lead.receive ? `Отримання: ${lead.receive}` : '',
+            lead.vehicle ? `Транспорт клієнта: ${lead.vehicle}` : '',
+            lead.unloading ? `Розвантаження: ${lead.unloading}` : '',
+            lead.comment || ''
+          ].filter(Boolean).join('\n') || null,
           utm_source: lead.utm_source || null,
           utm_medium: lead.utm_medium || null,
           utm_campaign: lead.utm_campaign || null,
@@ -143,6 +149,21 @@ export default async function handler(req, res) {
           <td class="label">⚖️ Запитуваний об'єм:</td>
           <td class="val" style="font-weight: 600;">${h.volume || '—'}</td>
         </tr>
+        ${h.receive ? `
+        <tr>
+          <td class="label">🚚 Отримання:</td>
+          <td class="val" style="font-weight: 600;">${h.receive}</td>
+        </tr>` : ''}
+        ${h.vehicle ? `
+        <tr>
+          <td class="label">🚐 Транспорт клієнта:</td>
+          <td class="val">${h.vehicle}</td>
+        </tr>` : ''}
+        ${h.unloading ? `
+        <tr>
+          <td class="label">🏗 Розвантаження:</td>
+          <td class="val">${h.unloading}</td>
+        </tr>` : ''}
         ${h.comment ? `
         <tr>
           <td class="label">💬 Примітка / Запит:</td>
@@ -204,6 +225,9 @@ export default async function handler(req, res) {
       lead.email ? `✉️ Email: ${lead.email}` : '',
       lead.city ? `📍 Місто: ${lead.city}` : '',
       lead.volume ? `⚖️ Об'єм: ${lead.volume}` : '',
+      lead.receive ? `🚚 Отримання: ${lead.receive}` : '',
+      lead.vehicle ? `🚐 Транспорт клієнта: ${lead.vehicle}` : '',
+      lead.unloading ? `🏗 Розвантаження: ${lead.unloading}` : '',
       lead.comment ? `💬 Коментар: ${lead.comment}` : '',
       lead.utm_source ? `📊 Реклама: ${lead.utm_source} (${lead.utm_campaign || '—'})` : '',
       `🕐 ${timestamp}`

@@ -4,6 +4,8 @@ Hosting: **Vercel** project `ukrecopelleta` builds the site (static pages + `api
 The domain **ukrecopelleta.org** is served by the Cloudflare Worker `ukrecopelleta-edge` (`cloudflare/`), attached as a
 custom domain. It 301-redirects `www` to the main domain and proxies all requests to `ukrpellet-ua.vercel.app`. To redeploy the Worker:
 `cd cloudflare && npx wrangler deploy`. Site changes only need `git push`; the Worker needs no changes.
+Cloudflare Workers Builds runs from the repo root, so the root `wrangler.toml` is a copy of
+`cloudflare/wrangler.toml` with `main` pointing into `cloudflare/`. Change both; `scripts/check-wrangler.cjs` (CI) fails if they differ.
 Before every deploy, run `npm run check`. It must print `✓ SEO check passed`; CI runs the same check.
 
 ## A. First deploy (one time, ~30 min)
