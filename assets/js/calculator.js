@@ -30,16 +30,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Diesel price: /data/fuel.json is refreshed daily by .github/workflows/fuel-price.yml (rises apply at once,
   // drops only after a week). analytics-config.js holds the fallback if that file can't be read.
+  // We price at the national average plus a markup: the cheapest stations are not on every route.
   let fuelFile = null;
   function diesel() {
     const d = window.APP_CONFIG?.DELIVERY || {};
-    return fuelFile
-      ? { price: fuelFile.diesel_uah_per_l, date: fuelFile.checked_date || fuelFile.effective_date, live: true }
-      : { price: d.diesel_uah_per_l, date: d.diesel_date, live: false };
+    const markup = d.diesel_markup_uah_per_l || 0;
+    const [market, date] = fuelFile
+      ? [fuelFile.diesel_uah_per_l, fuelFile.checked_date || fuelFile.effective_date]
+      : [d.diesel_uah_per_l, d.diesel_date];
+    return { market, markup, price: market + markup, date, live: !!fuelFile };
   }
 
-  // Delivery = own truck cost: fuel for the loaded run and the empty return, plus driver pay per km.
-  // Truck inputs live in analytics-config.js (APP_CONFIG.DELIVERY).
+  // Delivery = own truck cost: fuel for the loaded run and the empty return, plus driver pay per km,
+  // and never less than the minimum per order. Truck inputs live in analytics-config.js (APP_CONFIG.DELIVERY).
   function deliveryCost(km, bags) {
     const d = window.APP_CONFIG?.DELIVERY;
     if (!d) return null;
@@ -47,8 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const litres = km * (d.consumption_loaded_l_per_100km + d.consumption_empty_l_per_100km) / 100;
     const fuel = trucks * litres * diesel().price;
     const driver = trucks * 2 * km * d.driver_uah_per_km;
-    const total = Math.round((fuel + driver) / 10) * 10;
-    return { trucks, fuel, driver, total };
+    const cost = Math.round((fuel + driver) / 10) * 10;
+    const min = d.min_delivery_uah || 0;
+    return { trucks, fuel, driver, total: Math.max(cost, min), atMinimum: cost < min, min };
   }
 
   // Write plain text into a field that is otherwise rolled, so the next roll starts clean
@@ -120,14 +124,21 @@ document.addEventListener('DOMContentLoaded', () => {
     state.raf = requestAnimationFrame(step);
   }
 
-  // Load plan: one row per truck (22–24 t curtain-siders carry 24 big-bags of ~975 kg).
-  const BAGS_PER_TRUCK = 24;
+  // Load plan: one row per truck. Bag weight and bags per truck come from APP_CONFIG.DELIVERY
+  // (650 kg bags, 26 on a 13.6 m curtain-sider); the mark sits at the 15 t delivery minimum.
+  const KG_PER_BAG = window.APP_CONFIG?.DELIVERY?.bag_kg || 650;
+  const BAGS_PER_TRUCK = window.APP_CONFIG?.DELIVERY?.bags_per_truck || 26;
   const MAX_ROWS = 5;
-  const MIN_DELIVERY_BAGS = 15;
+  const MIN_DELIVERY_BAGS = Math.round(15 * 1000 / KG_PER_BAG);
+  const bagsFor = (tons) => Math.round(tons * 1000 / KG_PER_BAG);
   const loadPlan = document.getElementById('load-plan');
   const loadRows = document.getElementById('load-plan-rows');
   const loadSummary = document.getElementById('load-plan-summary');
   let filledBefore = 0;
+  if (loadPlan) {
+    loadPlan.style.setProperty('--bags-per-truck', BAGS_PER_TRUCK);
+    loadPlan.style.setProperty('--min-bags', MIN_DELIVERY_BAGS);
+  }
 
   function plural(n, one, few, many) {
     const m10 = n % 10, m100 = n % 100;
@@ -205,9 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tonsSlider.value = tons;
     tonsInput.value = tons;
 
-    // Big Bags: each holds ~950–1000 kg of pellets, use midpoint ~975 kg/bag
-    const KG_PER_BAG = 975; // midpoint of 950–1000 kg range
-    const bigBags = Math.round(tons * 1000 / KG_PER_BAG);
+    const bigBags = bagsFor(tons);
 
     // Thermal energy (approx 4.9 kWh/kg => ~4.95 MWh / ton => ~4.25 Gcal / ton; Gcal derived below)
     const eff = currentEff();
@@ -241,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
       roll(resGoods, goods, uah);
 
       const cfg = window.APP_CONFIG?.DELIVERY || {};
-      let km = mode === 'delivery' && selectedPlace ? Math.max(selectedPlace.km, cfg.min_delivery_km || 0) : null;
+      let km = mode === 'delivery' && selectedPlace ? Math.max(selectedPlace.km, 1) : null;
       const delivery = isNikopolPickup ? { total: 0 } : km == null ? null : deliveryCost(km, bigBags);
 
       if (isNikopolPickup) {
@@ -257,9 +266,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const trucksWord = en ? (delivery.trucks === 1 ? 'truck' : 'trucks') : plural(delivery.trucks, 'фура', 'фури', 'фур');
         setText(resDeliveryLabel, en ? `Delivery (${km} km, ${delivery.trucks} ${trucksWord}):` : `Доставка (${km} км, ${delivery.trucks} ${trucksWord}):`);
         roll(resDelivery, delivery.total, uah);
-        setText(resDeliveryBreakdown, en
-          ? `fuel ${uah(delivery.fuel)}, driver ${uah(delivery.driver)}`
-          : `паливо ${uah(delivery.fuel)}, водій ${uah(delivery.driver)}`);
+        setText(resDeliveryBreakdown, delivery.atMinimum
+          ? (en ? `minimum delivery charge per order (fuel ${uah(delivery.fuel)}, driver ${uah(delivery.driver)})`
+            : `мінімальна вартість доставки на замовлення (паливо ${uah(delivery.fuel)}, водій ${uah(delivery.driver)})`)
+          : (en ? `fuel ${uah(delivery.fuel)}, driver ${uah(delivery.driver)}`
+            : `паливо ${uah(delivery.fuel)}, водій ${uah(delivery.driver)}`));
       }
 
       const total = goods + (delivery ? delivery.total : 0);
@@ -273,10 +284,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (priceNote) {
         const f = diesel();
         const [y, m, dd] = String(f.date).split('-');
-        const litre = new Intl.NumberFormat(en ? 'en-US' : 'uk-UA', { minimumFractionDigits: 1, maximumFractionDigits: 2 }).format(f.price);
+        const fmt = new Intl.NumberFormat(en ? 'en-US' : 'uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const minText = cfg.min_delivery_uah ? uah(cfg.min_delivery_uah) : '';
         priceNote.textContent = en
-          ? `Diesel ${litre} UAH/l, average Ukrainian pump price (Minfin), checked ${dd}.${m}.${y}. Road distances © OpenStreetMap. Estimate only; our sales manager confirms the exact price.`
-          : `Дизель ${litre} грн/л, середня ціна на АЗС України (Мінфін), перевірено ${dd}.${m}.${y}. Відстані дорогами © OpenStreetMap. Розрахунок орієнтовний, точну ціну підтвердить менеджер.`;
+          ? `Diesel ${fmt.format(f.price)} UAH/l: the average Ukrainian pump price (Minfin, ${fmt.format(f.market)}, checked ${dd}.${m}.${y}) plus ${f.markup} UAH. ${minText ? `Delivery costs at least ${minText} per order. ` : ''}Road distances © OpenStreetMap. Estimate only; our sales manager confirms the exact price.`
+          : `Дизель ${fmt.format(f.price)} грн/л: середня ціна на АЗС України (Мінфін, ${fmt.format(f.market)}, перевірено ${dd}.${m}.${y}) плюс ${f.markup} грн. ${minText ? `Доставка на замовлення — від ${minText}. ` : ''}Відстані дорогами © OpenStreetMap. Розрахунок орієнтовний, точну ціну підтвердить менеджер.`;
       }
     }
     const meetsMinOrder = tons >= 15;
@@ -403,11 +415,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!placeHint) return;
     const en = lang() === 'en';
     if (selectedPlace) {
-      const min = window.APP_CONFIG?.DELIVERY?.min_delivery_km || 0;
-      const near = selectedPlace.km < min;
       placeHint.textContent = en
-        ? `${regionLabel(selectedPlace.region)}, ${selectedPlace.km} km by road from our warehouse.${near ? ` Nearby addresses are charged as ${min} km.` : ''}`
-        : `${regionLabel(selectedPlace.region)}, ${selectedPlace.km} км дорогою від складу.${near ? ` Близькі адреси рахуємо як ${min} км.` : ''}`;
+        ? `${regionLabel(selectedPlace.region)}, ${selectedPlace.km} km by road from our warehouse.`
+        : `${regionLabel(selectedPlace.region)}, ${selectedPlace.km} км дорогою від складу.`;
     } else if (places.failed) {
       placeHint.textContent = en
         ? 'Could not load the list of places. Try again, or call us and we will price delivery.'
@@ -590,11 +600,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const modal = document.getElementById('contact-dialog');
       const volumeInput = document.getElementById('modal-volume');
       const cityInput = document.getElementById('modal-city');
-      const bagsNow = Math.round((parseFloat(tonsInput.value) || 0) * 1000 / 975);
+      const bagsNow = bagsFor(parseFloat(tonsInput.value) || 0);
 
       if (volumeInput) {
         const product = productSelect ? productSelect.options[productSelect.selectedIndex].text : '';
-        volumeInput.value = `${tonsInput.value} т (~${bagsNow} біг-бегів по 950–1000 кг)${product ? `, ${product}` : ''}`;
+        volumeInput.value = `${tonsInput.value} т (~${bagsNow} ${plural(bagsNow, 'біг-бег', 'біг-беги', 'біг-бегів')} по ${KG_PER_BAG} кг)${product ? `, ${product}` : ''}`;
       }
 
       if (cityInput) {
@@ -604,6 +614,13 @@ document.addEventListener('DOMContentLoaded', () => {
           : mode === 'export' ? (en ? 'Export to Poland' : 'Експорт у Польщу')
           : selectedPlace ? `${placeName(selectedPlace)} (${regionLabel(selectedPlace.region)})`
           : (placeInput ? placeInput.value : '');
+      }
+
+      // Pickup or delivery carries over to the form (main.js shows the pickup vehicle question)
+      const receive = modal?.querySelector(`input[name="receive"][value="${currentMode() === 'pickup' ? 'Самовивіз' : 'Доставка'}"]`);
+      if (receive && !receive.checked) {
+        receive.checked = true;
+        receive.dispatchEvent(new Event('change', { bubbles: true }));
       }
 
       if (modal && typeof modal.showModal === 'function') {

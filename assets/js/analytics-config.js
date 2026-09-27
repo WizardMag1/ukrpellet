@@ -32,20 +32,23 @@ window.APP_CONFIG = {
   },
 
   // 5b. Delivery cost model used by the calculator: fuel + driver pay, own trucks.
-  //   per truck: fuel = km × (loaded + empty return consumption) / 100 × diesel price
+  //   per truck: fuel = km × (loaded + empty return consumption) / 100 × (diesel price + diesel_markup)
   //              driver = 2 × km × driver rate
-  //   trucks = ceil(big bags / bags_per_truck)
+  //   trucks = ceil(big bags / bags_per_truck); big bags = tonnes × 1000 / bag_kg
+  //   per order: never less than min_delivery_uah (set by the owner, Sep 2026)
   // The diesel price itself comes from /data/fuel.json, updated daily by .github/workflows/fuel-price.yml;
   // diesel_uah_per_l below is only the fallback if that file can't be read.
   // Road distances for every settlement are in /assets/data/places.json (scripts/build-places.cjs).
   DELIVERY: {
     diesel_uah_per_l: 98.42,         // fallback: avg ДП at Ukrainian filling stations, Minfin 25.09.2026
     diesel_date: '2026-09-25',
+    diesel_markup_uah_per_l: 3,      // added to the national average: the cheap stations are not on every route (owner, Sep 2026)
     consumption_loaded_l_per_100km: 35, // 20–22 t curtain-sider, loaded (market range 32–38)
     consumption_empty_l_per_100km: 28,  // same truck returning empty
     driver_uah_per_km: 2.5,          // domestic long-haul rate 1.8–2.5 UAH/km (2026)
-    bags_per_truck: 24,              // 22–24 t truck, ~975 kg per big bag
-    min_delivery_km: 15,             // deliveries inside Nikopol and next door are charged as 15 km
+    bag_kg: 650,                     // one big bag of pellets (owner, Sep 2026)
+    bags_per_truck: 26,              // 13.6 m curtain-sider, one tier: 26 × 650 kg = 16.9 t
+    min_delivery_uah: 15000,         // minimum delivery charge per order (owner, Sep 2026)
     // Road km from the warehouse for the ?city= links on the city pages (same values as places.json),
     // so the calculator shows a price before places.json has loaded
     distances_km: {

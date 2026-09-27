@@ -86,7 +86,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 5000);
   }
 
+  // Pickup asks which vehicle comes to the warehouse; the question is disabled (and not required) for delivery
+  function syncReceive(form) {
+    const receive = form.querySelector('input[name="receive"]:checked')?.value || '';
+    form.querySelectorAll('fieldset[data-receive]').forEach((fs) => {
+      const on = fs.dataset.receive === receive;
+      fs.hidden = !on;
+      fs.disabled = !on;
+    });
+  }
+
   leadForms.forEach(form => {
+    form.addEventListener('change', (e) => {
+      if (e.target.name === 'receive') syncReceive(form);
+    });
+    // form.reset() restores the default choice after the reset event, so re-sync on the next tick
+    form.addEventListener('reset', () => setTimeout(() => syncReceive(form), 0));
+    syncReceive(form);
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -111,6 +128,9 @@ document.addEventListener('DOMContentLoaded', () => {
         city: cityInput?.value?.trim() || '',
         volume: volumeInput?.value?.trim() || '',
         comment: commentInput?.value?.trim() || '',
+        receive: form.querySelector('input[name="receive"]:checked')?.value || '',
+        vehicle: form.querySelector('fieldset:not([disabled]) input[name="vehicle"]:checked')?.value || '',
+        unloading: form.querySelector('input[name="unloading"]:checked')?.value || '',
         website: form.querySelector('[name="website"]')?.value || '',
         ...utmData
       };
@@ -153,6 +173,9 @@ document.addEventListener('DOMContentLoaded', () => {
         payload.email ? `✉️ Email: ${payload.email}` : '',
         payload.city ? `📍 Місто: ${payload.city}` : '',
         payload.volume ? `⚖️ Об'єм: ${payload.volume}` : '',
+        payload.receive ? `🚚 Отримання: ${payload.receive}` : '',
+        payload.vehicle ? `🚐 Транспорт клієнта: ${payload.vehicle}` : '',
+        payload.unloading ? `🏗 Розвантаження: ${payload.unloading}` : '',
         payload.comment ? `💬 Коментар: ${payload.comment}` : '',
         utmData.utm_source ? `📊 UTM: ${utmData.utm_source} / ${utmData.utm_campaign || '—'}` : ''
       ].filter(Boolean).join('\n');
