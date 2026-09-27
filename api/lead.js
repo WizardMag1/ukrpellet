@@ -81,7 +81,8 @@ export default async function handler(req, res) {
           status: 'new',
           created_at: new Date().toISOString()
         })
-      }).catch(err => console.error('[Supabase Error]:', err.message))
+      }).then((r) => ({ channel: 'supabase', ok: r.ok, status: r.status }))
+        .catch((err) => ({ channel: 'supabase', ok: false, error: err.message }))
     );
   }
 
@@ -196,7 +197,8 @@ export default async function handler(req, res) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(resendPayload)
-      }).catch(err => console.error('[Resend Error]:', err.message))
+      }).then((r) => ({ channel: 'email', ok: r.ok, status: r.status }))
+        .catch((err) => ({ channel: 'email', ok: false, error: err.message }))
     );
   }
 
@@ -224,12 +226,21 @@ export default async function handler(req, res) {
           chat_id: TELEGRAM_CHAT_ID,
           text: msg
         })
-      }).catch(err => console.error('[Telegram Error]:', err.message))
+      }).then((r) => ({ channel: 'telegram', ok: r.ok, status: r.status }))
+        .catch((err) => ({ channel: 'telegram', ok: false, error: err.message }))
     );
   }
 
-  // Await all async forwarding tasks
-  await Promise.allSettled(tasks);
+  const results = await Promise.all(tasks);
+  results.filter((r) => !r.ok).forEach((r) => console.error(`[Lead ${r.channel}]`, r.status || r.error));
+
+  // The buyer is told "received" only if the sales team was actually notified (email or Telegram bot).
+  // A database row alone reaches nobody, so it doesn't count.
+  const notified = results.some((r) => r.ok && r.channel !== 'supabase');
+  if (!notified) {
+    console.error('[Lead] not delivered:', results.length ? JSON.stringify(results) : 'no email or Telegram bot configured');
+    return res.status(503).json({ success: false, error: 'not_delivered' });
+  }
 
   return res.status(200).json({
     success: true,

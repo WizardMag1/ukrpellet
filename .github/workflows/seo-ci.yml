@@ -18,6 +18,8 @@ jobs:
         run: npm run check
       - name: Lead API syntax
         run: node --check api/lead.js
+      - name: Lead API reports success only when the team was notified
+        run: node scripts/lead-api.test.mjs
       - name: Diesel price rule tests
         run: node scripts/update-fuel.test.cjs
       - name: Worker config in step (root and cloudflare/)

@@ -185,6 +185,37 @@ document.addEventListener('DOMContentLoaded', () => {
     return lines.join('\n');
   }
 
+  // Shown in the form when the request could not be delivered; the buyer's answers stay filled in
+  function showSendError(form, show) {
+    let box = form.querySelector('.form-error');
+    if (!show) {
+      if (box) box.hidden = true;
+      return;
+    }
+    const c = window.APP_CONFIG?.CONTACTS || {};
+    const phone = c.phone_display || '+38 (066) 403-53-96';
+    const tel = c.phone_raw || '+380664035396';
+    const tg = c.telegram_url || 'https://t.me/+380664035396';
+    if (!box) {
+      box = document.createElement('p');
+      box.className = 'form-error';
+      box.setAttribute('role', 'alert');
+      form.querySelector('button[type="submit"]')?.before(box);
+    }
+    const en = siteLang() === 'en';
+    box.textContent = en ? "We couldn't send your request. Your answers are still here. Try again, or call " : 'Не вдалося надіслати заявку. Ваші відповіді збережені у формі. Спробуйте ще раз або зателефонуйте ';
+    const a = document.createElement('a');
+    a.href = `tel:${tel}`;
+    a.textContent = phone;
+    const t = document.createElement('a');
+    t.href = tg;
+    t.target = '_blank';
+    t.rel = 'noopener';
+    t.textContent = 'Telegram';
+    box.append(a, en ? ' or message us on ' : ' чи напишіть у ', t, '.');
+    box.hidden = false;
+  }
+
   leadForms.forEach(form => {
     const date = form.querySelector('input[name="date"]');
     if (date) {
@@ -237,7 +268,44 @@ document.addEventListener('DOMContentLoaded', () => {
         ...utmData
       };
 
-      // Fire Meta Pixel & Google Analytics Lead Conversion Event
+      const en = siteLang() === 'en';
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const btnText = submitBtn ? submitBtn.textContent : '';
+      showSendError(form, false);
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = en ? 'Sending…' : 'Надсилаємо…';
+      }
+
+      // Send to /api/lead, which emails and messages the sales team. Success is shown only once the
+      // server confirms the team was notified; otherwise the answers stay in the form.
+      let sent = false;
+      try {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 15000);
+        const res = await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: ctrl.signal
+        });
+        clearTimeout(timer);
+        sent = res.ok && (await res.json().catch(() => ({}))).success === true;
+      } catch (err) {
+        sent = false;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = btnText;
+      }
+
+      if (!sent) {
+        showSendError(form, true);
+        return;
+      }
+
+      // Meta Pixel & Google Analytics lead conversion, counted only for leads that arrived
       if (typeof window.trackAdEvent === 'function') {
         window.trackAdEvent('Lead', {
           content_name: 'Wood Pellets Wholesale Inquiry',
@@ -249,50 +317,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
-      // Close modal if open
       if (contactModal && contactModal.open) {
         contactModal.close();
       }
-
-      // Reset inputs
       form.reset();
-
-      // Show instant feedback toast
-      const lang = localStorage.getItem('site_lang') || 'uk';
-      const successMessage = lang === 'uk'
-        ? "Дякуємо! Ваша заявка прийнята. Менеджер зв'яжеться з вами протягом 15 хвилин."
-        : "Thank you! Your quote request has been received. Our sales manager will contact you within 15 minutes.";
-
-      showToast(successMessage);
-
-      // Open Telegram with pre-filled lead summary (popup to your number)
-      const contacts = window.APP_CONFIG?.CONTACTS;
-      const tgUrl = contacts?.telegram_url || 'https://t.me/+380664035396';
-      const leadMsg = [
-        '🟢 Нова B2B заявка з сайту',
-        `👤 Ім'я: ${payload.name || '—'}`,
-        `📞 Телефон: ${payload.phone}`,
-        payload.email ? `✉️ Email: ${payload.email}` : '',
-        payload.city ? `📍 Місто: ${payload.city}` : '',
-        payload.volume ? `⚖️ Об'єм: ${payload.volume}` : '',
-        payload.logistics ? `🚚 Логістика:\n${payload.logistics}` : '',
-        payload.comment ? `💬 Коментар: ${payload.comment}` : '',
-        utmData.utm_source ? `📊 UTM: ${utmData.utm_source} / ${utmData.utm_campaign || '—'}` : ''
-      ].filter(Boolean).join('\n');
-      const tgDeepLink = `${tgUrl}?text=${encodeURIComponent(leadMsg)}`;
-      window.open(tgDeepLink, '_blank');
-
-      // Submit to backend API (/api/lead) asynchronously
-      try {
-        await fetch('/api/lead', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-      } catch (err) {
-        // Fail silently on static previews
-        console.log('[Lead Submission Note] Static environment fallback', err);
-      }
+      showToast(en
+        ? 'Thank you! Your quote request has been received. Our sales manager will contact you within 15 minutes.'
+        : "Дякуємо! Ваша заявка прийнята. Менеджер зв'яжеться з вами протягом 15 хвилин.");
     });
   });
 });
