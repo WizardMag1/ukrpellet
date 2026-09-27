@@ -59,10 +59,17 @@
   // 3. Initialize Google Analytics 4 & Google Ads Conversion Tracking
   const googleTrackingId = config.GA4_MEASUREMENT_ID || config.GOOGLE_ADS_CONVERSION_ID;
   if (googleTrackingId && !googleTrackingId.includes('XXXXX')) {
-    const gaScript = document.createElement('script');
-    gaScript.async = true;
-    gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${googleTrackingId}`;
-    document.head.appendChild(gaScript);
+    // gtag.js (~100 KB) loads once the page has finished loading and the browser is idle, so it never
+    // competes with the page itself. Calls made before then wait in dataLayer and are sent when it arrives.
+    const loadTag = () => {
+      const gaScript = document.createElement('script');
+      gaScript.async = true;
+      gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${googleTrackingId}`;
+      document.head.appendChild(gaScript);
+    };
+    const whenIdle = () => ('requestIdleCallback' in window ? requestIdleCallback(loadTag, { timeout: 3000 }) : setTimeout(loadTag, 1500));
+    if (document.readyState === 'complete') whenIdle();
+    else window.addEventListener('load', whenIdle, { once: true });
 
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
