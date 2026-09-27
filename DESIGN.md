@@ -48,6 +48,9 @@ Write and design like a plant manager talks: facts, numbers, the phone number. N
 - Section headings are left-aligned and have **no eyebrow label** above them.
 - Lists of facts are lists with rules between items, not grids of identical rounded cards with icons.
 - Spec values go in the spec sheet (`.specs-grid`), not in floating badges over photos.
+- Photos: only real pictures of UkrEcoPelleta's product, warehouse, bags and trucks. No generated or stock images that
+  show another company's name or facts that aren't ours (a "1 TON" bag when ours are 650 kg). Two such images were
+  removed in Sep 2026; until real photos arrive, pages use `hero-pellets.jpg` or no photo.
 - Don't repeat the same figures twice on one screen.
 
 ## Motion
