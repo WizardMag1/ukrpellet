@@ -1,9 +1,9 @@
 // api/lead.js reports success only when the sales team was notified (email or Telegram bot). Run: node scripts/lead-api.test.mjs
 const run = async (env, responder) => {
-  for (const k of ['SUPABASE_URL','SUPABASE_ANON_KEY','TELEGRAM_BOT_TOKEN','TELEGRAM_CHAT_ID','RESEND_API_KEY']) delete process.env[k];
+  for (const k of ['SUPABASE_URL','SUPABASE_ANON_KEY','TELEGRAM_BOT_TOKEN','TELEGRAM_CHAT_ID','RESEND_API_KEY','LEAD_EMAIL_FROM']) delete process.env[k];
   Object.assign(process.env, env);
   const calls = [];
-  globalThis.fetch = async (url) => { calls.push(String(url)); return responder(String(url)); };
+  globalThis.fetch = async (url, init = {}) => { calls.push(String(url)); const r = responder(String(url), init.body || '{}'); return { text: async () => '', ...r }; };
   const { default: handler } = await import(`../api/lead.js?${Math.random()}`);
   const out = {}; const res = { setHeader() {}, status(c) { out.code = c; return this; }, json(b) { out.body = b; return this; }, end() { return this; } };
   const origErr = console.error; console.error = () => {};
@@ -18,6 +18,8 @@ const cases = [
   ['Resend ok -> 200', { RESEND_API_KEY: 'k' }, ok, 200],
   ['Resend rejects -> 503', { RESEND_API_KEY: 'k' }, bad, 503],
   ['Resend rejects, Telegram ok -> 200', { RESEND_API_KEY: 'k', TELEGRAM_BOT_TOKEN: 't', TELEGRAM_CHAT_ID: '1' }, (u) => u.includes('resend') ? bad() : ok(), 200],
+  ['sender domain unverified (403) -> retried from resend.dev -> 200', { RESEND_API_KEY: 'k', LEAD_EMAIL_FROM: 'X <leads@example.org>' }, (u, body) => (JSON.parse(body).from.includes('resend.dev') ? ok() : { ok: false, status: 403 }), 200],
+  ['fallback sender also rejected -> 503', { RESEND_API_KEY: 'k', LEAD_EMAIL_FROM: 'X <leads@example.org>' }, () => ({ ok: false, status: 403 }), 503],
   ['network error everywhere -> 503', { RESEND_API_KEY: 'k', TELEGRAM_BOT_TOKEN: 't', TELEGRAM_CHAT_ID: '1' }, () => { throw new Error('down'); }, 503],
 ];
 let fails = 0;

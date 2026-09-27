@@ -9,7 +9,8 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || '';
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '';
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
-const LEAD_EMAIL_FROM = process.env.LEAD_EMAIL_FROM || 'UkrEcoPelleta Leads <onboarding@resend.dev>';
+const FALLBACK_FROM = 'UkrEcoPelleta Leads <onboarding@resend.dev>'; // Resend's test sender: account owner's inbox only
+const LEAD_EMAIL_FROM = process.env.LEAD_EMAIL_FROM || FALLBACK_FROM;
 const LEAD_EMAIL_TO = process.env.LEAD_EMAIL_TO || 'sales@ukrecopelleta.org';
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'https://ukrecopelleta.org';
 
@@ -189,15 +190,26 @@ export default async function handler(req, res) {
       resendPayload.reply_to = lead.email;
     }
 
+    const sendEmail = (payload) => fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    // Resend answers 403 when LEAD_EMAIL_FROM is on a domain that isn't (or is no longer) verified.
+    // Rather than lose the lead, send it again from Resend's own test sender, which delivers to the
+    // Resend account owner's inbox (the sales inbox here). The failed sender is noted in the subject.
     tasks.push(
-      fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${RESEND_API_KEY}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(resendPayload)
-      }).then((r) => ({ channel: 'email', ok: r.ok, status: r.status }))
+      sendEmail(resendPayload)
+        .then(async (r) => {
+          if (r.status !== 403 || LEAD_EMAIL_FROM === FALLBACK_FROM) return r;
+          console.error('[Resend] sender rejected, retrying from', FALLBACK_FROM, await r.text().catch(() => ''));
+          return sendEmail({ ...resendPayload, from: FALLBACK_FROM, subject: `${emailSubject} [відправник ${LEAD_EMAIL_FROM} не підтверджений у Resend]` });
+        })
+        .then((r) => ({ channel: 'email', ok: r.ok, status: r.status }))
         .catch((err) => ({ channel: 'email', ok: false, error: err.message }))
     );
   }
