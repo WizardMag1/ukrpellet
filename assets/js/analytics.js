@@ -95,7 +95,7 @@
         // Standard GA4 event
         window.gtag('event', 'generate_lead', {
           currency: eventParams.currency || 'UAH',
-          value: eventParams.value || 75000,
+          value: eventParams.value || 217500,
           ...eventParams
         });
 
@@ -104,7 +104,7 @@
           const sendToId = `${config.GOOGLE_ADS_CONVERSION_ID}/${config.GOOGLE_ADS_CONVERSION_LABEL}`;
           window.gtag('event', 'conversion', {
             'send_to': sendToId,
-            'value': eventParams.value || 75000,
+            'value': eventParams.value || 217500,
             'currency': eventParams.currency || 'UAH'
           });
           console.log('[Google Ads] Sent conversion to:', sendToId);
@@ -127,7 +127,7 @@
       city: 'м. Дніпро',
       tons: 15,
       currency: 'UAH',
-      value: 75000
+      value: 217500
     });
     console.log('=== Test Complete. Check Network Tab or Tag Assistant ===');
   };

@@ -313,7 +313,8 @@ document.addEventListener('DOMContentLoaded', () => {
           city: payload.city,
           volume: payload.volume,
           currency: 'UAH',
-          value: 75000 // Sample nominal order value for 15 tons
+          // Order value for bidding: tonnes from the calculator or the volume field × price per tonne
+          value: Math.round(orderTons(form) * (window.APP_CONFIG?.PRICING?.pine_uah_per_t || 14500)) || 217500
         });
       }
 
