@@ -12,8 +12,8 @@ window.APP_CONFIG = {
   GA4_MEASUREMENT_ID: '', // Set your GA4 ID here, e.g., 'G-XXXXXXXXXX'
 
   // 3. Google Ads Conversion Tracking (e.g. ID 'AW-XXXXXXXXXX' & Label 'AbCdEfGhIj')
-  GOOGLE_ADS_CONVERSION_ID: '', // e.g. 'AW-123456789'
-  GOOGLE_ADS_CONVERSION_LABEL: '', // e.g. 'aBcDeFgHiJkLmNoPqR'
+  GOOGLE_ADS_CONVERSION_ID: 'AW-18476871721', // Google tag from the Google Ads account (Sep 2026)
+  GOOGLE_ADS_CONVERSION_LABEL: '', // label of the "lead form" conversion action, e.g. 'aBcDeFgHiJkLmNoPqR'
 
   // 3. Supabase Integration (Optional - for cloud DB storage of leads)
   // Get from Supabase Project Settings -> API
