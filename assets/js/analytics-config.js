@@ -24,13 +24,37 @@ window.APP_CONFIG = {
   TELEGRAM_BOT_TOKEN: '',
   TELEGRAM_CHAT_ID: '',
 
-  // 5. Indicative calculator prices, UAH per tonne, ex-warehouse Nikopol (delivery quoted separately).
-  // TEMPORARY until real prices are set: market average of Ukrainian producer big-bag prices
-  // found in Sep 2026 (7 000 – 9 500 UAH/t, avg 8 020) + 5%. Replace these two numbers with real prices.
-  // Keep the JSON-LD "lowPrice"/"highPrice" on the pages consistent with what you set here.
+  // 5. Prices, UAH per tonne, ex-warehouse Nikopol (set by the owner, Sep 2026).
+  // Keep the JSON-LD "lowPrice"/"highPrice"/"priceRange" and the FAQ price answers on the pages in step.
   PRICING: {
-    pine_uah_per_t: 8420,
-    acacia_elm_uah_per_t: 8420
+    pine_uah_per_t: 14500,
+    acacia_elm_uah_per_t: 14500
+  },
+
+  // 5b. Delivery cost model used by the calculator: fuel + driver pay, own trucks.
+  //   per truck: fuel = km × (loaded + empty return consumption) / 100 × diesel price
+  //              driver = 2 × km × driver rate
+  //   trucks = ceil(big bags / bags_per_truck)
+  // Update diesel_uah_per_l (and diesel_date) when fuel prices move.
+  DELIVERY: {
+    diesel_uah_per_l: 99.2,          // avg ДП at Ukrainian filling stations, Главком 26.09.2026
+    diesel_date: '2026-09-26',
+    consumption_loaded_l_per_100km: 35, // 20–22 t curtain-sider, loaded (market range 32–38)
+    consumption_empty_l_per_100km: 28,  // same truck returning empty
+    driver_uah_per_km: 2.5,          // domestic long-haul rate 1.8–2.5 UAH/km (2026)
+    bags_per_truck: 24,              // 22–24 t truck, ~975 kg per big bag
+    // Road distance from the Nikopol warehouse, km
+    distances_km: {
+      nikopol_pickup: 0,
+      nikopol_deliv: 15,
+      marhanets: 27,
+      pokrov: 30,
+      kryvyi_rih: 104,
+      dnipro: 123,
+      kamianske: 146,
+      novomoskovsk: 152, // via Dnipro (123 + 29)
+      pavlohrad: 198     // via Dnipro (123 + 75)
+    }
   },
 
   // 6. Contact & Messenger Routing (all CTAs point to the same number / channel)

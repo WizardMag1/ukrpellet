@@ -17,6 +17,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const productSelect = document.getElementById('calc-product-select');
   const resPrice = document.getElementById('res-price-per-t');
   const resTotal = document.getElementById('res-total-price');
+  const resGoods = document.getElementById('res-goods-total');
+  const resDelivery = document.getElementById('res-delivery');
+  const resDeliveryLabel = document.getElementById('res-delivery-label');
+  const resDeliveryBreakdown = document.getElementById('res-delivery-breakdown');
+  const resPerTDelivered = document.getElementById('res-per-t-delivered');
+  const priceNote = document.getElementById('calc-price-note');
+  const distanceGroup = document.getElementById('calc-distance-group');
+  const distanceInput = document.getElementById('calc-distance-input');
+
+  // Delivery = own truck cost: fuel for the loaded run and the empty return, plus driver pay per km.
+  // All inputs live in analytics-config.js (APP_CONFIG.DELIVERY).
+  function deliveryCost(km, bags) {
+    const d = window.APP_CONFIG?.DELIVERY;
+    if (!d) return null;
+    const trucks = Math.max(1, Math.ceil(bags / d.bags_per_truck));
+    const litres = km * (d.consumption_loaded_l_per_100km + d.consumption_empty_l_per_100km) / 100;
+    const fuel = trucks * litres * d.diesel_uah_per_l;
+    const driver = trucks * 2 * km * d.driver_uah_per_km;
+    const total = Math.round((fuel + driver) / 10) * 10;
+    return { trucks, fuel, driver, total };
+  }
+
+  // Write plain text into a field that is otherwise rolled, so the next roll starts clean
+  function setText(el, text) {
+    if (!el) return;
+    rolls.delete(el);
+    el.textContent = text;
+  }
 
   // Indicative ex-warehouse prices live in analytics-config.js (APP_CONFIG.PRICING)
   function pricePerTonne() {
@@ -187,18 +215,60 @@ document.addEventListener('DOMContentLoaded', () => {
     roll(resEnergy, grossMwh, energyText);
     roll(resHeatOutput, grossMwh * eff, energyText);
 
-    const price = pricePerTonne();
-    if (price) {
-      const money = new Intl.NumberFormat(en ? 'en-US' : 'uk-UA', { maximumFractionDigits: 0 });
-      const uah = (v) => (en ? `UAH ${money.format(Math.round(v))}` : `${money.format(Math.round(v))} грн`);
-      roll(resPrice, price, uah);
-      roll(resTotal, price * tons, uah);
-    }
-
     // Check regional delivery constraints
     // Minimum order: strictly at least 15 tonnes (from 15 big-bags)
     const selectedCity = citySelect ? citySelect.value : 'dnipro';
     const isNikopolPickup = selectedCity === 'nikopol_pickup';
+    const isOther = selectedCity === 'other_ua';
+    const onRequest = selectedCity === 'poland';
+    if (distanceGroup) distanceGroup.hidden = !isOther;
+
+    const price = pricePerTonne();
+    const cfg = window.APP_CONFIG?.DELIVERY;
+    if (price) {
+      const money = new Intl.NumberFormat(en ? 'en-US' : 'uk-UA', { maximumFractionDigits: 0 });
+      const uah = (v) => (en ? `UAH ${money.format(Math.round(v))}` : `${money.format(Math.round(v))} грн`);
+      const goods = price * tons;
+      roll(resPrice, price, uah);
+      roll(resGoods, goods, uah);
+
+      let km = isOther ? Math.min(Math.max(parseFloat(distanceInput?.value) || 0, 1), 1500) : cfg?.distances_km?.[selectedCity];
+      const delivery = isNikopolPickup ? { total: 0 } : (onRequest || km == null) ? null : deliveryCost(km, bigBags);
+
+      if (isNikopolPickup) {
+        setText(resDeliveryLabel, en ? 'Delivery:' : 'Доставка:');
+        setText(resDelivery, en ? 'pickup, free' : 'самовивіз, 0 грн');
+        setText(resDeliveryBreakdown, '');
+      } else if (!delivery) {
+        setText(resDeliveryLabel, en ? 'Delivery:' : 'Доставка:');
+        setText(resDelivery, en ? 'on request' : 'за запитом');
+        setText(resDeliveryBreakdown, '');
+      } else {
+        km = Math.round(km);
+        const trucksWord = en ? (delivery.trucks === 1 ? 'truck' : 'trucks') : plural(delivery.trucks, 'фура', 'фури', 'фур');
+        setText(resDeliveryLabel, en ? `Delivery (${km} km, ${delivery.trucks} ${trucksWord}):` : `Доставка (${km} км, ${delivery.trucks} ${trucksWord}):`);
+        roll(resDelivery, delivery.total, uah);
+        setText(resDeliveryBreakdown, en
+          ? `fuel ${uah(delivery.fuel)}, driver ${uah(delivery.driver)}`
+          : `паливо ${uah(delivery.fuel)}, водій ${uah(delivery.driver)}`);
+      }
+
+      const total = goods + (delivery ? delivery.total : 0);
+      roll(resTotal, total, uah);
+      setText(resPerTDelivered, isNikopolPickup
+        ? (en ? 'pickup from the Nikopol warehouse' : 'самовивіз зі складу в Нікополі')
+        : delivery
+          ? (en ? `≈ ${uah(total / tons)} per tonne delivered` : `≈ ${uah(total / tons)} за тонну з доставкою`)
+          : (en ? 'without delivery' : 'без доставки'));
+
+      if (priceNote && cfg) {
+        const [y, m, dd] = String(cfg.diesel_date).split('-');
+        const diesel = new Intl.NumberFormat(en ? 'en-US' : 'uk-UA', { minimumFractionDigits: 1, maximumFractionDigits: 2 }).format(cfg.diesel_uah_per_l);
+        priceNote.textContent = en
+          ? `Diesel ${diesel} UAH/l as of ${dd}.${m}.${y}. Estimate only; our sales manager confirms the exact price.`
+          : `Дизель ${diesel} грн/л станом на ${dd}.${m}.${y}. Розрахунок орієнтовний, точну ціну підтвердить менеджер.`;
+      }
+    }
     const meetsMinOrder = tons >= 15;
 
     renderLoadPlan(bigBags, isNikopolPickup);
@@ -223,6 +293,10 @@ document.addEventListener('DOMContentLoaded', () => {
     citySelect.addEventListener('change', () => {
       updateCalculations();
     });
+  }
+
+  if (distanceInput) {
+    distanceInput.addEventListener('input', updateCalculations);
   }
 
   if (effSelect) {
