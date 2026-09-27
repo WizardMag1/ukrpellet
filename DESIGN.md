@@ -23,7 +23,10 @@ Write and design like a plant manager talks: facts, numbers, the phone number. N
 
 ## Type
 
-- **Fixel** (MacPaw, Kyiv; SIL OFL; self-hosted in `assets/fonts/fixel/`). Full Cyrillic.
+- **Fixel** (MacPaw, Kyiv; SIL OFL; self-hosted in `assets/fonts/fixel/`). The served files are subsets
+  (`*-sub.woff2`, about half the size) made by `scripts/subset-fonts.sh` from the full fonts in `scripts/fonts-src/`:
+  Ukrainian/Russian Cyrillic, basic Latin, the symbols the site uses. New text with other characters (accented
+  Latin, another script) falls back to the system font; add its range to the script and re-run it.
   Fixel Display Bold for headings, Fixel Text 400/500/600 for everything else.
 - Do not add Google Fonts. Inter / Plus Jakarta Sans were removed: Plus Jakarta has no Cyrillic,
   so every Ukrainian heading was silently rendering in a system fallback font.
@@ -154,7 +157,10 @@ fallback for when `data/fuel.json` can't be read. To change the rule, edit `DECR
 ## Before you ship a change
 
 1. Bump `ASSET_VERSION` in `scripts/sync-layout.cjs` and run it. `/assets/*` is cached as
-   `immutable` for a year (`vercel.json`), so without a new `?v=` returning visitors keep the old CSS/JS.
+   `immutable` for a year (`vercel.json`), so without a new `?v=` returning visitors keep the old JS.
+   The script also inlines `assets/css/styles.css` into every page (no render-blocking stylesheet request), so
+   **any CSS change needs a re-run**; CI fails if a page is out of step. Page scripts are `defer`red and the
+   Google tag loads after the page has finished loading.
 2. Check 1440, 1280, 1024, 768, 390 and 360 px widths in **both** UA and EN (EN labels are longer).
    The header must never wrap or overflow.
 3. Optional independent audit: `npx impeccable detect http://localhost:3000/` — sales pages should

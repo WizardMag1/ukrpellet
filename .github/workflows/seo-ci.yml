@@ -24,3 +24,5 @@ jobs:
         run: node scripts/update-fuel.test.cjs
       - name: Worker config in step (root and cloudflare/)
         run: node scripts/check-wrangler.cjs
+      - name: Pages in step with the shared layout and styles.css (re-run scripts/sync-layout.cjs if this fails)
+        run: node scripts/sync-layout.cjs && git diff --exit-code -- '*.html'

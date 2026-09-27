@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ASSET_VERSION = '20260927-8';
+const ASSET_VERSION = '20260927-10';
 const ROOT = path.join(__dirname, '..');
 
 // pagePath: the clean URL the page is served at (vercel.json cleanUrls).
@@ -238,6 +238,21 @@ function buildLogistics(page) {
         <!-- /logistics -->`;
 }
 
+// The stylesheet is inlined into every page: most visitors arrive cold from ads, and a separate CSS file
+// costs them a round trip before anything can paint (Lighthouse "render-blocking requests"). The source of
+// truth stays assets/css/styles.css; edit it, then re-run this script. Comments and indentation are dropped.
+function inlineCss() {
+  const css = fs.readFileSync(path.join(ROOT, 'assets/css/styles.css'), 'utf8')
+    .replace(/url\('\.\.\/fonts\//g, "url('/assets/fonts/") // paths were relative to /assets/css/
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\n\s+/g, '\n')
+    .replace(/\n{2,}/g, '\n')
+    .trim();
+  if (css.includes('</style')) throw new Error('styles.css must not contain "</style"');
+  return `<style data-inlined="assets/css/styles.css">\n${css}\n</style>`;
+}
+const INLINE_CSS = inlineCss();
+
 const FOOTER_MARK = `<img class="brand-mark" src="/assets/images/favicon.svg?v=${ASSET_VERSION}" alt="" width="40" height="40">`;
 
 let failed = false;
@@ -260,20 +275,30 @@ for (const [file, page] of Object.entries(PAGES)) {
   // 3. Google Fonts are replaced by self-hosted Fixel (Cyrillic support).
   html = html.replace(/[ \t]*<link rel="preconnect" href="https:\/\/fonts\.(?:googleapis|gstatic)\.com"[^>]*>\n/g, '');
   html = html.replace(/[ \t]*<link href="https:\/\/fonts\.googleapis\.com[^>]*>\n/g, '');
-  if (!html.includes('FixelDisplay-Bold.woff2')) {
+  if (!html.includes('fonts/fixel/FixelDisplay-Bold')) {
     html = html.replace(
       /([ \t]*)<link rel="stylesheet" href="\/?assets\/css\/styles\.css[^"]*">/,
-      `$1<link rel="preload" href="/assets/fonts/fixel/FixelText-Regular.woff2" as="font" type="font/woff2" crossorigin>\n` +
-      `$1<link rel="preload" href="/assets/fonts/fixel/FixelDisplay-Bold.woff2" as="font" type="font/woff2" crossorigin>\n` +
+      `$1<link rel="preload" href="/assets/fonts/fixel/FixelText-Regular-sub.woff2" as="font" type="font/woff2" crossorigin>\n` +
+      `$1<link rel="preload" href="/assets/fonts/fixel/FixelDisplay-Bold-sub.woff2" as="font" type="font/woff2" crossorigin>\n` +
       `$1<link rel="stylesheet" href="/assets/css/styles.css">`
     );
   }
+
+  // 3b. Fonts are the subsets made by scripts/subset-fonts.sh (new file names, so no cache holds the full fonts).
+  html = html.replace(/(fonts\/fixel\/Fixel(?:Text|Display)-[A-Za-z]+)\.woff2/g, '$1-sub.woff2');
 
   // 4. Every /assets css/js/svg reference gets the current version query.
   html = html.replace(
     /(src|href)="\/?(assets\/(?:css|js)\/[\w.-]+\.(?:css|js)|assets\/images\/favicon\.svg)(?:\?v=[\w.-]*)?"/g,
     `$1="/$2?v=${ASSET_VERSION}"`
   );
+
+  // 4b. Inline the stylesheet (replaces the <link>, or the previous inlined copy on re-runs).
+  html = html.replace(/<link rel="stylesheet" href="\/assets\/css\/styles\.css\?v=[\w.-]+">|<style data-inlined="assets\/css\/styles\.css">[\s\S]*?<\/style>/, () => INLINE_CSS);
+  if (!html.includes('<style data-inlined="assets/css/styles.css">')) {
+    console.error(`✗ ${file}: stylesheet link not found`);
+    failed = true;
+  }
 
   // 5. Legal pages previously loaded no main.js, so the mobile menu could not open.
   if (!page.interactive && !html.includes('/assets/js/main.js')) {
@@ -308,6 +333,9 @@ for (const [file, page] of Object.entries(PAGES)) {
   if (!html.includes('<main')) {
     html = html.replace(/(<\/header>\n)/, '$1\n  <main id="main">\n').replace(/\n([ \t]*)<footer /, '\n  </main>\n\n$1<footer ');
   }
+
+  // 6b. Page scripts run after the HTML is parsed (defer keeps their order), so they never hold up rendering.
+  html = html.replace(/<script src="(\/assets\/js\/(?:i18n|calculator|main)\.js\?v=[\w.-]+)"><\/script>/g, '<script defer src="$1"></script>');
 
   // 7. Analytics setup scripts must not block the first paint.
   html = html.replace(/<script src="(\/assets\/js\/analytics(?:-config)?\.js\?v=[\w.-]+)"><\/script>/g, '<script defer src="$1"></script>');
