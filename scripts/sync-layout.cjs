@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ASSET_VERSION = '20260927-5';
+const ASSET_VERSION = '20260927-6';
 const ROOT = path.join(__dirname, '..');
 
 // pagePath: the clean URL the page is served at (vercel.json cleanUrls).
@@ -124,7 +124,7 @@ function buildFacts(page, html) {
         <dl class="buy-facts">
           <div>
             <dt data-i18n="facts.price">Ціна</dt>
-            <dd><strong>${priceText()}</strong> <span data-i18n="facts.price_unit">грн/т зі складу</span><br><a href="${calc}" data-i18n="facts.price_link">Розрахувати з доставкою</a></dd>
+            <dd><strong>${priceText()}</strong> <span data-i18n="facts.price_unit">грн/т зі складу, без ПДВ</span><br><a href="${calc}" data-i18n="facts.price_link">Розрахувати з доставкою</a></dd>
           </div>
           <div>
             <dt data-i18n="facts.wood">Деревина</dt>
