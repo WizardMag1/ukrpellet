@@ -567,6 +567,54 @@ h1, h2, h3, h4, h5, h6, .footer-heading {
   margin-bottom: 0;
 }
 
+/* What a buyer came for, under every sales-page headline: price, wood, quality, lot size */
+.buy-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1.5rem;
+  margin: 0 0 2rem;
+  max-width: 62ch;
+  border-top: 1px solid var(--line);
+}
+
+.buy-facts > div {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.buy-facts dt {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  margin-bottom: 0.15rem;
+}
+
+.buy-facts dd {
+  font-size: 0.975rem;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.buy-facts dd strong {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.buy-facts a {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--forest);
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .buy-facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* The one condition every buyer needs to know: minimum lot */
 .regional-focus-box {
   background: var(--paper-alt);
@@ -925,15 +973,50 @@ input[type="range"] {
   margin-left: auto;
 }
 
-#res-energy-val,
-#res-heat-output {
-  font-size: 1.05rem;
-}
-
 .calc-summary-row--key {
   margin-top: 0.5rem;
   padding-top: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Small explanatory line under a result (delivery breakdown, price per tonne delivered) */
+.calc-summary-sub {
+  flex-basis: 100%;
+  text-align: right;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.65);
+  font-variant-numeric: tabular-nums;
+}
+
+.calc-summary-row--delivery .calc-summary-val {
+  font-size: 1.1rem;
+}
+
+/* Heat figures are secondary to price: grouped and set smaller at the end */
+.calc-heat {
+  margin-top: 0.5rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.calc-heat .calc-summary-row > span:first-child {
+  font-size: 0.8rem !important;
+}
+
+.calc-heat .calc-summary-val {
+  font-size: 0.95rem !important;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.calc-distance {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+
+.calc-distance[hidden] {
+  display: none;
 }
 
 .calc-price-note {

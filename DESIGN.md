@@ -41,7 +41,10 @@ Write and design like a plant manager talks: facts, numbers, the phone number. N
 
 - **One header on every page.** It is generated: edit `scripts/sync-layout.cjs`, then run
   `node scripts/sync-layout.cjs`. Never hand-edit a page's `<header>`.
-  Menu: Пелети · Калькулятор · Доставка · Про завод · Контакти, phone, UA/EN, «Запит ціни».
+  Menu, in buyer priority: Ціни (calculator) · Продукція (wood, quality) · Доставка · Про завод · Контакти,
+  then phone, UA/EN, «Запит ціни».
+- Every sales-page hero carries the **buyer facts** block (price, wood, quality, lot size), also generated
+  by `sync-layout.cjs`. Its price is read from `PRICING`, so it can't drift from the calculator.
 - Section headings are left-aligned and have **no eyebrow label** above them.
 - Lists of facts are lists with rules between items, not grids of identical rounded cards with icons.
 - Spec values go in the spec sheet (`.specs-grid`), not in floating badges over photos.
@@ -78,9 +81,16 @@ Motion answers what the visitor does. It never decorates.
 ## Prices
 
 Calculator prices live in one place: `assets/js/analytics-config.js` → `PRICING` (UAH per tonne, ex-warehouse,
-separately for pine and acacia + elm). They are **temporary**: Ukrainian producer big-bag average from Sep 2026
-(≈8 020 грн/т) + 5% = 8 420 грн/т. When real prices are set, also update the JSON-LD `lowPrice`/`highPrice`
-and the FAQ price answers on the pages so all three agree.
+separately for pine and acacia + elm). Current price: **14 500 грн/т for both** (set by the owner, Sep 2026).
+When it changes, also update the JSON-LD `lowPrice`/`highPrice`/`priceRange` and the FAQ price answers on the
+pages so all three agree.
+
+## Delivery pricing
+
+The calculator adds delivery = trucks × distance × (fuel for the loaded run + the empty return) + driver pay.
+Inputs live in `assets/js/analytics-config.js` → `DELIVERY`: diesel price and its date, consumption loaded /
+empty, driver rate per km, big bags per truck, road distances from Nikopol per city. **Update `diesel_uah_per_l`
+and `diesel_date` when fuel prices move**; the calculator shows the date to buyers.
 
 ## Before you ship a change
 

@@ -23,6 +23,10 @@
   - Біг-Беги (Big Bag): 950–1000 кг (герметичні вологостійкі мішки на європіддонах).
   - Поліетиленові мішки: 15 кг (за попереднім замовленням).
 
+## Ціни
+- **Ціна**: 14 500 грн за тонну зі складу в Нікополі, однаково для чистої сосни та суміші акації з берестом.
+- **Доставка**: розраховується за відстанню від Нікополя (паливо та робота водія), партії від 15 т. Точну суму для свого міста порахуйте в [онлайн-калькуляторі](https://ukrecopelleta.org/pellets#calculator).
+
 ## Логістика та умови поставки
 - **Регіональна доставка вантажним автотранспортом по Дніпропетровській області**:
   - Мінімальна партія для доставки автотранспортом — **не менше 15 тонн (від 15 біг-бегів)**.
@@ -43,18 +47,18 @@
 - **Телефон відділу продажу**: +38 (066) 403-53-96 (+380664035396)
 - **Email**: sales@ukrecopelleta.org
 - **Прямий зв'язок у Telegram**: https://t.me/+380664035396
-- **Офіційний сайт**: https://ukrecopelleta.org
+- **Офіційний сайт**: [ukrecopelleta.org](https://ukrecopelleta.org)
 - **Графік роботи**: Понеділок – П'ятниця: 08:00 – 18:00. Субота: за попередньою домовленістю. Неділя: вихідний.
 
 ## Основні розділи сайту
-- Головний корпоративний портал: https://ukrecopelleta.org/
-- Оптовий лендінг та онлайн-калькулятор пелет: https://ukrecopelleta.org/pellets
-- Купити пелети в Нікополі (самовивіз від 1 біг-бега): https://ukrecopelleta.org/pelety-nikopol
-- Пелети в Дніпрі та Дніпропетровській області (доставка від 15 т): https://ukrecopelleta.org/pelety-dnipro
-- Пелети оптом від виробника по Україні: https://ukrecopelleta.org/pelety-optom
-- Пелети Кривий Ріг (доставка від 15 т): https://ukrecopelleta.org/pelety-kryvyi-rih
-- Пелети Кам'янське (доставка від 15 т): https://ukrecopelleta.org/pelety-kamianske
-- Пелети Павлоград (доставка від 15 т): https://ukrecopelleta.org/pelety-pavlohrad
-- Публічна оферта оптової поставки: https://ukrecopelleta.org/oferta
-- Політика конфіденційності: https://ukrecopelleta.org/privacy
-- Карта сайту (Sitemap): https://ukrecopelleta.org/sitemap.xml
+- [Головний корпоративний портал](https://ukrecopelleta.org/)
+- [Оптовий лендінг та онлайн-калькулятор пелет](https://ukrecopelleta.org/pellets)
+- [Купити пелети в Нікополі (самовивіз від 1 біг-бега)](https://ukrecopelleta.org/pelety-nikopol)
+- [Пелети в Дніпрі та Дніпропетровській області (доставка від 15 т)](https://ukrecopelleta.org/pelety-dnipro)
+- [Пелети оптом від виробника по Україні](https://ukrecopelleta.org/pelety-optom)
+- [Пелети Кривий Ріг (доставка від 15 т)](https://ukrecopelleta.org/pelety-kryvyi-rih)
+- [Пелети Кам'янське (доставка від 15 т)](https://ukrecopelleta.org/pelety-kamianske)
+- [Пелети Павлоград (доставка від 15 т)](https://ukrecopelleta.org/pelety-pavlohrad)
+- [Публічна оферта оптової поставки](https://ukrecopelleta.org/oferta)
+- [Політика конфіденційності](https://ukrecopelleta.org/privacy)
+- [Карта сайту (Sitemap)](https://ukrecopelleta.org/sitemap.xml)

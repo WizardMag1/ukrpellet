@@ -5,7 +5,7 @@
   <!-- Corporate Portal -->
   <url>
     <loc>https://ukrecopelleta.org/</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="uk" href="https://ukrecopelleta.org/" />
@@ -15,7 +15,7 @@
   <!-- Pellets Sales Landing (Dnipro Wholesale 15 tons) -->
   <url>
     <loc>https://ukrecopelleta.org/pellets</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
     <xhtml:link rel="alternate" hreflang="uk" href="https://ukrecopelleta.org/pellets" />
@@ -25,44 +25,44 @@
   <!-- Local landing pages -->
   <url>
     <loc>https://ukrecopelleta.org/pelety-nikopol</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://ukrecopelleta.org/pelety-dnipro</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://ukrecopelleta.org/pelety-optom</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://ukrecopelleta.org/pelety-kryvyi-rih</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <priority>0.85</priority>
   </url>
 
   <url>
     <loc>https://ukrecopelleta.org/pelety-kamianske</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <priority>0.85</priority>
   </url>
 
   <url>
     <loc>https://ukrecopelleta.org/pelety-pavlohrad</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <priority>0.85</priority>
   </url>
 
   <!-- Public Oferta Contract -->
   <url>
     <loc>https://ukrecopelleta.org/oferta</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -70,7 +70,7 @@
   <!-- Privacy Policy -->
   <url>
     <loc>https://ukrecopelleta.org/privacy</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
