@@ -24,7 +24,7 @@ window.APP_CONFIG = {
   TELEGRAM_BOT_TOKEN: '',
   TELEGRAM_CHAT_ID: '',
 
-  // 5. Prices, UAH per tonne, ex-warehouse Nikopol (set by the owner, Sep 2026).
+  // 5. Prices, UAH per tonne, ex-warehouse Nikopol, without VAT (ПДВ) (set by the owner, Sep 2026).
   // Keep the JSON-LD "lowPrice"/"highPrice"/"priceRange" and the FAQ price answers on the pages in step.
   PRICING: {
     pine_uah_per_t: 14500,

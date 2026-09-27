@@ -287,8 +287,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const fmt = new Intl.NumberFormat(en ? 'en-US' : 'uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         const minText = cfg.min_delivery_uah ? uah(cfg.min_delivery_uah) : '';
         priceNote.textContent = en
-          ? `Diesel ${fmt.format(f.price)} UAH/l: the average Ukrainian pump price (Minfin, ${fmt.format(f.market)}, checked ${dd}.${m}.${y}) plus ${f.markup} UAH. ${minText ? `Delivery costs at least ${minText} per order. ` : ''}Road distances © OpenStreetMap. Estimate only; our sales manager confirms the exact price.`
-          : `Дизель ${fmt.format(f.price)} грн/л: середня ціна на АЗС України (Мінфін, ${fmt.format(f.market)}, перевірено ${dd}.${m}.${y}) плюс ${f.markup} грн. ${minText ? `Доставка на замовлення — від ${minText}. ` : ''}Відстані дорогами © OpenStreetMap. Розрахунок орієнтовний, точну ціну підтвердить менеджер.`;
+          ? `Diesel ${fmt.format(f.price)} UAH/l: the average Ukrainian pump price (Minfin, ${fmt.format(f.market)}, checked ${dd}.${m}.${y}) plus ${f.markup} UAH. ${minText ? `Delivery costs at least ${minText} per order. ` : ''}Prices exclude VAT. Road distances © OpenStreetMap. Estimate only; our sales manager confirms the exact price.`
+          : `Дизель ${fmt.format(f.price)} грн/л: середня ціна на АЗС України (Мінфін, ${fmt.format(f.market)}, перевірено ${dd}.${m}.${y}) плюс ${f.markup} грн. ${minText ? `Доставка на замовлення — від ${minText}. ` : ''}Ціни без ПДВ. Відстані дорогами © OpenStreetMap. Розрахунок орієнтовний, точну ціну підтвердить менеджер.`;
       }
     }
     const meetsMinOrder = tons >= 15;

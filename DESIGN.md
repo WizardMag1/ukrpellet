@@ -81,7 +81,8 @@ Motion answers what the visitor does. It never decorates.
 ## Prices
 
 Calculator prices live in one place: `assets/js/analytics-config.js` → `PRICING` (UAH per tonne, ex-warehouse,
-separately for pine and acacia + elm). Current price: **14 500 грн/т for both** (set by the owner, Sep 2026).
+separately for pine and acacia + elm). Current price: **14 500 грн/т for both, без ПДВ** (set by the owner, Sep 2026);
+say "без ПДВ" wherever the site shows a price.
 When it changes, also update the JSON-LD `lowPrice`/`highPrice`/`priceRange` and the FAQ price answers on the
 pages so all three agree.
 
