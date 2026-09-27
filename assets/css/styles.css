@@ -1609,6 +1609,57 @@ textarea.form-control {
   color: var(--ink-muted);
 }
 
+.form-row {
+  display: grid;
+  gap: 0.6rem;
+}
+
+@media (min-width: 420px) {
+  .form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.form-sub {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+
+.form-choice-grid {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.form-choice-grid .form-choice-opt + .form-choice-opt {
+  margin-top: 0;
+}
+
+@media (min-width: 480px) {
+  .form-choice-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* What won't work with the chosen vehicle or equipment, and what we'll confirm by email */
+.form-warn {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0 0 1.1rem;
+  padding: 0.7rem 0.9rem;
+  list-style: none;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--paper-alt);
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.form-warn[hidden] {
+  display: none;
+}
+
 dialog.contact-modal {
   border: none;
   border-radius: var(--radius-xl);

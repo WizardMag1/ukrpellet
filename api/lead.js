@@ -42,7 +42,7 @@ export default async function handler(req, res) {
   // Trim and cap every field; strings only
   const lead = {};
   for (const [k, v] of Object.entries(raw)) {
-    if (typeof v === 'string') lead[k] = v.trim().slice(0, 1000);
+    if (typeof v === 'string') lead[k] = v.trim().slice(0, k === 'logistics' ? 2000 : 1000);
   }
 
   // Basic validation: must have at least phone, name, or email
@@ -71,12 +71,7 @@ export default async function handler(req, res) {
           city: lead.city || null,
           volume: lead.volume || null,
           // Logistics answers ride in the comment so the existing b2b_leads table needs no new columns
-          comment: [
-            lead.receive ? `Отримання: ${lead.receive}` : '',
-            lead.vehicle ? `Транспорт клієнта: ${lead.vehicle}` : '',
-            lead.unloading ? `Розвантаження: ${lead.unloading}` : '',
-            lead.comment || ''
-          ].filter(Boolean).join('\n') || null,
+          comment: [lead.logistics || '', lead.comment || ''].filter(Boolean).join('\n') || null,
           utm_source: lead.utm_source || null,
           utm_medium: lead.utm_medium || null,
           utm_campaign: lead.utm_campaign || null,
@@ -149,20 +144,10 @@ export default async function handler(req, res) {
           <td class="label">⚖️ Запитуваний об'єм:</td>
           <td class="val" style="font-weight: 600;">${h.volume || '—'}</td>
         </tr>
-        ${h.receive ? `
+        ${h.logistics ? `
         <tr>
-          <td class="label">🚚 Отримання:</td>
-          <td class="val" style="font-weight: 600;">${h.receive}</td>
-        </tr>` : ''}
-        ${h.vehicle ? `
-        <tr>
-          <td class="label">🚐 Транспорт клієнта:</td>
-          <td class="val">${h.vehicle}</td>
-        </tr>` : ''}
-        ${h.unloading ? `
-        <tr>
-          <td class="label">🏗 Розвантаження:</td>
-          <td class="val">${h.unloading}</td>
+          <td class="label">🚚 Логістика:</td>
+          <td class="val">${h.logistics.replace(/\n/g, '<br>')}</td>
         </tr>` : ''}
         ${h.comment ? `
         <tr>
@@ -225,9 +210,7 @@ export default async function handler(req, res) {
       lead.email ? `✉️ Email: ${lead.email}` : '',
       lead.city ? `📍 Місто: ${lead.city}` : '',
       lead.volume ? `⚖️ Об'єм: ${lead.volume}` : '',
-      lead.receive ? `🚚 Отримання: ${lead.receive}` : '',
-      lead.vehicle ? `🚐 Транспорт клієнта: ${lead.vehicle}` : '',
-      lead.unloading ? `🏗 Розвантаження: ${lead.unloading}` : '',
+      lead.logistics ? `🚚 Логістика:\n${lead.logistics}` : '',
       lead.comment ? `💬 Коментар: ${lead.comment}` : '',
       lead.utm_source ? `📊 Реклама: ${lead.utm_source} (${lead.utm_campaign || '—'})` : '',
       `🕐 ${timestamp}`
