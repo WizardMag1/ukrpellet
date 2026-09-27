@@ -18,3 +18,5 @@ jobs:
         run: npm run check
       - name: Lead API syntax
         run: node --check api/lead.js
+      - name: Diesel price rule tests
+        run: node scripts/update-fuel.test.cjs

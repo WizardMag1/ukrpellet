@@ -5,7 +5,11 @@
 document.addEventListener('DOMContentLoaded', () => {
   const tonsSlider = document.getElementById('calc-tons-slider');
   const tonsInput = document.getElementById('calc-tons-input');
-  const citySelect = document.getElementById('calc-city-select');
+  const modeRadios = document.querySelectorAll('input[name="calc-mode"]');
+  const placeGroup = document.getElementById('calc-place-group');
+  const placeInput = document.getElementById('calc-place-input');
+  const placeList = document.getElementById('calc-place-list');
+  const placeHint = document.getElementById('calc-place-hint');
 
   const resTons = document.getElementById('res-total-tons');
   const resBags = document.getElementById('res-big-bags');
@@ -23,17 +27,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const resDeliveryBreakdown = document.getElementById('res-delivery-breakdown');
   const resPerTDelivered = document.getElementById('res-per-t-delivered');
   const priceNote = document.getElementById('calc-price-note');
-  const distanceGroup = document.getElementById('calc-distance-group');
-  const distanceInput = document.getElementById('calc-distance-input');
+
+  // Diesel price: /data/fuel.json is refreshed daily by .github/workflows/fuel-price.yml (rises apply at once,
+  // drops only after a week). analytics-config.js holds the fallback if that file can't be read.
+  let fuelFile = null;
+  function diesel() {
+    const d = window.APP_CONFIG?.DELIVERY || {};
+    return fuelFile
+      ? { price: fuelFile.diesel_uah_per_l, date: fuelFile.checked_date || fuelFile.effective_date, live: true }
+      : { price: d.diesel_uah_per_l, date: d.diesel_date, live: false };
+  }
 
   // Delivery = own truck cost: fuel for the loaded run and the empty return, plus driver pay per km.
-  // All inputs live in analytics-config.js (APP_CONFIG.DELIVERY).
+  // Truck inputs live in analytics-config.js (APP_CONFIG.DELIVERY).
   function deliveryCost(km, bags) {
     const d = window.APP_CONFIG?.DELIVERY;
     if (!d) return null;
     const trucks = Math.max(1, Math.ceil(bags / d.bags_per_truck));
     const litres = km * (d.consumption_loaded_l_per_100km + d.consumption_empty_l_per_100km) / 100;
-    const fuel = trucks * litres * d.diesel_uah_per_l;
+    const fuel = trucks * litres * diesel().price;
     const driver = trucks * 2 * km * d.driver_uah_per_km;
     const total = Math.round((fuel + driver) / 10) * 10;
     return { trucks, fuel, driver, total };
@@ -215,16 +227,12 @@ document.addEventListener('DOMContentLoaded', () => {
     roll(resEnergy, grossMwh, energyText);
     roll(resHeatOutput, grossMwh * eff, energyText);
 
-    // Check regional delivery constraints
-    // Minimum order: strictly at least 15 tonnes (from 15 big-bags)
-    const selectedCity = citySelect ? citySelect.value : 'dnipro';
-    const isNikopolPickup = selectedCity === 'nikopol_pickup';
-    const isOther = selectedCity === 'other_ua';
-    const onRequest = selectedCity === 'poland';
-    if (distanceGroup) distanceGroup.hidden = !isOther;
+    // Destination: delivery to a chosen place, pickup at the Nikopol warehouse, or export (priced on request)
+    const mode = currentMode();
+    const isNikopolPickup = mode === 'pickup';
+    if (placeGroup) placeGroup.hidden = mode !== 'delivery';
 
     const price = pricePerTonne();
-    const cfg = window.APP_CONFIG?.DELIVERY;
     if (price) {
       const money = new Intl.NumberFormat(en ? 'en-US' : 'uk-UA', { maximumFractionDigits: 0 });
       const uah = (v) => (en ? `UAH ${money.format(Math.round(v))}` : `${money.format(Math.round(v))} грн`);
@@ -232,8 +240,9 @@ document.addEventListener('DOMContentLoaded', () => {
       roll(resPrice, price, uah);
       roll(resGoods, goods, uah);
 
-      let km = isOther ? Math.min(Math.max(parseFloat(distanceInput?.value) || 0, 1), 1500) : cfg?.distances_km?.[selectedCity];
-      const delivery = isNikopolPickup ? { total: 0 } : (onRequest || km == null) ? null : deliveryCost(km, bigBags);
+      const cfg = window.APP_CONFIG?.DELIVERY || {};
+      let km = mode === 'delivery' && selectedPlace ? Math.max(selectedPlace.km, cfg.min_delivery_km || 0) : null;
+      const delivery = isNikopolPickup ? { total: 0 } : km == null ? null : deliveryCost(km, bigBags);
 
       if (isNikopolPickup) {
         setText(resDeliveryLabel, en ? 'Delivery:' : 'Доставка:');
@@ -241,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setText(resDeliveryBreakdown, '');
       } else if (!delivery) {
         setText(resDeliveryLabel, en ? 'Delivery:' : 'Доставка:');
-        setText(resDelivery, en ? 'on request' : 'за запитом');
+        setText(resDelivery, mode === 'export' ? (en ? 'on request' : 'за запитом') : (en ? 'choose a place' : 'оберіть населений пункт'));
         setText(resDeliveryBreakdown, '');
       } else {
         km = Math.round(km);
@@ -261,12 +270,13 @@ document.addEventListener('DOMContentLoaded', () => {
           ? (en ? `≈ ${uah(total / tons)} per tonne delivered` : `≈ ${uah(total / tons)} за тонну з доставкою`)
           : (en ? 'without delivery' : 'без доставки'));
 
-      if (priceNote && cfg) {
-        const [y, m, dd] = String(cfg.diesel_date).split('-');
-        const diesel = new Intl.NumberFormat(en ? 'en-US' : 'uk-UA', { minimumFractionDigits: 1, maximumFractionDigits: 2 }).format(cfg.diesel_uah_per_l);
+      if (priceNote) {
+        const f = diesel();
+        const [y, m, dd] = String(f.date).split('-');
+        const litre = new Intl.NumberFormat(en ? 'en-US' : 'uk-UA', { minimumFractionDigits: 1, maximumFractionDigits: 2 }).format(f.price);
         priceNote.textContent = en
-          ? `Diesel ${diesel} UAH/l as of ${dd}.${m}.${y}. Estimate only; our sales manager confirms the exact price.`
-          : `Дизель ${diesel} грн/л станом на ${dd}.${m}.${y}. Розрахунок орієнтовний, точну ціну підтвердить менеджер.`;
+          ? `Diesel ${litre} UAH/l, average Ukrainian pump price (Minfin), checked ${dd}.${m}.${y}. Road distances © OpenStreetMap. Estimate only; our sales manager confirms the exact price.`
+          : `Дизель ${litre} грн/л, середня ціна на АЗС України (Мінфін), перевірено ${dd}.${m}.${y}. Відстані дорогами © OpenStreetMap. Розрахунок орієнтовний, точну ціну підтвердить менеджер.`;
       }
     }
     const meetsMinOrder = tons >= 15;
@@ -280,6 +290,281 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // ---- Destination: mode + place search ------------------------------------------------------------
+  // places.json (built by scripts/build-places.cjs): every settlement in government-controlled Ukraine
+  // with its road distance from the warehouse. It is fetched when the buyer starts typing.
+
+  function currentMode() {
+    const checked = document.querySelector('input[name="calc-mode"]:checked');
+    return checked ? checked.value : 'delivery';
+  }
+
+  // City pages link here as /pellets?city=dnipro#calculator. Distances match places.json so the
+  // calculator can show a price before that file has loaded.
+  const PRESETS = {
+    dnipro: ['Дніпро', 'Dnipro', ['Дніпровський', 'Дніпропетровська', 'Dniprovskyi', 'Dnipropetrovska'], 2],
+    kamianske: ['Кам’янське', 'Kamianske', ['Кам’янський', 'Дніпропетровська', 'Kamianskyi', 'Dnipropetrovska'], 2],
+    kryvyi_rih: ['Кривий Ріг', 'Kryvyi Rih', ['Криворізький', 'Дніпропетровська', 'Kryvorizkyi', 'Dnipropetrovska'], 2],
+    pavlohrad: ['Павлоград', 'Pavlohrad', ['Павлоградський', 'Дніпропетровська', 'Pavlohradskyi', 'Dnipropetrovska'], 2],
+    novomoskovsk: ['Самар', 'Samar', ['Самарівський', 'Дніпропетровська', 'Samarivskyi', 'Dnipropetrovska'], 2],
+    nikopol_deliv: ['Нікополь', 'Nikopol', ['Нікопольський', 'Дніпропетровська', 'Nikopolskyi', 'Dnipropetrovska'], 2],
+    marhanets: ['Марганець', 'Marhanets', ['Нікопольський', 'Дніпропетровська', 'Nikopolskyi', 'Dnipropetrovska'], 2],
+    pokrov: ['Покров', 'Pokrov', ['Нікопольський', 'Дніпропетровська', 'Nikopolskyi', 'Dnipropetrovska'], 2],
+  };
+  const presetKm = window.APP_CONFIG?.DELIVERY?.distances_km || {};
+  const toPlace = ([uk, en, region, type], km) => ({ uk, en, region, km, type });
+
+  let selectedPlace = null;
+  const places = { rows: null, keys: null, loading: null, failed: false };
+  let results = [];
+  let active = -1;
+
+  // Fold spelling variants so "Никополь", "нікополь" and "Nikopol" all find Нікополь
+  function norm(str) {
+    return String(str).toLowerCase()
+      .replace(/[’ʼ'`"]/g, '')
+      .replace(/[ёєэ]/g, 'е')
+      .replace(/[іїйы]/g, 'и')
+      .replace(/ґ/g, 'г')
+      .replace(/ъ/g, '')
+      .replace(/[-‐–]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function placeName(p) {
+    return lang() === 'en' ? p.en : p.uk;
+  }
+
+  function regionLabel(r) {
+    if (lang() === 'en') return r[2] === r[3] ? r[3] : `${r[2]} district, ${r[3]} Oblast`;
+    return r[0] === r[1] ? `м. ${r[1]}` : `${r[0]} р-н, ${r[1]} обл.`;
+  }
+
+  function typeWord(type) {
+    const en = lang() === 'en';
+    return type === 2 ? (en ? 'town' : 'місто') : type === 1 ? (en ? 'settlement' : 'селище') : (en ? 'village' : 'село');
+  }
+
+  function placesUrl() {
+    const src = document.querySelector('script[src*="calculator.js"]')?.getAttribute('src') || '';
+    const v = src.split('?v=')[1];
+    return `/assets/data/places.json${v ? `?v=${v}` : ''}`;
+  }
+
+  function loadPlaces() {
+    if (!places.loading) {
+      places.failed = false;
+      places.loading = fetch(placesUrl())
+        .then((r) => {
+          if (!r.ok) throw new Error(`places.json ${r.status}`);
+          return r.json();
+        })
+        .then((doc) => {
+          places.rows = doc.places.map((row) => ({ uk: row[0], en: row[1], region: doc.regions[row[2]], km: row[3], type: row[4], former: row[5] || '' }));
+          places.keys = places.rows.map((p) => [norm(p.uk), norm(p.en), norm(p.former)]);
+        })
+        .catch(() => {
+          places.loading = null;
+          places.failed = true;
+        })
+        .finally(() => {
+          renderHint();
+          if (document.activeElement === placeInput && !selectedPlace) refreshResults();
+        });
+    }
+    return places.loading;
+  }
+
+  function matchScore(key, q) {
+    if (key === q) return 0;
+    if (key.startsWith(q)) return 1;
+    if (key.includes(` ${q}`)) return 2;
+    if (key.includes(q)) return 3;
+    return 4;
+  }
+
+  // Best matches first; then towns before villages; then the nearest to the warehouse
+  function search(query) {
+    const q = norm(query);
+    if (q.length < 2 || !places.rows) return [];
+    const hits = [];
+    for (let i = 0; i < places.rows.length; i++) {
+      const [ku, ke, kf] = places.keys[i];
+      const score = Math.min(matchScore(ku, q), matchScore(ke, q), kf ? matchScore(kf, q) : 4);
+      if (score < 4) hits.push([score, i]);
+    }
+    const P = places.rows;
+    hits.sort((a, b) => a[0] - b[0] || P[b[1]].type - P[a[1]].type || P[a[1]].km - P[b[1]].km);
+    return hits.slice(0, 8).map(([, i]) => P[i]);
+  }
+
+  function renderHint() {
+    if (!placeHint) return;
+    const en = lang() === 'en';
+    if (selectedPlace) {
+      const min = window.APP_CONFIG?.DELIVERY?.min_delivery_km || 0;
+      const near = selectedPlace.km < min;
+      placeHint.textContent = en
+        ? `${regionLabel(selectedPlace.region)}, ${selectedPlace.km} km by road from our warehouse.${near ? ` Nearby addresses are charged as ${min} km.` : ''}`
+        : `${regionLabel(selectedPlace.region)}, ${selectedPlace.km} км дорогою від складу.${near ? ` Близькі адреси рахуємо як ${min} км.` : ''}`;
+    } else if (places.failed) {
+      placeHint.textContent = en
+        ? 'Could not load the list of places. Try again, or call us and we will price delivery.'
+        : 'Не вдалося завантажити список. Спробуйте ще раз або зателефонуйте, і ми порахуємо доставку.';
+    } else if (places.loading && !places.rows) {
+      placeHint.textContent = en ? 'Loading the list of places…' : 'Завантажуємо список населених пунктів…';
+    } else {
+      placeHint.textContent = en
+        ? 'Start typing a town or village and pick it from the list.'
+        : 'Почніть вводити місто або село й оберіть його зі списку.';
+    }
+  }
+
+  function setOpen(open) {
+    if (!placeList || !placeInput) return;
+    placeList.hidden = !open;
+    placeInput.setAttribute('aria-expanded', String(open));
+    if (!open) placeInput.removeAttribute('aria-activedescendant');
+  }
+
+  function renderList() {
+    if (!placeList) return;
+    placeList.textContent = '';
+    const en = lang() === 'en';
+    const q = norm(placeInput.value);
+    results.forEach((p, i) => {
+      const li = document.createElement('li');
+      li.id = `calc-place-opt-${i}`;
+      li.className = 'calc-combo-opt';
+      li.setAttribute('role', 'option');
+      li.setAttribute('aria-selected', String(i === active));
+      const name = document.createElement('span');
+      name.className = 'calc-combo-name';
+      name.textContent = placeName(p);
+      const km = document.createElement('span');
+      km.className = 'calc-combo-km';
+      km.textContent = en ? `${p.km} km` : `${p.km} км`;
+      const meta = document.createElement('span');
+      meta.className = 'calc-combo-meta';
+      meta.textContent = `${typeWord(p.type)}, ${regionLabel(p.region)}${p.former ? (en ? ` (formerly ${p.former})` : ` (колишній ${p.former})`) : ''}`;
+      li.append(name, km, meta);
+      li.addEventListener('click', () => choose(p));
+      placeList.appendChild(li);
+    });
+    if (!results.length && places.rows && q.length >= 2) {
+      const li = document.createElement('li');
+      li.className = 'calc-combo-empty';
+      li.setAttribute('role', 'option');
+      li.setAttribute('aria-disabled', 'true');
+      li.textContent = en
+        ? 'Nothing found. Check the spelling or type the nearest town.'
+        : 'Нічого не знайдено. Перевірте назву або введіть найближче місто.';
+      placeList.appendChild(li);
+    }
+    setOpen(placeList.children.length > 0);
+    if (active >= 0) {
+      placeInput.setAttribute('aria-activedescendant', `calc-place-opt-${active}`);
+      placeList.children[active]?.scrollIntoView({ block: 'nearest' });
+    } else {
+      placeInput.removeAttribute('aria-activedescendant');
+    }
+  }
+
+  function refreshResults() {
+    results = search(placeInput.value);
+    active = results.length ? 0 : -1;
+    renderList();
+  }
+
+  function choose(p) {
+    selectedPlace = p;
+    placeInput.value = placeName(p);
+    results = [];
+    active = -1;
+    setOpen(false);
+    renderHint();
+    updateCalculations();
+  }
+
+  if (placeInput && placeList) {
+    placeInput.addEventListener('focus', () => {
+      loadPlaces();
+      renderHint();
+      if (!selectedPlace && placeInput.value) refreshResults();
+      // On phones the keyboard would cover the suggestions: lift the field to just under the sticky header
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        setTimeout(() => {
+          const header = document.querySelector('.site-header');
+          const top = placeInput.getBoundingClientRect().top + window.scrollY - (header ? header.offsetHeight : 0) - 40;
+          window.scrollTo({ top, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+        }, 250);
+      }
+    });
+
+    placeInput.addEventListener('input', () => {
+      selectedPlace = null;
+      loadPlaces();
+      renderHint();
+      refreshResults();
+      updateCalculations();
+    });
+
+    placeInput.addEventListener('keydown', (e) => {
+      const open = !placeList.hidden && results.length > 0;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        if (!results.length) return;
+        e.preventDefault();
+        const step = e.key === 'ArrowDown' ? 1 : -1;
+        active = open ? (active + step + results.length) % results.length : 0;
+        renderList();
+      } else if (e.key === 'Enter') {
+        if (open && active >= 0) {
+          e.preventDefault();
+          choose(results[active]);
+        }
+      } else if (e.key === 'Escape') {
+        if (!placeList.hidden) {
+          e.preventDefault();
+          setOpen(false);
+        }
+      }
+    });
+
+    // Leaving the field (Tab) closes the list; an exact name typed counts as choosing it
+    placeInput.addEventListener('blur', () => {
+      if (!selectedPlace && results.length && norm(placeName(results[0])) === norm(placeInput.value)) choose(results[0]);
+      setOpen(false);
+    });
+
+    // Keep focus in the input while an option is clicked, so the list doesn't close under the pointer
+    placeList.addEventListener('mousedown', (e) => e.preventDefault());
+
+    document.addEventListener('pointerdown', (e) => {
+      if (!e.target.closest('.calc-combo')) setOpen(false);
+    });
+  }
+
+  modeRadios.forEach((radio) => radio.addEventListener('change', () => {
+    setOpen(false);
+    updateCalculations();
+  }));
+
+  // Starting destination: from ?city= on the city pages, otherwise Dnipro
+  (function initDestination() {
+    const param = new URLSearchParams(window.location.search).get('city') || 'dnipro';
+    const mode = param === 'nikopol_pickup' ? 'pickup' : param === 'poland' ? 'export' : 'delivery';
+    const radio = document.querySelector(`input[name="calc-mode"][value="${mode}"]`);
+    if (radio) radio.checked = true;
+    // Also fill a place for pickup/export, so switching to delivery starts somewhere sensible
+    const key = Object.hasOwn(PRESETS, param) ? param : param === 'nikopol_pickup' ? 'nikopol_deliv' : param === 'other_ua' ? null : 'dnipro';
+    if (key && presetKm[key] != null) {
+      selectedPlace = toPlace(PRESETS[key], presetKm[key]);
+      if (placeInput) placeInput.value = placeName(selectedPlace);
+    }
+    renderHint();
+  })();
+
   tonsSlider.addEventListener('input', (e) => {
     tonsInput.value = e.target.value;
     updateCalculations();
@@ -288,16 +573,6 @@ document.addEventListener('DOMContentLoaded', () => {
   tonsInput.addEventListener('change', () => {
     updateCalculations();
   });
-
-  if (citySelect) {
-    citySelect.addEventListener('change', () => {
-      updateCalculations();
-    });
-  }
-
-  if (distanceInput) {
-    distanceInput.addEventListener('input', updateCalculations);
-  }
 
   if (effSelect) {
     effSelect.addEventListener('change', () => {
@@ -322,9 +597,13 @@ document.addEventListener('DOMContentLoaded', () => {
         volumeInput.value = `${tonsInput.value} т (~${bagsNow} біг-бегів по 950–1000 кг)${product ? `, ${product}` : ''}`;
       }
 
-      if (cityInput && citySelect) {
-        const selectedText = citySelect.options[citySelect.selectedIndex].text;
-        cityInput.value = selectedText;
+      if (cityInput) {
+        const mode = currentMode();
+        const en = lang() === 'en';
+        cityInput.value = mode === 'pickup' ? (en ? 'Pickup, Nikopol warehouse' : 'Самовивіз, склад у Нікополі')
+          : mode === 'export' ? (en ? 'Export to Poland' : 'Експорт у Польщу')
+          : selectedPlace ? `${placeName(selectedPlace)} (${regionLabel(selectedPlace.region)})`
+          : (placeInput ? placeInput.value : '');
       }
 
       if (modal && typeof modal.showModal === 'function') {
@@ -333,14 +612,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // City pages link here as /pellets?city=dnipro#calculator: start with that destination selected
-  const cityParam = new URLSearchParams(window.location.search).get('city');
-  if (citySelect && cityParam && citySelect.querySelector(`option[value="${CSS.escape(cityParam)}"]`)) {
-    citySelect.value = cityParam;
-  }
+  // Re-render unit labels, the chosen place and the delivery notice when the language switches
+  window.addEventListener('languageChanged', () => {
+    if (selectedPlace && placeInput) placeInput.value = placeName(selectedPlace);
+    renderHint();
+    updateCalculations();
+  });
 
-  // Re-render unit labels and the delivery notice when the language switches
-  window.addEventListener('languageChanged', updateCalculations);
+  // Live diesel price (falls back to analytics-config.js if the file is missing or malformed)
+  fetch('/data/fuel.json', { cache: 'no-cache' })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((f) => {
+      if (f && f.diesel_uah_per_l > 0) {
+        fuelFile = f;
+        updateCalculations();
+      }
+    })
+    .catch(() => {});
 
   // Initial calculation run
   updateCalculations();
