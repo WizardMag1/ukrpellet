@@ -2,6 +2,8 @@ name = "ukrecopelleta-edge"
 main = "worker.js"
 compatibility_date = "2026-09-01"
 workers_dev = false
+# Worker Previews (Cloudflare branch builds run `wrangler preview`) get a noindex workers.dev URL
+preview_urls = true
 
 # Custom domains: Cloudflare creates the DNS records for these automatically
 routes = [
@@ -12,3 +14,9 @@ routes = [
 [vars]
 ORIGIN = "ukrpellet-ua.vercel.app"
 CANONICAL_HOST = "ukrecopelleta.org"
+
+# Previews don't inherit the production settings above. No CANONICAL_HOST: a preview answers on its own
+# workers.dev URL instead of redirecting to the live domain. Production routes never apply to previews.
+[previews.vars]
+ORIGIN = "ukrpellet-ua.vercel.app"
+CANONICAL_HOST = ""
