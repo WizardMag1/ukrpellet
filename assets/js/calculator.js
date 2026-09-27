@@ -617,8 +617,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // Pickup or delivery carries over to the form (main.js shows the pickup vehicle question)
+      // (and the tonnage, for its vehicle-capacity warning)
+      const leadForm = modal?.querySelector('.quote-lead-form');
+      if (leadForm) leadForm.dataset.tons = String(parseFloat(tonsInput.value) || '');
       const receive = modal?.querySelector(`input[name="receive"][value="${currentMode() === 'pickup' ? 'Самовивіз' : 'Доставка'}"]`);
-      if (receive && !receive.checked) {
+      if (receive) {
         receive.checked = true;
         receive.dispatchEvent(new Event('change', { bubbles: true }));
       }

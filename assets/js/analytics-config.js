@@ -45,7 +45,7 @@ window.APP_CONFIG = {
     diesel_markup_uah_per_l: 3,      // added to the national average: the cheap stations are not on every route (owner, Sep 2026)
     consumption_loaded_l_per_100km: 35, // 20–22 t curtain-sider, loaded (market range 32–38)
     consumption_empty_l_per_100km: 28,  // same truck returning empty
-    driver_uah_per_km: 2.5,          // domestic long-haul rate 1.8–2.5 UAH/km (2026)
+    driver_uah_per_km: 4,            // ~40 000 UAH/month at ~10 000 km (owner, Sep 2026)
     bag_kg: 650,                     // one big bag of pellets (owner, Sep 2026)
     bags_per_truck: 26,              // 13.6 m curtain-sider, one tier: 26 × 650 kg = 16.9 t
     min_delivery_uah: 15000,         // minimum delivery charge per order (owner, Sep 2026)
