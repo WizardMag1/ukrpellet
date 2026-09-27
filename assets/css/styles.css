@@ -2218,3 +2218,8 @@ dialog.contact-modal[open] {
 .legal-content li {
   max-width: 64ch;
 }
+
+/* Home "production" section: text only until real photos of the warehouse arrive */
+.production-copy {
+  max-width: 46rem;
+}

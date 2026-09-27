@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ASSET_VERSION = '20260927-7';
+const ASSET_VERSION = '20260927-8';
 const ROOT = path.join(__dirname, '..');
 
 // pagePath: the clean URL the page is served at (vercel.json cleanUrls).
