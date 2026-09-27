@@ -24,7 +24,16 @@ window.APP_CONFIG = {
   TELEGRAM_BOT_TOKEN: '',
   TELEGRAM_CHAT_ID: '',
 
-  // 5. Contact & Messenger Routing (all CTAs point to the same number / channel)
+  // 5. Indicative calculator prices, UAH per tonne, ex-warehouse Nikopol (delivery quoted separately).
+  // TEMPORARY until real prices are set: market average of Ukrainian producer big-bag prices
+  // found in Sep 2026 (7 000 – 9 500 UAH/t, avg 8 020) + 5%. Replace these two numbers with real prices.
+  // Keep the JSON-LD "lowPrice"/"highPrice" on the pages consistent with what you set here.
+  PRICING: {
+    pine_uah_per_t: 8420,
+    acacia_elm_uah_per_t: 8420
+  },
+
+  // 6. Contact & Messenger Routing (all CTAs point to the same number / channel)
   CONTACTS: {
     phone_display: "+38 (066) 403-53-96",
     phone_raw: "+380664035396",
@@ -33,7 +42,7 @@ window.APP_CONFIG = {
     email: "sales@ukrecopelleta.org"
   },
 
-  // 6. Company Credentials & Requisites (Officially Verified via Clarity Project)
+  // 7. Company Credentials & Requisites (Officially Verified via Clarity Project)
   COMPANY_CREDENTIALS: {
     legal_name_ua: "ТОВ «УКРЕКОПЕЛЕТА»",
     legal_name_en: "UKREKOPELLET, LLC",

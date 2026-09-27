@@ -12,19 +12,20 @@ const translations = {
 
     // Navigation
     "nav.home": "Головна",
-    "nav.about": "Про компанію",
-    "nav.pellets": "Паливні пелети (Опт)",
+    "nav.about": "Про завод",
+    "nav.pellets": "Пелети",
     "nav.production": "Виробництво",
     "nav.calculator": "Калькулятор",
     "nav.logistics": "Доставка",
     "nav.faq": "FAQ",
     "nav.contacts": "Контакти",
-    "nav.quote_btn": "Швидкий розрахунок",
+    "nav.quote_btn": "Запит ціни",
 
     // Brand
-    "brand.title": "UkrEco<span>Pelleta</span>",
+    "brand.title": "UkrEcoPelleta",
+    "brand.tagline": "Пелетний завод у Нікополі",
     "brand.corp_sub": "ТОВ «УКРЕКОПЕЛЕТА»",
-    "brand.badge_nikopol": "Виробник • м. Нікополь",
+    "brand.badge_nikopol": "Виробник, м. Нікополь",
 
     // Hero Corporate (index.html)
     "hero.corp_badge": "Екологічне біопаливо європейського стандарту",
@@ -66,8 +67,8 @@ const translations = {
     "corp.f3_title": "Великий критий склад готової продукції",
     "corp.f3_desc": "Складські площі понад 3000 м² у Нікополі забезпечують сухе зберігання біг-бегів та гарантують оперативне відвантаження навіть у пік опалювального сезону.",
 
-    "corp.f4_title": "Екологічна сировина: сосна, акація, берест",
-    "corp.f4_desc": "Ми використовуємо виключно чисту відбірну деревину — сосну або комбінацію сосни з акацією та берестом — без піску, кори чи хімічних клеїв. Гранули безпечні для будь-яких типів сучасних пелетних пальників.",
+    "corp.f4_title": "Сировина: чиста сосна або акація з берестом",
+    "corp.f4_desc": "Ми використовуємо виключно чисту відбірну деревину — чисту сосну або суміш акації з берестом — без піску, кори чи хімічних клеїв. Гранули безпечні для будь-яких типів сучасних пелетних пальників.",
 
     "corp.f5_title": "Логістика та гнучкі поставки",
     "corp.f5_desc": "Організовуємо доставку тентованими напівпричепами (фурами 22-24 т) по Дніпропетровській області, всій території України, а також потенційний експорт до Польщі.",
@@ -81,8 +82,8 @@ const translations = {
     "specs.lead": "Відповідають стандартам ENplus A1 / DINplus. Високий коефіцієнт корисної дії та мінімальний нагар у пальнику.",
 
     "spec.material_name": "Базова сировина",
-    "spec.material_val": "Сосна, акація, берест",
-    "spec.material_note": "100% натуральна деревина: чиста сосна або комбінація сосни з акацією та берестом",
+    "spec.material_val": "Сосна або акація + берест",
+    "spec.material_note": "100% натуральна деревина: чиста сосна або суміш акації з берестом",
 
     "spec.diam_name": "Діаметр гранул",
     "spec.diam_val": "6 мм / 8 мм",
@@ -149,9 +150,18 @@ const translations = {
     "calc.res_tons": "Загальний тоннаж:",
     "calc.res_bags": "Кількість Біг-Бегів:",
     "calc.res_energy": "Орієнтовна теплоенергія:",
-    "calc.min_alert_ok": "✔ Об'єм відповідає умовам регіональної доставки (не менше 15 тонн / від 15 біг-бегів).",
-    "calc.min_alert_warn": "⚠ Увага: для доставки по області мінімальна партія становить не менше 15 тонн (від 15 біг-бегів). Для менших обсягів доступний самовивіз у м. Нікополь або індивідуальне узгодження.",
+    "calc.min_alert_ok": "Партія підходить для доставки по області (від 15 тонн).",
+    "calc.min_alert_pickup": "Самовивіз зі складу в Нікополі: можна від 1 біг-бега, за попереднім узгодженням.",
+    "calc.min_alert_warn": "Доставка по області — від 15 тонн. Меншу партію можна забрати самовивозом у Нікополі або узгодити окремо.",
     "calc.submit_btn": "Отримати точну ціну з доставкою",
+    "calc.load_plan": "План завантаження",
+    "calc.label_product": "Сировина:",
+    "calc.option_pine": "Сосна 100%",
+    "calc.option_acacia_elm": "Акація + берест",
+    "calc.res_price": "Ціна зі складу, за тонну:",
+    "calc.res_total": "Орієнтовна сума за партію:",
+    "calc.price_note": "Орієнтовна ціна без доставки. Точну ціну з доставкою підтвердить менеджер.",
+    "calc.min_marker": "мінімальна партія для доставки — 15 т",
 
     // Regional Delivery Info
     "deliv.tag": "Географія постачання",
@@ -177,7 +187,7 @@ const translations = {
     "faq.q1": "Чому мінімальне замовлення для доставки по області становить не менше 15 тонн?",
     "faq.a1": "Партія не менше 15 тонн (від 15 біг-бегів по 950–1000 кг) — це мінімальне економічно обґрунтоване завантаження вантажного автотранспорту, що гарантує найнижчу собівартість доставки за тонну палива. Для самовивозу безпосередньо зі складу в м. Нікополь можливий відпуск менших обсягів (від 1 біг-бега) за попереднім узгодженням.",
     "faq.q2": "Яка деревина використовується для виробництва?",
-    "faq.a2": "Ми використовуємо екологічно чисту технічну деревину та відходи лісопиляння без кори, домішок і хімічних сполучників. Основна сировина — чиста сосна або комбінація сосни з акацією та берестом. Точний склад та поточні характеристики надаються нашим менеджером при оформленні заявки.",
+    "faq.a2": "Ми використовуємо екологічно чисту технічну деревину та відходи лісопиляння без кори, домішок і хімічних сполучників. Основна сировина — чиста сосна або суміш акації з берестом. Точний склад та поточні характеристики надаються нашим менеджером при оформленні заявки.",
     "faq.q3": "Як швидко здійснюється доставка до Дніпра чи Кривого Рогу?",
     "faq.a3": "За наявності потрібного об'єму на складі в Нікополі відвантаження здійснюється протягом 24–48 годин з моменту підтвердження замовлення та оплати.",
     "faq.q4": "Які варіанти оплати доступні для підприємств?",
@@ -208,7 +218,9 @@ const translations = {
     "form.comment_label": "Додаткові побажання (діаметр 6/8 мм, терміни)",
     "form.comment_placeholder": "Цікавить 6 мм, безготівковий розрахунок...",
     "form.submit": "Надіслати заявку",
-    "form.privacy_note": "🔒 Ваші дані захищені. Ми не розсилаємо спам.",
+    "form.privacy_note": "Ваші дані захищені. Ми не розсилаємо спам.",
+    "cta.pellets_terms": "Умови поставки",
+    "cta.all_specs": "Усі характеристики",
     "form.success_msg": "Дякуємо! Ваша заявка прийнята. Менеджер зв'яжеться з вами найближчим часом.",
 
     // Footer
@@ -233,19 +245,20 @@ const translations = {
 
     // Navigation
     "nav.home": "Home",
-    "nav.about": "About Company",
-    "nav.pellets": "Wood Pellets (Wholesale)",
+    "nav.about": "About the plant",
+    "nav.pellets": "Pellets",
     "nav.production": "Production",
     "nav.calculator": "Calculator",
-    "nav.logistics": "Logistics",
+    "nav.logistics": "Delivery",
     "nav.faq": "FAQ",
     "nav.contacts": "Contacts",
-    "nav.quote_btn": "Quick Quote",
+    "nav.quote_btn": "Request a price",
 
     // Brand
-    "brand.title": "UkrEco<span>Pelleta</span>",
+    "brand.title": "UkrEcoPelleta",
+    "brand.tagline": "Wood pellet plant in Nikopol",
     "brand.corp_sub": "UKREKOPELLET, LLC",
-    "brand.badge_nikopol": "Manufacturer • Nikopol, UA",
+    "brand.badge_nikopol": "Manufacturer, Nikopol, Ukraine",
 
     // Hero Corporate (index.html)
     "hero.corp_badge": "Eco-friendly Biofuel of European Standard",
@@ -287,8 +300,8 @@ const translations = {
     "corp.f3_title": "Extensive Covered Storage",
     "corp.f3_desc": "Over 3,000 m² of dry indoor storage in Nikopol protects Big Bags from moisture and ensures immediate dispatch even during peak winter heating demand.",
 
-    "corp.f4_title": "Pine, Acacia & Elm Raw Material",
-    "corp.f4_desc": "We use exclusively clean natural wood — pure pine or a combination of pine with acacia and elm — without sand, bark, chemical glues, or binders. Our pellets are safe for all types of modern automatic pellet burners.",
+    "corp.f4_title": "Raw material: pure pine or acacia–elm blend",
+    "corp.f4_desc": "We use exclusively clean natural wood — pure pine, or an acacia and elm blend — without sand, bark, chemical glues, or binders. Our pellets are safe for all types of modern automatic pellet burners.",
 
     "corp.f5_title": "Flexible Logistics Fleet",
     "corp.f5_desc": "We arrange truck delivery (22-24 ton curtain-side semi-trailers) across Dnipropetrovsk region, throughout Ukraine, and support export shipments to Poland and EU.",
@@ -302,8 +315,8 @@ const translations = {
     "specs.lead": "Compliant with ENplus A1 / DINplus standards. High thermal efficiency and minimal burner residue.",
 
     "spec.material_name": "Raw Material Base",
-    "spec.material_val": "Pine, Acacia & Elm",
-    "spec.material_note": "100% natural wood: pure pine or a combination of pine with acacia and elm",
+    "spec.material_val": "Pine, or acacia + elm",
+    "spec.material_note": "100% natural wood: pure pine, or an acacia and elm blend",
 
     "spec.diam_name": "Pellet Diameter",
     "spec.diam_val": "6 mm / 8 mm",
@@ -370,9 +383,18 @@ const translations = {
     "calc.res_tons": "Total Weight:",
     "calc.res_bags": "Big Bags Count:",
     "calc.res_energy": "Estimated Heat Energy:",
-    "calc.min_alert_ok": "✔ Volume fulfills regional delivery minimum (at least 15 tonnes / from 15 Big Bags).",
-    "calc.min_alert_warn": "⚠ Notice: Minimum order for delivery across Dnipro region is at least 15 tonnes (from 15 Big Bags). Smaller quantities are available via self-pickup in Nikopol.",
+    "calc.min_alert_ok": "This lot qualifies for regional delivery (15 t minimum).",
+    "calc.min_alert_pickup": "Pickup from the Nikopol warehouse: from 1 big bag, arranged in advance.",
+    "calc.min_alert_warn": "Regional delivery starts at 15 t. Smaller lots can be picked up in Nikopol or arranged separately.",
     "calc.submit_btn": "Get Formal Quote with Freight",
+    "calc.load_plan": "Load plan",
+    "calc.label_product": "Wood:",
+    "calc.option_pine": "100% pine",
+    "calc.option_acacia_elm": "Acacia + elm",
+    "calc.res_price": "Ex-warehouse price per tonne:",
+    "calc.res_total": "Estimated total for the lot:",
+    "calc.price_note": "Indicative price, delivery not included. Our sales manager confirms the exact price with delivery.",
+    "calc.min_marker": "minimum lot for delivery — 15 t",
 
     // Regional Delivery Info
     "deliv.tag": "Regional Logistics",
@@ -398,7 +420,7 @@ const translations = {
     "faq.q1": "Why is the minimum order for regional delivery set to at least 15 tonnes?",
     "faq.a1": "Orders of at least 15 tonnes (from 15 Big Bags of 950–1000 kg each) ensure optimal truck capacity utilization and the lowest freight cost per ton. For self-pickup in Nikopol, smaller quantities from 1 Big Bag can be arranged.",
     "faq.q2": "What type of wood is used in the pellet production?",
-    "faq.a2": "We use clean natural wood residuals without bark, sand, or chemical binders. The primary raw material is pure pine or a combination of pine with acacia and elm. Detailed test data and composition are confirmed with our manager upon your order request.",
+    "faq.a2": "We use clean natural wood residuals without bark, sand, or chemical binders. The primary raw material is pure pine, or an acacia and elm blend. Detailed test data and composition are confirmed with our manager upon your order request.",
     "faq.q3": "How quickly can you deliver to Dnipro or Kryvyi Rih?",
     "faq.a3": "With available stock in our Nikopol warehouse, shipments are dispatched within 24–48 hours following order confirmation and payment processing.",
     "faq.q4": "What payment methods are supported for B2B enterprises?",
@@ -429,7 +451,9 @@ const translations = {
     "form.comment_label": "Additional Notes (diameter 6/8 mm, timeframe)",
     "form.comment_placeholder": "Interested in 6mm, cashless settlement...",
     "form.submit": "Submit Request",
-    "form.privacy_note": "🔒 Your information is confidential. No spam guaranteed.",
+    "form.privacy_note": "Your information is confidential. No spam guaranteed.",
+    "cta.pellets_terms": "Delivery terms",
+    "cta.all_specs": "Full specifications",
     "form.success_msg": "Thank you! Your request has been received. Our sales manager will contact you shortly.",
 
     // Footer
