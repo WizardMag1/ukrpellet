@@ -88,9 +88,44 @@ pages so all three agree.
 ## Delivery pricing
 
 The calculator adds delivery = trucks × distance × (fuel for the loaded run + the empty return) + driver pay.
-Inputs live in `assets/js/analytics-config.js` → `DELIVERY`: diesel price and its date, consumption loaded /
-empty, driver rate per km, big bags per truck, road distances from Nikopol per city. **Update `diesel_uah_per_l`
-and `diesel_date` when fuel prices move**; the calculator shows the date to buyers.
+Truck inputs live in `assets/js/analytics-config.js` → `DELIVERY` (consumption loaded / empty, driver rate per
+km, big bags per truck, 15 km minimum for addresses next to the warehouse).
+
+**Where the buyer is.** The buyer types a town or village and picks it from the list; nobody types kilometres.
+The list is `assets/data/places.json` (≈26 000 settlements, ~300 KB gzipped, fetched only when the search box is
+used). It is built by `scripts/build-places.cjs`:
+
+- settlements and coordinates: `ua-location` (npm; Ukraine humanitarian reference data), town/village type from
+  the KATOTTG register (`ua-geo-set`); the 2024 renames Самар and Шахтарське are applied, the old names stay searchable;
+- occupied communities are left out: `scripts/data/occupied-hromadas.json` (≥50% under Russian control, 31.01.2024).
+  Update that file when the situation changes, then rebuild;
+- road km from the warehouse (47.58261, 34.33747) come from OSRM on the OpenStreetMap map of Ukraine, run locally
+  once per rebuild (the public OSRM server is non-commercial only). In the car profile, `process_node` starts with
+  a barrier for the occupied cells, so no route goes through occupied territory:
+  ```lua
+  local occupied_cells = require('occupied_cells')   -- written by: build-places.cjs mask occupied_cells.lua
+  -- first lines of process_node(profile, node, result, relations):
+  local loc = node:location()
+  if occupied_cells[math.floor(loc:lat() / 0.02 + 1e-9) .. ':' .. math.floor(loc:lon() / 0.02 + 1e-9)] then
+    result.barrier = true
+    return
+  end
+  ```
+  Distances follow OSRM's fastest route, so long trips can come out longer than the shortest road (Kyiv: 600 km
+  vs 519 km by the shorter road via Kropyvnytskyi). Within Dnipropetrovsk oblast and its neighbours they agree with
+  published road distances to within about 10%.
+- `DELIVERY.distances_km` keeps the same numbers for the `?city=` links on the city pages, so the calculator shows a
+  price before the list has loaded. Keep them in step when you rebuild.
+
+**Diesel price.** `data/fuel.json` is updated daily by `.github/workflows/fuel-price.yml`
+(`scripts/update-fuel.cjs`, average ДП price at Ukrainian filling stations from index.minfin.com.ua):
+
+- price goes **up**: the calculator uses it the same day;
+- price goes **down**: nothing changes for 7 days. Only if the market stays below our price for a whole week do we
+  lower it, and then to the highest price seen that week. A short dip never produces a quote that is too low.
+
+The rule is tested in `scripts/update-fuel.test.cjs` (runs in CI). `DELIVERY.diesel_uah_per_l` is only the
+fallback for when `data/fuel.json` can't be read. To change the rule, edit `DECREASE_DELAY_DAYS` in the script.
 
 ## Before you ship a change
 

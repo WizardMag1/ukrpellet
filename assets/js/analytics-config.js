@@ -35,25 +35,28 @@ window.APP_CONFIG = {
   //   per truck: fuel = km × (loaded + empty return consumption) / 100 × diesel price
   //              driver = 2 × km × driver rate
   //   trucks = ceil(big bags / bags_per_truck)
-  // Update diesel_uah_per_l (and diesel_date) when fuel prices move.
+  // The diesel price itself comes from /data/fuel.json, updated daily by .github/workflows/fuel-price.yml;
+  // diesel_uah_per_l below is only the fallback if that file can't be read.
+  // Road distances for every settlement are in /assets/data/places.json (scripts/build-places.cjs).
   DELIVERY: {
-    diesel_uah_per_l: 99.2,          // avg ДП at Ukrainian filling stations, Главком 26.09.2026
-    diesel_date: '2026-09-26',
+    diesel_uah_per_l: 98.42,         // fallback: avg ДП at Ukrainian filling stations, Minfin 25.09.2026
+    diesel_date: '2026-09-25',
     consumption_loaded_l_per_100km: 35, // 20–22 t curtain-sider, loaded (market range 32–38)
     consumption_empty_l_per_100km: 28,  // same truck returning empty
     driver_uah_per_km: 2.5,          // domestic long-haul rate 1.8–2.5 UAH/km (2026)
     bags_per_truck: 24,              // 22–24 t truck, ~975 kg per big bag
-    // Road distance from the Nikopol warehouse, km
+    min_delivery_km: 15,             // deliveries inside Nikopol and next door are charged as 15 km
+    // Road km from the warehouse for the ?city= links on the city pages (same values as places.json),
+    // so the calculator shows a price before places.json has loaded
     distances_km: {
-      nikopol_pickup: 0,
-      nikopol_deliv: 15,
-      marhanets: 27,
-      pokrov: 30,
-      kryvyi_rih: 104,
-      dnipro: 123,
-      kamianske: 146,
-      novomoskovsk: 152, // via Dnipro (123 + 29)
-      pavlohrad: 198     // via Dnipro (123 + 75)
+      nikopol_deliv: 4,
+      pokrov: 23,
+      marhanets: 31,
+      kryvyi_rih: 100,
+      dnipro: 125,
+      kamianske: 150,
+      novomoskovsk: 151, // Самар
+      pavlohrad: 200
     }
   },
 

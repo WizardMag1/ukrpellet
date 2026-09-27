@@ -1,0 +1,39 @@
+name: Diesel price update
+
+# Daily: read the average diesel price (Minfin) and update data/fuel.json for the delivery calculator.
+# Rises apply the same day; drops only after 7 days below our price (see scripts/update-fuel.cjs).
+on:
+  schedule:
+    - cron: '17 12 * * *' # 15:17 Kyiv (summer), after Minfin's midday update
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fuel-price
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Rule tests
+        run: node scripts/update-fuel.test.cjs
+      - name: Fetch price and apply rule
+        run: node scripts/update-fuel.cjs
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- data/fuel.json; then
+            echo "No change to data/fuel.json"
+            exit 0
+          fi
+          git config user.name "fuel-price-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/fuel.json
+          git commit -m "Diesel price: $(node -p "require('./data/fuel.json').diesel_uah_per_l") UAH/l"
+          git push
