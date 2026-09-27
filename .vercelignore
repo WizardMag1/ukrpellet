@@ -8,4 +8,5 @@ supabase-schema.sql
 .env.*
 .claude/
 cloudflare/
+wrangler.toml
 .mcp.json
