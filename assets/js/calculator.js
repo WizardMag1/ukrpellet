@@ -303,8 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ---- Destination: mode + place search ------------------------------------------------------------
-  // places.json (built by scripts/build-places.cjs): every settlement in government-controlled Ukraine
-  // with its road distance from the warehouse. It is fetched when the buyer starts typing.
+  // The settlement list and the search box are shared with the quote form (assets/js/places.js).
 
   function currentMode() {
     const checked = document.querySelector('input[name="calc-mode"]:checked');
@@ -327,89 +326,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const toPlace = ([uk, en, region, type], km) => ({ uk, en, region, km, type });
 
   let selectedPlace = null;
-  const places = { rows: null, keys: null, loading: null, failed: false };
-  let results = [];
-  let active = -1;
-
-  // Fold spelling variants so "Никополь", "нікополь" and "Nikopol" all find Нікополь
-  function norm(str) {
-    return String(str).toLowerCase()
-      .replace(/[’ʼ'`"]/g, '')
-      .replace(/[ёєэ]/g, 'е')
-      .replace(/[іїйы]/g, 'и')
-      .replace(/ґ/g, 'г')
-      .replace(/ъ/g, '')
-      .replace(/[-‐–]/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
-  }
-
-  function placeName(p) {
-    return lang() === 'en' ? p.en : p.uk;
-  }
-
-  function regionLabel(r) {
-    if (lang() === 'en') return r[2] === r[3] ? r[3] : `${r[2]} district, ${r[3]} Oblast`;
-    return r[0] === r[1] ? `м. ${r[1]}` : `${r[0]} р-н, ${r[1]} обл.`;
-  }
-
-  function typeWord(type) {
-    const en = lang() === 'en';
-    return type === 2 ? (en ? 'town' : 'місто') : type === 1 ? (en ? 'settlement' : 'селище') : (en ? 'village' : 'село');
-  }
-
-  function placesUrl() {
-    const src = document.querySelector('script[src*="calculator.js"]')?.getAttribute('src') || '';
-    const v = src.split('?v=')[1];
-    return `/assets/data/places.json${v ? `?v=${v}` : ''}`;
-  }
-
-  function loadPlaces() {
-    if (!places.loading) {
-      places.failed = false;
-      places.loading = fetch(placesUrl())
-        .then((r) => {
-          if (!r.ok) throw new Error(`places.json ${r.status}`);
-          return r.json();
-        })
-        .then((doc) => {
-          places.rows = doc.places.map((row) => ({ uk: row[0], en: row[1], region: doc.regions[row[2]], km: row[3], type: row[4], former: row[5] || '' }));
-          places.keys = places.rows.map((p) => [norm(p.uk), norm(p.en), norm(p.former)]);
-        })
-        .catch(() => {
-          places.loading = null;
-          places.failed = true;
-        })
-        .finally(() => {
-          renderHint();
-          if (document.activeElement === placeInput && !selectedPlace) refreshResults();
-        });
-    }
-    return places.loading;
-  }
-
-  function matchScore(key, q) {
-    if (key === q) return 0;
-    if (key.startsWith(q)) return 1;
-    if (key.includes(` ${q}`)) return 2;
-    if (key.includes(q)) return 3;
-    return 4;
-  }
-
-  // Best matches first; then towns before villages; then the nearest to the warehouse
-  function search(query) {
-    const q = norm(query);
-    if (q.length < 2 || !places.rows) return [];
-    const hits = [];
-    for (let i = 0; i < places.rows.length; i++) {
-      const [ku, ke, kf] = places.keys[i];
-      const score = Math.min(matchScore(ku, q), matchScore(ke, q), kf ? matchScore(kf, q) : 4);
-      if (score < 4) hits.push([score, i]);
-    }
-    const P = places.rows;
-    hits.sort((a, b) => a[0] - b[0] || P[b[1]].type - P[a[1]].type || P[a[1]].km - P[b[1]].km);
-    return hits.slice(0, 8).map(([, i]) => P[i]);
-  }
+  const places = window.Places.state;
+  const placeName = (p) => window.Places.placeName(p, lang());
+  const regionLabel = (r) => window.Places.regionLabel(r, lang());
 
   function renderHint() {
     if (!placeHint) return;
@@ -431,77 +350,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function setOpen(open) {
-    if (!placeList || !placeInput) return;
-    placeList.hidden = !open;
-    placeInput.setAttribute('aria-expanded', String(open));
-    if (!open) placeInput.removeAttribute('aria-activedescendant');
-  }
-
-  function renderList() {
-    if (!placeList) return;
-    placeList.textContent = '';
-    const en = lang() === 'en';
-    const q = norm(placeInput.value);
-    results.forEach((p, i) => {
-      const li = document.createElement('li');
-      li.id = `calc-place-opt-${i}`;
-      li.className = 'calc-combo-opt';
-      li.setAttribute('role', 'option');
-      li.setAttribute('aria-selected', String(i === active));
-      const name = document.createElement('span');
-      name.className = 'calc-combo-name';
-      name.textContent = placeName(p);
-      const km = document.createElement('span');
-      km.className = 'calc-combo-km';
-      km.textContent = en ? `${p.km} km` : `${p.km} км`;
-      const meta = document.createElement('span');
-      meta.className = 'calc-combo-meta';
-      meta.textContent = `${typeWord(p.type)}, ${regionLabel(p.region)}${p.former ? (en ? ` (formerly ${p.former})` : ` (колишній ${p.former})`) : ''}`;
-      li.append(name, km, meta);
-      li.addEventListener('click', () => choose(p));
-      placeList.appendChild(li);
-    });
-    if (!results.length && places.rows && q.length >= 2) {
-      const li = document.createElement('li');
-      li.className = 'calc-combo-empty';
-      li.setAttribute('role', 'option');
-      li.setAttribute('aria-disabled', 'true');
-      li.textContent = en
-        ? 'Nothing found. Check the spelling or type the nearest town.'
-        : 'Нічого не знайдено. Перевірте назву або введіть найближче місто.';
-      placeList.appendChild(li);
-    }
-    setOpen(placeList.children.length > 0);
-    if (active >= 0) {
-      placeInput.setAttribute('aria-activedescendant', `calc-place-opt-${active}`);
-      placeList.children[active]?.scrollIntoView({ block: 'nearest' });
-    } else {
-      placeInput.removeAttribute('aria-activedescendant');
-    }
-  }
-
-  function refreshResults() {
-    results = search(placeInput.value);
-    active = results.length ? 0 : -1;
-    renderList();
-  }
-
-  function choose(p) {
-    selectedPlace = p;
-    placeInput.value = placeName(p);
-    results = [];
-    active = -1;
-    setOpen(false);
-    renderHint();
-    updateCalculations();
-  }
-
+  let combo = null;
   if (placeInput && placeList) {
+    combo = window.Places.combobox(placeInput, placeList, {
+      lang,
+      isChosen: () => !!selectedPlace,
+      onChoose(p) {
+        selectedPlace = p;
+        renderHint();
+        updateCalculations();
+      },
+      onEdit() {
+        selectedPlace = null;
+        renderHint();
+        updateCalculations();
+      },
+      onLoad: renderHint,
+    });
+
     placeInput.addEventListener('focus', () => {
-      loadPlaces();
       renderHint();
-      if (!selectedPlace && placeInput.value) refreshResults();
       // On phones the keyboard would cover the suggestions: lift the field to just under the sticky header
       if (window.matchMedia('(max-width: 768px)').matches) {
         setTimeout(() => {
@@ -511,52 +379,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 250);
       }
     });
-
-    placeInput.addEventListener('input', () => {
-      selectedPlace = null;
-      loadPlaces();
-      renderHint();
-      refreshResults();
-      updateCalculations();
-    });
-
-    placeInput.addEventListener('keydown', (e) => {
-      const open = !placeList.hidden && results.length > 0;
-      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-        if (!results.length) return;
-        e.preventDefault();
-        const step = e.key === 'ArrowDown' ? 1 : -1;
-        active = open ? (active + step + results.length) % results.length : 0;
-        renderList();
-      } else if (e.key === 'Enter') {
-        if (open && active >= 0) {
-          e.preventDefault();
-          choose(results[active]);
-        }
-      } else if (e.key === 'Escape') {
-        if (!placeList.hidden) {
-          e.preventDefault();
-          setOpen(false);
-        }
-      }
-    });
-
-    // Leaving the field (Tab) closes the list; an exact name typed counts as choosing it
-    placeInput.addEventListener('blur', () => {
-      if (!selectedPlace && results.length && norm(placeName(results[0])) === norm(placeInput.value)) choose(results[0]);
-      setOpen(false);
-    });
-
-    // Keep focus in the input while an option is clicked, so the list doesn't close under the pointer
-    placeList.addEventListener('mousedown', (e) => e.preventDefault());
-
-    document.addEventListener('pointerdown', (e) => {
-      if (!e.target.closest('.calc-combo')) setOpen(false);
-    });
   }
 
   modeRadios.forEach((radio) => radio.addEventListener('change', () => {
-    setOpen(false);
+    if (combo) combo.close();
     updateCalculations();
   }));
 
@@ -607,13 +433,15 @@ document.addEventListener('DOMContentLoaded', () => {
         volumeInput.value = `${tonsInput.value} т (~${bagsNow} ${plural(bagsNow, 'біг-бег', 'біг-беги', 'біг-бегів')} по ${KG_PER_BAG} кг)${product ? `, ${product}` : ''}`;
       }
 
+      // The quote form takes the place as picked (assets/js/lead-fields.js), so its distance comes along
       if (cityInput) {
         const mode = currentMode();
         const en = lang() === 'en';
-        cityInput.value = mode === 'pickup' ? (en ? 'Pickup, Nikopol warehouse' : 'Самовивіз, склад у Нікополі')
-          : mode === 'export' ? (en ? 'Export to Poland' : 'Експорт у Польщу')
-          : selectedPlace ? `${placeName(selectedPlace)} (${regionLabel(selectedPlace.region)})`
-          : (placeInput ? placeInput.value : '');
+        const detail = mode === 'pickup' ? { text: en ? 'Pickup, Nikopol warehouse' : 'Самовивіз, склад у Нікополі' }
+          : mode === 'export' ? { text: en ? 'Poland' : 'Польща', abroad: true }
+          : selectedPlace ? { place: selectedPlace }
+          : { text: placeInput ? placeInput.value : '' };
+        cityInput.dispatchEvent(new CustomEvent('lead:place', { detail }));
       }
 
       // Pickup or delivery carries over to the form (main.js shows the pickup vehicle question)
