@@ -265,7 +265,9 @@ document.addEventListener('DOMContentLoaded', () => {
         comment: commentInput?.value?.trim() || '',
         logistics: logisticsSummary(form, syncLogistics(form)),
         website: form.querySelector('[name="website"]')?.value || '',
-        ...utmData
+        ...utmData,
+        // Checked phone (+380 99 123 45 67) and delivery place, with any map pin (assets/js/lead-fields.js)
+        ...(window.LeadFields ? window.LeadFields.payload(form) : {})
       };
 
       const en = siteLang() === 'en';
@@ -280,6 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Send to /api/lead, which emails and messages the sales team. Success is shown only once the
       // server confirms the team was notified; otherwise the answers stay in the form.
       let sent = false;
+      let phoneRefused = false;
       try {
         const ctrl = new AbortController();
         const timer = setTimeout(() => ctrl.abort(), 15000);
@@ -290,7 +293,9 @@ document.addEventListener('DOMContentLoaded', () => {
           signal: ctrl.signal
         });
         clearTimeout(timer);
-        sent = res.ok && (await res.json().catch(() => ({}))).success === true;
+        const body = await res.json().catch(() => ({}));
+        sent = res.ok && body.success === true;
+        phoneRefused = res.status === 400 && body.error === 'invalid_phone';
       } catch (err) {
         sent = false;
       }
@@ -300,6 +305,10 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.textContent = btnText;
       }
 
+      if (phoneRefused && window.LeadFields) {
+        window.LeadFields.phoneRejected(form);
+        return;
+      }
       if (!sent) {
         showSendError(form, true);
         return;

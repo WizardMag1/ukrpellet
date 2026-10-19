@@ -4,6 +4,8 @@
 // - Fires instant Telegram Bot alert on mobile
 // - Zero npm dependencies (native fetch, works on Node 18+ and Vercel Edge)
 
+import { parsePhone, countryName } from '../assets/js/phone.js';
+
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || '';
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
@@ -11,7 +13,8 @@ const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '';
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 const FALLBACK_FROM = 'UkrEcoPelleta Leads <onboarding@resend.dev>'; // Resend's test sender: account owner's inbox only
 const LEAD_EMAIL_FROM = process.env.LEAD_EMAIL_FROM || FALLBACK_FROM;
-const LEAD_EMAIL_TO = process.env.LEAD_EMAIL_TO || 'sales@ukrecopelleta.org';
+// One address or several, comma-separated: "sales@ukrecopelleta.org, manager@gmail.com"
+const LEAD_EMAIL_TO = (process.env.LEAD_EMAIL_TO || 'sales@ukrecopelleta.org').split(',').map((a) => a.trim()).filter(Boolean);
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'https://ukrecopelleta.org';
 
 // Escape user input before embedding it in the HTML email
@@ -51,6 +54,22 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Потрібно вказати номер телефону або контактні дані' });
   }
 
+  // The same phone check the form runs (assets/js/phone.js); the number is stored as +380 99 123 45 67
+  let phone = null;
+  if (lead.phone) {
+    phone = parsePhone(lead.phone);
+    if (!phone.valid) return res.status(400).json({ success: false, error: 'invalid_phone' });
+    if (phone.corrected && !lead.phone_entered) lead.phone_entered = lead.phone;
+    lead.phone = phone.display;
+  }
+  if (lead.phone_entered === lead.phone) delete lead.phone_entered;
+  const phoneCountry = phone && phone.iso !== 'UA' ? countryName(phone.iso, 'uk') || 'міжнародний' : '';
+  const phoneNote = [phoneCountry, lead.phone_entered ? `введено: ${lead.phone_entered}` : ''].filter(Boolean).join(', ');
+
+  // Map pin from the form: "lat,lon", opened by the sales team in Google Maps
+  const geo = (lead.geo || '').match(/^(-?\d{1,2}(?:\.\d{1,6})?),(-?\d{1,3}(?:\.\d{1,6})?)$/);
+  const mapUrl = geo && Math.abs(geo[1]) <= 90 && Math.abs(geo[2]) <= 180 ? `https://www.google.com/maps?q=${geo[1]},${geo[2]}` : '';
+
   const timestamp = new Date().toLocaleString('uk-UA', { timeZone: 'Europe/Kyiv' });
   const tasks = [];
 
@@ -71,8 +90,8 @@ export default async function handler(req, res) {
           email: lead.email || null,
           city: lead.city || null,
           volume: lead.volume || null,
-          // Logistics answers ride in the comment so the existing b2b_leads table needs no new columns
-          comment: [lead.logistics || '', lead.comment || ''].filter(Boolean).join('\n') || null,
+          // Logistics answers and the map pin ride in the comment so the b2b_leads table needs no new columns
+          comment: [lead.logistics || '', mapUrl ? `Точка на карті: ${mapUrl}` : '', lead.comment || ''].filter(Boolean).join('\n') || null,
           utm_source: lead.utm_source || null,
           utm_medium: lead.utm_medium || null,
           utm_campaign: lead.utm_campaign || null,
@@ -90,7 +109,7 @@ export default async function handler(req, res) {
   // ── 2. Send Email via Resend API ──────────────────────────────────────────
   if (RESEND_API_KEY) {
     const emailSubject = `🟢 Нова оптова заявка: ${lead.name || lead.city || 'Клієнт'} (${lead.volume || 'пелети'})`;
-    const cleanPhone = (lead.phone || '').replace(/[^\d+]/g, '');
+    const cleanPhone = phone ? phone.e164 : '';
 
     const h = Object.fromEntries(Object.entries(lead).map(([k, v]) => [k, esc(v)]));
     const emailHtml = `
@@ -130,7 +149,8 @@ export default async function handler(req, res) {
         <tr>
           <td class="label">📞 Телефон:</td>
           <td class="val">
-            <a href="tel:${cleanPhone}" style="color: #1e5631; font-weight: 700; font-size: 16px;">${h.phone || '—'}</a>
+            <a href="tel:${cleanPhone}" style="color: #1e5631; font-weight: 700; font-size: 16px;">${h.phone || '—'}</a>${phoneNote ? `
+            <div style="font-size: 12px; color: #718096; margin-top: 4px;">${esc(phoneNote)}</div>` : ''}
           </td>
         </tr>
         ${h.email ? `
@@ -140,7 +160,7 @@ export default async function handler(req, res) {
         </tr>` : ''}
         <tr>
           <td class="label">📍 Населений пункт:</td>
-          <td class="val">${h.city || '—'}</td>
+          <td class="val">${h.city || '—'}${mapUrl ? `<br><a href="${mapUrl}" style="color: #1e5631; font-weight: 600;">🗺️ Відкрити точку на карті</a>` : ''}</td>
         </tr>
         <tr>
           <td class="label">⚖️ Запитуваний об'єм:</td>
@@ -181,7 +201,7 @@ export default async function handler(req, res) {
 
     const resendPayload = {
       from: LEAD_EMAIL_FROM,
-      to: [LEAD_EMAIL_TO],
+      to: LEAD_EMAIL_TO,
       subject: emailSubject,
       html: emailHtml
     };
@@ -220,9 +240,10 @@ export default async function handler(req, res) {
       '🟢 НОВА B2B ЗАЯВКА (UkrEcoPelleta)',
       '────────────────────────',
       `👤 Ім'я: ${lead.name || '—'}`,
-      `📞 Телефон: ${lead.phone || '—'}`,
+      `📞 Телефон: ${lead.phone || '—'}${phoneNote ? ` (${phoneNote})` : ''}`,
       lead.email ? `✉️ Email: ${lead.email}` : '',
       lead.city ? `📍 Місто: ${lead.city}` : '',
+      mapUrl ? `🗺️ Точка на карті: ${mapUrl}` : '',
       lead.volume ? `⚖️ Об'єм: ${lead.volume}` : '',
       lead.logistics ? `🚚 Логістика:\n${lead.logistics}` : '',
       lead.comment ? `💬 Коментар: ${lead.comment}` : '',

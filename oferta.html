@@ -38,8 +38,8 @@
   </script>
   
   <!-- Favicon & PWA Icons -->
-  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg?v=20260927-10">
-  <link rel="alternate icon" href="/assets/images/favicon.svg?v=20260927-10">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg?v=20261019-1">
+  <link rel="alternate icon" href="/assets/images/favicon.svg?v=20261019-1">
   <link rel="apple-touch-icon" href="/assets/images/icon-180.png">
   <link rel="manifest" href="site.webmanifest">
 
@@ -1385,6 +1385,109 @@ text-decoration: underline;
 .form-error[hidden] {
 display: none;
 }
+.field-hint {
+margin: 0.35rem 0 0;
+min-height: 1.25em;
+font-size: 0.8rem;
+color: var(--ink-muted);
+}
+.field-hint.is-error {
+font-weight: 600;
+color: var(--warn);
+}
+.field-fix {
+padding: 0;
+border: 0;
+background: none;
+font: inherit;
+font-weight: 600;
+color: var(--forest);
+text-decoration: underline;
+cursor: pointer;
+}
+.phone-field {
+position: relative;
+}
+.phone-flag {
+position: absolute;
+top: 50%;
+left: 0.9rem;
+width: 22px;
+height: 16px;
+object-fit: cover;
+border-radius: 2px;
+box-shadow: 0 0 0 1px rgba(27, 32, 28, 0.15);
+transform: translateY(-50%);
+pointer-events: none;
+}
+.phone-flag[hidden] {
+display: none;
+}
+.phone-field .form-control.has-flag {
+padding-left: 2.9rem;
+}
+.lead-place-tools {
+display: flex;
+flex-wrap: wrap;
+gap: 0.5rem 1.25rem;
+align-items: center;
+margin-top: 0.6rem;
+}
+.lead-place-tools[hidden] {
+display: none;
+}
+.lead-map-btn {
+display: inline-flex;
+gap: 0.4rem;
+align-items: center;
+min-height: 44px;
+padding: 0.5rem 0.9rem;
+border: 1px solid var(--line-strong);
+border-radius: var(--radius-md);
+background: var(--paper);
+font: inherit;
+font-size: 0.9rem;
+font-weight: 600;
+color: var(--forest);
+cursor: pointer;
+}
+.lead-map-btn:hover,
+.lead-map-btn[aria-expanded="true"] {
+border-color: var(--forest);
+background: var(--paper-alt);
+}
+.lead-abroad {
+display: inline-flex;
+gap: 0.5rem;
+align-items: center;
+min-height: 44px;
+font-size: 0.9rem;
+color: var(--ink);
+cursor: pointer;
+}
+.lead-abroad input {
+width: 1.1rem;
+height: 1.1rem;
+accent-color: var(--forest);
+}
+.lead-map {
+margin-top: 0.6rem;
+}
+.lead-map[hidden] {
+display: none;
+}
+.lead-map-canvas {
+position: relative;
+z-index: 0;
+isolation: isolate;
+height: 260px;
+border: 1px solid var(--line-strong);
+border-radius: var(--radius-md);
+background: var(--paper-alt);
+}
+.lead-map .field-hint {
+margin-top: 0.4rem;
+}
 dialog.contact-modal {
 border: none;
 border-radius: var(--radius-xl);
@@ -1852,7 +1955,7 @@ max-width: 46rem;
   <header class="site-header">
     <div class="container header-inner">
       <a href="/" class="brand-logo" aria-label="UkrEcoPelleta — головна">
-        <img class="brand-mark" src="/assets/images/favicon.svg?v=20260927-10" alt="" width="40" height="40">
+        <img class="brand-mark" src="/assets/images/favicon.svg?v=20261019-1" alt="" width="40" height="40">
         <span class="brand-text">
           <span class="brand-title">UkrEcoPelleta</span>
           <span class="brand-subtitle">Пелетний завод у Нікополі</span>
@@ -1996,13 +2099,13 @@ max-width: 46rem;
     </div>
   </footer>
 
-  <script defer src="/assets/js/analytics-config.js?v=20260927-10"></script>
-  <script defer src="/assets/js/analytics.js?v=20260927-10"></script>
+  <script defer src="/assets/js/analytics-config.js?v=20261019-1"></script>
+  <script defer src="/assets/js/analytics.js?v=20261019-1"></script>
   <!-- Vercel Web Analytics + Speed Insights -->
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
   <script>window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };</script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
-  <script defer src="/assets/js/main.js?v=20260927-10"></script>
+  <script defer src="/assets/js/main.js?v=20261019-1"></script>
 </body>
 </html>

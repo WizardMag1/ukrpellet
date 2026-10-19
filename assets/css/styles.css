@@ -1681,6 +1681,130 @@ textarea.form-control {
   display: none;
 }
 
+/* Quote form phone and place (assets/js/lead-fields.js): a line under the field says what we understood */
+.field-hint {
+  margin: 0.35rem 0 0;
+  min-height: 1.25em;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
+.field-hint.is-error {
+  font-weight: 600;
+  color: var(--warn);
+}
+
+/* Inline action in a hint: "Yes, +371 2613 3794", "Remove pin" */
+.field-fix {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--forest);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* The country's flag sits inside the phone field, top left */
+.phone-field {
+  position: relative;
+}
+
+.phone-flag {
+  position: absolute;
+  top: 50%;
+  left: 0.9rem;
+  width: 22px;
+  height: 16px;
+  object-fit: cover;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(27, 32, 28, 0.15);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.phone-flag[hidden] {
+  display: none;
+}
+
+.phone-field .form-control.has-flag {
+  padding-left: 2.9rem;
+}
+
+.lead-place-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  align-items: center;
+  margin-top: 0.6rem;
+}
+
+.lead-place-tools[hidden] {
+  display: none;
+}
+
+.lead-map-btn {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--forest);
+  cursor: pointer;
+}
+
+.lead-map-btn:hover,
+.lead-map-btn[aria-expanded="true"] {
+  border-color: var(--forest);
+  background: var(--paper-alt);
+}
+
+.lead-abroad {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.9rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.lead-abroad input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--forest);
+}
+
+.lead-map {
+  margin-top: 0.6rem;
+}
+
+.lead-map[hidden] {
+  display: none;
+}
+
+/* isolation keeps Leaflet's own z-indexes under the place suggestions that open above the map */
+.lead-map-canvas {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  height: 260px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--paper-alt);
+}
+
+.lead-map .field-hint {
+  margin-top: 0.4rem;
+}
+
 dialog.contact-modal {
   border: none;
   border-radius: var(--radius-xl);

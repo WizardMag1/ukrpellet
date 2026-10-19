@@ -14,7 +14,8 @@ Before every deploy, run `npm run check`. It must print `✓ SEO check passed`; 
 - Import the repo in Vercel (framework preset: *Other*; no build command; output directory: `.`).
 - In Settings → Environment Variables (Production), set:
   `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`,
-  `RESEND_API_KEY`, `LEAD_EMAIL_TO=sales@ukrecopelleta.org`.
+  `RESEND_API_KEY`, `LEAD_EMAIL_TO=sales@ukrecopelleta.org`. For more than one inbox, separate the
+  addresses with commas: `LEAD_EMAIL_TO=sales@ukrecopelleta.org, manager@example.com`.
 - In Settings → Domains, add `ukrecopelleta.org` and `www.ukrecopelleta.org`. `vercel.json` already 301-redirects www to the apex.
 
 **2. Cloudflare DNS** (after moving the domain's nameservers to Cloudflare at your .com.ua registrar)
