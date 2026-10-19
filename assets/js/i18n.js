@@ -589,7 +589,7 @@ function setLanguage(lang) {
   });
 
   // Update switcher buttons UI
-  document.querySelectorAll('.lang-btn').forEach(btn => {
+  document.querySelectorAll('button.lang-btn').forEach(btn => {
     if (btn.getAttribute('data-lang') === lang) {
       btn.classList.add('active');
     } else {
@@ -601,16 +601,33 @@ function setLanguage(lang) {
   window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));
 }
 
-function initI18n() {
-  const saved = localStorage.getItem('site_lang');
-  const browserLang = navigator.language && navigator.language.startsWith('uk') ? 'uk' : 'uk';
-  const initial = saved || browserLang;
+// Language order (owner's rule): Ukrainian is always the default, English is the in-page toggle,
+// Russian is third and exists only as separate static pages under /ru/ (built by scripts/build-ru.cjs).
+// Nothing ever switches a visitor to Russian automatically.
+function rememberLang(lang) {
+  try { localStorage.setItem('site_lang', lang); } catch (e) { /* private mode */ }
+}
 
-  // Bind click handlers to lang switchers
-  document.querySelectorAll('.lang-btn').forEach(btn => {
+function initI18n() {
+  // Links in the switcher (RU on Ukrainian pages, UA/EN on Russian pages) navigate; remember the choice first.
+  document.querySelectorAll('a.lang-btn').forEach(link => {
+    link.addEventListener('click', () => rememberLang(link.getAttribute('data-lang')));
+  });
+
+  // A Russian page is already rendered in Russian: keep it, other scripts fall back to Ukrainian strings.
+  if (document.documentElement.lang === 'ru') {
+    currentLang = 'ru';
+    rememberLang('ru');
+    return;
+  }
+
+  let saved = null;
+  try { saved = localStorage.getItem('site_lang'); } catch (e) { /* private mode */ }
+  const initial = saved === 'en' ? 'en' : 'uk';
+
+  document.querySelectorAll('button.lang-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      const selected = e.currentTarget.getAttribute('data-lang');
-      setLanguage(selected);
+      setLanguage(e.currentTarget.getAttribute('data-lang'));
     });
   });
 

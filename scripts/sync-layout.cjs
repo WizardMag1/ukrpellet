@@ -13,8 +13,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const ASSET_VERSION = '20261019-1';
+const ASSET_VERSION = '20261019-2';
 const ROOT = path.join(__dirname, '..');
+// Pages with a Russian copy under /ru/ (built by scripts/build-ru.cjs at the end of this script).
+const { PAGES: RU_PAGES, SITE } = require('./ru-lib.cjs');
+const ruPathFor = (pagePath) => (RU_PAGES.some((p) => '/' + p.slug === pagePath) ? (pagePath === '/' ? '/ru' : '/ru' + pagePath) : null);
 
 // pagePath: the clean URL the page is served at (vercel.json cleanUrls).
 // interactive: page loads i18n.js and has the #contact-dialog quote modal.
@@ -70,7 +73,8 @@ function buildHeader(page, html) {
     ? `
         <div class="lang-switcher" role="group" aria-label="Мова / Language">
           <button type="button" class="lang-btn active" data-lang="uk">UA</button>
-          <button type="button" class="lang-btn" data-lang="en">EN</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>${ruPathFor(page.pagePath) ? `
+          <a class="lang-btn" data-lang="ru" href="${ruPathFor(page.pagePath)}" hreflang="ru" lang="ru">RU</a>` : ''}
         </div>`
     : '';
 
@@ -310,6 +314,13 @@ for (const [file, page] of Object.entries(PAGES)) {
   }
   html = html.replace(headerStart, `\n  ${buildHeader(page, html)}`);
 
+  // 1b. Language alternates: Ukrainian is x-default, Russian (third language) only where a /ru/ copy exists.
+  const ruPath = ruPathFor(page.pagePath);
+  html = html.replace(/\n[ \t]*<link rel="alternate" hreflang="ru" href="[^"]*">/g, '');
+  if (ruPath) {
+    html = html.replace(/(\n([ \t]*)<link rel="alternate" hreflang="uk" href="[^"]*">)/, `$1\n$2<link rel="alternate" hreflang="ru" href="${SITE}${ruPath}">`);
+  }
+
   // 2. Footer brand block: old decorative icon container -> the real mark.
   html = html.replace(/<div class="brand-icon">\s*(?:<svg[\s\S]*?<\/svg>|<img[^>]*>)\s*<\/div>/g, FOOTER_MARK);
 
@@ -408,4 +419,7 @@ for (const [file, page] of Object.entries(PAGES)) {
   fs.writeFileSync(full, html);
   console.log(`✓ ${file}`);
 }
-process.exit(failed ? 1 : 0);
+if (failed) process.exit(1);
+
+// Russian copies are generated from the Ukrainian pages just written, so they never drift.
+require('./build-ru.cjs');
