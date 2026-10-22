@@ -291,14 +291,23 @@ document.addEventListener('DOMContentLoaded', () => {
           : `Дизель ${fmt.format(f.price)} грн/л: середня ціна на АЗС України (Мінфін, ${fmt.format(f.market)}, перевірено ${dd}.${m}.${y}) плюс ${f.markup} грн. ${minText ? `Доставка на замовлення — від ${minText}. ` : ''}Ціни без ПДВ. Відстані дорогами © OpenStreetMap. Розрахунок орієнтовний, точну ціну підтвердить менеджер.`;
       }
     }
-    const meetsMinOrder = tons >= 15;
+    const minDeliveryTons = window.APP_CONFIG?.DELIVERY?.min_tons || 15;
+    const meetsMinOrder = tons >= minDeliveryTons;
 
     renderLoadPlan(bigBags, isNikopolPickup);
 
+    const isDeliveryDisabled = window.APP_CONFIG?.DELIVERY?.enabled === false;
     if (minOrderAlert) {
-      const key = isNikopolPickup ? 'calc.min_alert_pickup' : meetsMinOrder ? 'calc.min_alert_ok' : 'calc.min_alert_warn';
-      minOrderAlert.className = `min-order-indicator ${meetsMinOrder || isNikopolPickup ? 'min-order-ok' : 'min-order-warn'}`;
-      minOrderAlert.textContent = t(key);
+      if (isDeliveryDisabled && mode === 'delivery') {
+        minOrderAlert.className = 'min-order-indicator min-order-warn';
+        minOrderAlert.textContent = en
+          ? 'Direct delivery is temporarily paused (trucks fully booked). Self-pickup is available from the Nikopol plant.'
+          : 'Доставка автопарком заводу тимчасово призупинена (висока завантаженість). Доступний самовивіз зі складу в Нікополі від 1 біг-бега.';
+      } else {
+        const key = isNikopolPickup ? 'calc.min_alert_pickup' : meetsMinOrder ? 'calc.min_alert_ok' : 'calc.min_alert_warn';
+        minOrderAlert.className = `min-order-indicator ${meetsMinOrder || isNikopolPickup ? 'min-order-ok' : 'min-order-warn'}`;
+        minOrderAlert.textContent = t(key);
+      }
     }
   }
 
@@ -477,6 +486,52 @@ document.addEventListener('DOMContentLoaded', () => {
         fuelFile = f;
         updateCalculations();
       }
+    })
+    .catch(() => {});
+
+  // Live dynamic pricing & delivery config (managed in real-time via Telegram Bot @ukrecopelleta_bot)
+  fetch('/api/pricing', { cache: 'no-cache' })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((data) => {
+      if (!data) return;
+      if (data.pricing) {
+        if (!window.APP_CONFIG) window.APP_CONFIG = {};
+        if (!window.APP_CONFIG.PRICING) window.APP_CONFIG.PRICING = {};
+        if (data.pricing.pine_uah_per_t) window.APP_CONFIG.PRICING.pine_uah_per_t = Number(data.pricing.pine_uah_per_t);
+        if (data.pricing.acacia_elm_uah_per_t) window.APP_CONFIG.PRICING.acacia_elm_uah_per_t = Number(data.pricing.acacia_elm_uah_per_t);
+      }
+      if (data.delivery) {
+        if (!window.APP_CONFIG) window.APP_CONFIG = {};
+        if (!window.APP_CONFIG.DELIVERY) window.APP_CONFIG.DELIVERY = {};
+        window.APP_CONFIG.DELIVERY.enabled = data.delivery.enabled !== false;
+        if (data.delivery.min_delivery_uah) window.APP_CONFIG.DELIVERY.min_delivery_uah = Number(data.delivery.min_delivery_uah);
+        if (data.delivery.driver_uah_per_km) window.APP_CONFIG.DELIVERY.driver_uah_per_km = Number(data.delivery.driver_uah_per_km);
+        if (data.delivery.min_tons) window.APP_CONFIG.DELIVERY.min_tons = Number(data.delivery.min_tons);
+
+        const deliveryOpt = document.querySelector('input[name="calc-mode"][value="delivery"]');
+        const pickupOpt = document.querySelector('input[name="calc-mode"][value="pickup"]');
+        if (deliveryOpt) {
+          if (data.delivery.enabled === false) {
+            deliveryOpt.disabled = true;
+            if (deliveryOpt.checked && pickupOpt) {
+              pickupOpt.checked = true;
+            }
+            if (deliveryOpt.parentElement) {
+              deliveryOpt.parentElement.style.opacity = '0.5';
+              deliveryOpt.parentElement.title = lang() === 'en'
+                ? 'Delivery paused (trucks booked). Self-pickup available.'
+                : 'Доставка тимчасово призупинена. Доступний самовивіз.';
+            }
+          } else {
+            deliveryOpt.disabled = false;
+            if (deliveryOpt.parentElement) {
+              deliveryOpt.parentElement.style.opacity = '1';
+              deliveryOpt.parentElement.removeAttribute('title');
+            }
+          }
+        }
+      }
+      updateCalculations();
     })
     .catch(() => {});
 

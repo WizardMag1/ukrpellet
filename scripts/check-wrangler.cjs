@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const settings = (file, main) => fs.readFileSync(path.join(ROOT, file), 'utf8')
+  .replace(/\r/g, '')
   .split('\n')
   .filter((l) => l.trim() && !l.trim().startsWith('#'))
   .map((l) => (l.startsWith('main = ') ? (l === `main = "${main}"` ? 'main' : `BAD ${l}`) : l))

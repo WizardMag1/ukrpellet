@@ -1,16 +1,76 @@
 // Edge entry for ukrecopelleta.org: serves the Vercel-hosted site under the real domain.
+// Intercepts /api/pricing (dynamic pellet prices and delivery tariffs from KV)
+// Intercepts /api/telegram-webhook (Telegram management bot for the factory owner and managers)
 // www -> apex 301; everything else is proxied to the Vercel origin.
-// Worker Previews (branch builds) set no CANONICAL_HOST, so they serve on their own preview URL.
+
+import { getPricingConfig, handleTelegramUpdate } from './bot.js';
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const host = env.CANONICAL_HOST || url.hostname;
 
+    // Apex canonical redirect
     if (env.CANONICAL_HOST && url.hostname !== env.CANONICAL_HOST) {
       url.hostname = env.CANONICAL_HOST;
       return Response.redirect(url.toString(), 301);
     }
 
+    // 1. Dynamic Pricing & Delivery API Endpoint
+    if (url.pathname === '/api/pricing') {
+      const config = await getPricingConfig(env);
+      return new Response(JSON.stringify(config), {
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'public, max-age=15, s-maxage=30, stale-while-revalidate=60'
+        }
+      });
+    }
+
+    // 2. Telegram Webhook for Bot (@ukrecopelleta_bot)
+    if (url.pathname === '/api/telegram-webhook' && request.method === 'POST') {
+      const secret = request.headers.get('X-Telegram-Bot-Api-Secret-Token');
+      const expectedSecret = env.TELEGRAM_WEBHOOK_SECRET || 'ukr_sec_98890c83_pelleta';
+      if (secret && secret !== expectedSecret) {
+        return new Response('Unauthorized', { status: 401 });
+      }
+      try {
+        const update = await request.json();
+        // Process update in background (waitUntil keeps execution alive)
+        // or await directly
+        await handleTelegramUpdate(update, env);
+      } catch (err) {
+        console.error('[Telegram webhook error]', err);
+      }
+      return new Response('OK', { status: 200 });
+    }
+
+    // 3. Admin Webhook Registration Helper
+    if (url.pathname === '/api/admin/setup-webhook') {
+      const key = url.searchParams.get('key');
+      const expectedKey = env.TELEGRAM_WEBHOOK_SECRET || 'ukr_sec_98890c83_pelleta';
+      if (key !== expectedKey) {
+        return new Response('Forbidden', { status: 403 });
+      }
+      const token = env.TELEGRAM_BOT_TOKEN || '8962858456:AAF0rwGGHsK6ViCBvqELVJeSnU19pe-wajw';
+      const webhookUrl = `https://${host}/api/telegram-webhook`;
+      const tgRes = await fetch(`https://api.telegram.org/bot${token}/setWebhook`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          url: webhookUrl,
+          secret_token: expectedKey,
+          drop_pending_updates: false
+        })
+      });
+      const data = await tgRes.json();
+      return new Response(JSON.stringify(data, null, 2), {
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // 4. Default: Proxy to Vercel origin
     const upstream = new URL(url.pathname + url.search, `https://${env.ORIGIN}`);
     const headers = new Headers(request.headers);
     headers.set('X-Forwarded-Host', host);
