@@ -1,0 +1,15 @@
+{
+  "pricing": {
+    "pine_uah_per_t": 15500,
+    "acacia_elm_uah_per_t": 14500
+  },
+  "delivery": {
+    "enabled": true,
+    "min_tons": 15,
+    "min_delivery_uah": 15000,
+    "driver_uah_per_km": 4.0
+  },
+  "updated_at": "2026-10-22T15:06:00Z",
+  "updated_by": "788872538",
+  "updated_by_name": "@Wizard_666"
+}
