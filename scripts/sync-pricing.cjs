@@ -81,10 +81,13 @@ for (const relPath of htmlFiles) {
   const original = html;
 
   // A. Schema.org JSON-LD
-  html = html.replace(/"lowPrice":\s*"\d+"/g, `"lowPrice": "${pinePrice}"`);
-  html = html.replace(/"highPrice":\s*"\d+"/g, `"highPrice": "${pinePrice}"`);
-  html = html.replace(/"priceRange":\s*"\d+\s*UAH\/t"/g, `"priceRange": "${pinePrice} UAH/t"`);
-  html = html.replace(/("priceSpecification":\s*\{\s*"@type":\s*"UnitPriceSpecification",\s*"price":\s*)"\d+"/g, `$1"${pinePrice}"`);
+  const minP = Math.min(pinePrice, acaciaPrice);
+  const maxP = Math.max(pinePrice, acaciaPrice);
+  const rangeStr = minP === maxP ? `${minP} UAH/t` : `${minP}–${maxP} UAH/t`;
+  html = html.replace(/"lowPrice":\s*"\d+"/g, `"lowPrice": "${minP}"`);
+  html = html.replace(/"highPrice":\s*"\d+"/g, `"highPrice": "${maxP}"`);
+  html = html.replace(/"priceRange":\s*"[^"]*"/g, `"priceRange": "${rangeStr}"`);
+  html = html.replace(/("priceSpecification":\s*\{\s*"@type":\s*"UnitPriceSpecification",\s*"price":\s*)"\d+"/g, `$1"${minP}"`);
 
   // B. FAQ Schema JSON-LD text
   html = html.replace(/(Ціна[^":]*?[—:]\s*)[\d\s]+(грн за тонну)/gi, `$1${priceFmt} $2`);
