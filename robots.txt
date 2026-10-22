@@ -4,6 +4,7 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /*?*
 
 # Explicit permissions for AI assistants and web crawlers
 User-agent: GPTBot
