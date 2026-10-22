@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ASSET_VERSION = '20261022-1';
+const ASSET_VERSION = '20261022-2';
 const ROOT = path.join(__dirname, '..');
 // Pages with a Russian copy under /ru/ (built by scripts/build-ru.cjs at the end of this script).
 const { PAGES: RU_PAGES, SITE } = require('./ru-lib.cjs');
@@ -130,7 +130,7 @@ function buildFacts(page, html) {
         <dl class="buy-facts">
           <div>
             <dt data-i18n="facts.price">Ціна</dt>
-            <dd><strong>${priceText()}</strong> <span data-i18n="facts.price_unit">грн/т зі складу, без ПДВ</span><br><a href="${calc}" data-i18n="facts.price_link">Розрахувати з доставкою</a></dd>
+            <dd><strong data-dynamic-price="facts">${priceText()}</strong> <span data-i18n="facts.price_unit">грн/т зі складу, без ПДВ</span><br><a href="${calc}" data-i18n="facts.price_link">Розрахувати з доставкою</a></dd>
           </div>
           <div>
             <dt data-i18n="facts.wood">Деревина</dt>

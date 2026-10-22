@@ -83,11 +83,46 @@ export default {
     });
 
     // Keep redirects on our domain
-    const out = new Response(res.body, res);
-    const loc = out.headers.get('Location');
+    const loc = res.headers.get('Location');
     if (loc && loc.includes(env.ORIGIN)) {
+      const out = new Response(res.body, res);
       out.headers.set('Location', loc.replace(`https://${env.ORIGIN}`, `https://${host}`));
+      return out;
     }
-    return out;
+
+    // Dynamic Edge HTML Rewriter for Instant Zero-Delay Price Rendering
+    if (res.status === 200 && res.headers.get('content-type')?.includes('text/html')) {
+      try {
+        const config = await getPricingConfig(env);
+        const pine = Number(config.pricing?.pine_uah_per_t) || 14000;
+        const mix = Number(config.pricing?.acacia_elm_uah_per_t) || pine;
+        const min = Math.min(pine, mix);
+        const fmtMin = min.toLocaleString('uk-UA').replace(/\u00a0/g, ' ');
+        const isRu = url.pathname.startsWith('/ru');
+        const prefix = isRu ? 'от' : 'від';
+        const factText = pine === mix ? fmtMin : `${prefix} ${fmtMin}`;
+
+        const rewriter = new HTMLRewriter()
+          .on('[data-dynamic-price="facts"], .buy-facts strong', {
+            element(el) {
+              el.setInnerContent(factText);
+            }
+          })
+          .on('[data-dynamic-price="pine"]', {
+            element(el) {
+              el.setInnerContent(pine.toLocaleString('uk-UA').replace(/\u00a0/g, ' '));
+            }
+          });
+
+        const transformed = rewriter.transform(res);
+        const out = new Response(transformed.body, transformed);
+        out.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
+        return out;
+      } catch (rewriteErr) {
+        console.error('[HTMLRewriter error]', rewriteErr);
+      }
+    }
+
+    return new Response(res.body, res);
   },
 };

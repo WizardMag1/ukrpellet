@@ -490,7 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(() => {});
 
   // Live dynamic pricing & delivery config (managed in real-time via Telegram Bot @ukrecopelleta_bot)
-  fetch('/data/pricing.json', { cache: 'no-cache' })
+  fetch('/api/pricing')
     .then((r) => (r.ok ? r.json() : null))
     .then((data) => {
       if (!data) return;

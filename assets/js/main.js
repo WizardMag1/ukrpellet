@@ -5,23 +5,29 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   // Live dynamic pricing hydration across all pages (Google Ads conversion value & on-page badges)
-  fetch('/data/pricing.json', { cache: 'no-cache' })
+  fetch('/api/pricing')
     .then((r) => (r.ok ? r.json() : null))
     .then((data) => {
       if (!data) return;
       if (data.pricing) {
         if (!window.APP_CONFIG) window.APP_CONFIG = {};
         if (!window.APP_CONFIG.PRICING) window.APP_CONFIG.PRICING = {};
-        if (data.pricing.pine_uah_per_t) {
-          window.APP_CONFIG.PRICING.pine_uah_per_t = Number(data.pricing.pine_uah_per_t);
-          const formatted = Number(data.pricing.pine_uah_per_t).toLocaleString('uk-UA');
-          document.querySelectorAll('.js-dynamic-price, [data-dynamic-price="pine"]').forEach((el) => {
-            el.textContent = formatted;
-          });
-        }
-        if (data.pricing.acacia_elm_uah_per_t) {
-          window.APP_CONFIG.PRICING.acacia_elm_uah_per_t = Number(data.pricing.acacia_elm_uah_per_t);
-        }
+        const pine = Number(data.pricing.pine_uah_per_t);
+        const mix = Number(data.pricing.acacia_elm_uah_per_t);
+        if (pine) window.APP_CONFIG.PRICING.pine_uah_per_t = pine;
+        if (mix) window.APP_CONFIG.PRICING.acacia_elm_uah_per_t = mix;
+
+        const isRu = window.location.pathname.startsWith('/ru');
+        const min = Math.min(pine || 14000, mix || pine || 14000);
+        const fmtMin = min.toLocaleString('uk-UA');
+        const factText = (pine && mix && pine === mix) ? fmtMin : `${isRu ? 'от' : 'від'} ${fmtMin}`;
+
+        document.querySelectorAll('[data-dynamic-price="facts"], .buy-facts dt[data-i18n="facts.price"] + dd strong').forEach((el) => {
+          el.textContent = factText;
+        });
+        document.querySelectorAll('.js-dynamic-price, [data-dynamic-price="pine"]').forEach((el) => {
+          el.textContent = pine.toLocaleString('uk-UA');
+        });
       }
       if (data.delivery) {
         if (!window.APP_CONFIG) window.APP_CONFIG = {};

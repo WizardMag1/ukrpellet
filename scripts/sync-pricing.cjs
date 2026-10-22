@@ -61,6 +61,7 @@ for (const txtFile of ['llms.txt', 'llms-full.txt']) {
 const ruTransPath = path.join(ROOT, 'data', 'ru', 'translations.json');
 if (fs.existsSync(ruTransPath)) {
   let ruJson = fs.readFileSync(ruTransPath, 'utf8');
+  ruJson = ruJson.replace(/(\b\d{2}\s\d{3}\b)(?=\s*грн)/g, priceFmt);
   const minPrice = Math.min(pinePrice, acaciaPrice);
   const minFmt = fmtUa(minPrice);
   const ruObj = JSON.parse(ruJson);
@@ -92,14 +93,11 @@ for (const relPath of htmlFiles) {
   // B. FAQ Schema JSON-LD text
   html = html.replace(/(Ціна[^":]*?[—:]\s*)[\d\s]+(грн за тонну)/gi, `$1${priceFmt} $2`);
 
-  // C. Meta description
-  html = html.replace(/(від|ціна|—)\s*[\d\s]+(грн\/т|грн за тонну)/gi, (match, prefix, suffix) => {
-    return `${prefix} ${priceFmt} ${suffix}`;
-  });
+  // C. Meta description & content text prices
+  html = html.replace(/(\b\d{2}\s\d{3}\b)(?=\s*грн(?:\/т|\s*за\s*тонну)?)/gi, priceFmt);
 
   // D. Static HTML Visual Content
-  html = html.replace(/(<dd><strong>)[\d\s]+(<\/strong>\s*<span[^>]*data-i18n="facts\.price_unit")/gi, `$1${priceFmt}$2`);
-  html = html.replace(/(<li>)[\d\s]+(грн\/т на складі)/gi, `$1${priceFmt} $2`);
+  html = html.replace(/(<dd><strong[^>]*>)[^<]+(<\/strong>\s*<span[^>]*data-i18n="facts\.price_unit")/gi, `$1${priceFmt}$2`);
 
   if (html !== original) {
     fs.writeFileSync(fullPath, html.replace(/\r\n/g, '\n'), 'utf8');

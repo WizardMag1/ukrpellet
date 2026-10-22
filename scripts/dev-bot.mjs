@@ -41,6 +41,9 @@ while (true) {
         ) {
           console.log('Change detected! Running system-wide SEO & Schema sync...');
           try {
+            try {
+              execSync('git pull --rebase origin master', { stdio: 'inherit' });
+            } catch (_) {}
             execSync('node scripts/sync-pricing.cjs', { stdio: 'inherit' });
             const changes = execSync('git status --porcelain').toString().trim();
             if (changes) {
