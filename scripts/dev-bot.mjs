@@ -42,8 +42,13 @@ while (true) {
           console.log('Change detected! Running system-wide SEO & Schema sync...');
           try {
             execSync('node scripts/sync-pricing.cjs', { stdio: 'inherit' });
-            execSync('git add -A && git commit -m "chore(pricing): system-wide sync from @ukrecopelleta_bot" && git push origin master', { stdio: 'inherit' });
-            console.log('✓ System-wide sync pushed to master!');
+            const changes = execSync('git status --porcelain').toString().trim();
+            if (changes) {
+              execSync('git add -A && git commit -m "chore(pricing): system-wide sync from @ukrecopelleta_bot" && git push origin master', { stdio: 'inherit' });
+              console.log('✓ System-wide sync pushed to master!');
+            } else {
+              console.log('✓ Everything already up to date, nothing to commit.');
+            }
           } catch (syncErr) {
             console.error('Local sync/push error:', syncErr.message);
           }

@@ -38,6 +38,21 @@ export async function getKV(env, key) {
       console.error('[KV get error]', e);
     }
   }
+  if (key === 'config:pricing') {
+    if (memoryStore.has(key)) return memoryStore.get(key);
+    if (typeof process !== 'undefined') {
+      try {
+        const fs = await import('fs');
+        const path = await import('path');
+        const p = path.join(process.cwd(), 'data', 'pricing.json');
+        if (fs.existsSync(p)) {
+          const cfg = JSON.parse(fs.readFileSync(p, 'utf8'));
+          memoryStore.set(key, cfg);
+          return cfg;
+        }
+      } catch (_) {}
+    }
+  }
   return memoryStore.get(key) || null;
 }
 
@@ -50,6 +65,14 @@ export async function putKV(env, key, value, ttlSeconds) {
     } catch (e) {
       console.error('[KV put error]', e);
     }
+  }
+  if (key === 'config:pricing' && typeof process !== 'undefined') {
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const p = path.join(process.cwd(), 'data', 'pricing.json');
+      fs.writeFileSync(p, JSON.stringify(value, null, 2) + '\n', 'utf8');
+    } catch (_) {}
   }
 }
 
@@ -195,8 +218,11 @@ export function renderMainMenu(config, userRole, name) {
 
   const keyboard = [
     [
-      { text: `🌲 Змінити сосну (${p.pine_uah_per_t})`, callback_data: 'edit_pine' },
-      { text: `🌳 Змінити мікс (${p.acacia_elm_uah_per_t})`, callback_data: 'edit_acacia' }
+      { text: `💰 Змінити базову ціну (усі пелети)`, callback_data: 'edit_all_prices' }
+    ],
+    [
+      { text: `🌲 Тільки сосна (${p.pine_uah_per_t})`, callback_data: 'edit_pine' },
+      { text: `🌳 Тільки мікс (${p.acacia_elm_uah_per_t})`, callback_data: 'edit_acacia' }
     ],
     [
       {
@@ -317,6 +343,24 @@ export async function handleTelegramUpdate(update, env) {
         text: menu.text,
         parse_mode: 'HTML',
         reply_markup: { inline_keyboard: menu.keyboard }
+      });
+      await callTelegram(token, 'answerCallbackQuery', { callback_query_id: cb.id });
+      return;
+    }
+
+    // Edit All Prices prompt
+    if (data === 'edit_all_prices') {
+      await putKV(env, `state:${userId}`, { action: 'await_all_price' }, 600);
+      await callTelegram(token, 'sendMessage', {
+        chat_id: cb.message.chat.id,
+        text: `💰 <b>Введіть нову базову ціну для ВСІХ пелет (сосна + мікс) у грн/т:</b>\n\n` +
+          `Поточна ціна сосни: <b>${config.pricing.pine_uah_per_t} грн/т</b>\n` +
+          `Поточна ціна міксу: <b>${config.pricing.acacia_elm_uah_per_t} грн/т</b>\n\n` +
+          `Введіть тільки число (наприклад: <code>15500</code>):`,
+        parse_mode: 'HTML',
+        reply_markup: {
+          inline_keyboard: [[{ text: '❌ Скасувати', callback_data: 'cancel_input' }]]
+        }
       });
       await callTelegram(token, 'answerCallbackQuery', { callback_query_id: cb.id });
       return;
@@ -598,6 +642,43 @@ export async function handleTelegramUpdate(update, env) {
     const state = await getKV(env, `state:${userId}`);
     if (state && state.action) {
       const numVal = parseFloat(text.replace(',', '.').replace(/\s/g, ''));
+
+      if (state.action === 'await_all_price') {
+        if (isNaN(numVal) || numVal < 5000 || numVal > 50000) {
+          await callTelegram(token, 'sendMessage', {
+            chat_id: msg.chat.id,
+            text: '⚠️ <b>Будь ласка, введіть реальну ціну в межах від 5 000 до 50 000 грн/т.</b> Спробуйте ще раз або натисніть «Скасувати»:',
+            parse_mode: 'HTML',
+            reply_markup: { inline_keyboard: [[{ text: '❌ Скасувати', callback_data: 'cancel_input' }]] }
+          });
+          return;
+        }
+        await deleteKV(env, `state:${userId}`);
+        const newPrice = Math.round(numVal);
+        const updated = await savePricingConfig(env, {
+          pricing: { pine_uah_per_t: newPrice, acacia_elm_uah_per_t: newPrice }
+        }, msg.from);
+        const menu = renderMainMenu(updated, auth.role, userName);
+
+        await callTelegram(token, 'sendMessage', {
+          chat_id: msg.chat.id,
+          text: `✅ <b>Базову ціну для всіх пелет успішно оновлено: ${newPrice.toLocaleString('uk-UA')} грн/т!</b>\n` +
+            `Сайт ukrecopelleta.org, калькулятор та Google Search Console оновлено.\n\n` + menu.text,
+          parse_mode: 'HTML',
+          reply_markup: { inline_keyboard: menu.keyboard }
+        });
+
+        if (auth.role !== 'owner') {
+          try {
+            await callTelegram(token, 'sendMessage', {
+              chat_id: ownerId,
+              text: `📢 <b>Менеджер ${escapeHtml(userName)} оновив базову ціну всіх пелет:</b> ${newPrice.toLocaleString('uk-UA')} грн/т`,
+              parse_mode: 'HTML'
+            });
+          } catch (_) {}
+        }
+        return;
+      }
 
       if (state.action === 'await_pine_price') {
         if (isNaN(numVal) || numVal < 5000 || numVal > 50000) {
