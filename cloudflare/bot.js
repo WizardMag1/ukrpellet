@@ -19,8 +19,15 @@ export const DEFAULT_CONFIG = {
   updated_by_name: null
 };
 
-// In-memory memory fallback for local preview or uninitialized KV
+// In-memory fallback for local preview or uninitialized KV
 const memoryStore = new Map();
+
+export function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
 
 export async function getKV(env, key) {
   if (env && env.PRICING_KV) {
@@ -87,16 +94,68 @@ export async function savePricingConfig(env, newConfig, user) {
     updated_by_name: user ? (user.username ? `@${user.username}` : user.first_name || 'Менеджер') : null
   };
   await putKV(env, 'config:pricing', updated);
+
+  // Sync directly to GitHub repository so Vercel & the live website update immediately
+  const ghToken = env?.GITHUB_TOKEN || (typeof process !== 'undefined' ? process.env.GITHUB_TOKEN : '') || '';
+  if (ghToken) {
+    try {
+      const apiUrl = 'https://api.github.com/repos/WizardMag1/ukrpellet/contents/data/pricing.json';
+      const getRes = await fetch(apiUrl, {
+        headers: {
+          'Authorization': `Bearer ${ghToken}`,
+          'User-Agent': 'ukrecopelleta-bot',
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+      let sha = null;
+      if (getRes.ok) {
+        const fileObj = await getRes.json();
+        sha = fileObj.sha;
+      }
+      const jsonStr = JSON.stringify(updated, null, 2);
+      const b64 = typeof Buffer !== 'undefined'
+        ? Buffer.from(jsonStr).toString('base64')
+        : btoa(unescape(encodeURIComponent(jsonStr)));
+
+      const putRes = await fetch(apiUrl, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${ghToken}`,
+          'User-Agent': 'ukrecopelleta-bot',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: `Price update: Pine ${updated.pricing.pine_uah_per_t} UAH, Delivery ${updated.delivery.enabled ? 'ON' : 'OFF'} (via @ukrecopelleta_bot)`,
+          content: b64,
+          sha: sha || undefined
+        })
+      });
+      const putData = await putRes.json();
+      console.log('[GitHub sync successful]:', putData?.commit?.sha || putData);
+    } catch (err) {
+      console.error('[GitHub sync error]:', err.message);
+    }
+  }
+
   return updated;
 }
 
 export async function callTelegram(token, method, payload) {
-  const res = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-  return res.json();
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!data.ok) {
+      console.error(`[Telegram error in ${method}]:`, JSON.stringify(data));
+    }
+    return data;
+  } catch (err) {
+    console.error(`[Telegram fetch error in ${method}]:`, err.message);
+    return { ok: false, error: err.message };
+  }
 }
 
 export async function isAuthorized(env, userId) {
@@ -120,18 +179,19 @@ export function renderMainMenu(config, userRole, name) {
   const lastUpdated = config.updated_at
     ? new Date(config.updated_at).toLocaleString('uk-UA', { timeZone: 'Europe/Kyiv' })
     : 'Початкові налаштування';
-  const updatedBy = config.updated_by_name ? ` (${config.updated_by_name})` : '';
+  const updatedBy = config.updated_by_name ? ` (${escapeHtml(config.updated_by_name)})` : '';
+  const safeName = escapeHtml(name);
 
-  const text = `🌲 *UkrEcoPelleta — Керування цінами та доставкою*\n\n` +
-    `📊 *Поточні налаштування на сайті ukrecopelleta.org:*\n` +
-    `• Сосна 100%: *${p.pine_uah_per_t.toLocaleString('uk-UA')} грн/т*\n` +
-    `• Акація + берест: *${p.acacia_elm_uah_per_t.toLocaleString('uk-UA')} грн/т*\n` +
-    `• Доставка автопарком: *${deliveryStatusText}*\n` +
-    `• Поріг партії для доставки: *від ${d.min_tons || 15} т*\n` +
-    `• Мін. тариф рейсу: *${(d.min_delivery_uah || 15000).toLocaleString('uk-UA')} грн*\n` +
-    `• Ставка водія: *${d.driver_uah_per_km || 4.00} грн/км*\n\n` +
-    `👤 *Ви:* ${name} (${userRole === 'owner' ? 'Власник' : 'Менеджер'})\n` +
-    `🕒 *Останнє оновлення:* ${lastUpdated}${updatedBy}`;
+  const text = `🌲 <b>UkrEcoPelleta — Керування цінами та доставкою</b>\n\n` +
+    `📊 <b>Поточні налаштування на сайті ukrecopelleta.org:</b>\n` +
+    `• Сосна 100%: <b>${p.pine_uah_per_t.toLocaleString('uk-UA')} грн/т</b>\n` +
+    `• Акація + берест: <b>${p.acacia_elm_uah_per_t.toLocaleString('uk-UA')} грн/т</b>\n` +
+    `• Доставка автопарком: <b>${deliveryStatusText}</b>\n` +
+    `• Поріг партії для доставки: <b>від ${d.min_tons || 15} т</b>\n` +
+    `• Мін. тариф рейсу: <b>${(d.min_delivery_uah || 15000).toLocaleString('uk-UA')} грн</b>\n` +
+    `• Ставка водія: <b>${d.driver_uah_per_km || 4.00} грн/км</b>\n\n` +
+    `👤 <b>Ви:</b> ${safeName} (${userRole === 'owner' ? 'Власник' : 'Менеджер'})\n` +
+    `🕒 <b>Останнє оновлення:</b> ${lastUpdated}${updatedBy}`;
 
   const keyboard = [
     [
@@ -165,10 +225,10 @@ export function renderMainMenu(config, userRole, name) {
 
 export function renderTariffsMenu(config) {
   const d = config.delivery;
-  const text = `⚙️ *Налаштування логістики та тарифів доставки:*\n\n` +
-    `• Мінімальна партія для виїзду фури: *${d.min_tons || 15} т*\n` +
-    `• Мінімальна сума замовлення доставки: *${(d.min_delivery_uah || 15000).toLocaleString('uk-UA')} грн*\n` +
-    `• Оплата водієві: *${d.driver_uah_per_km || 4.00} грн/км*\n\n` +
+  const text = `⚙️ <b>Налаштування логістики та тарифів доставки:</b>\n\n` +
+    `• Мінімальна партія для виїзду фури: <b>${d.min_tons || 15} т</b>\n` +
+    `• Мінімальна сума замовлення доставки: <b>${(d.min_delivery_uah || 15000).toLocaleString('uk-UA')} грн</b>\n` +
+    `• Оплата водієві: <b>${d.driver_uah_per_km || 4.00} грн/км</b>\n\n` +
     `Оберіть параметр для зміни:`;
 
   const keyboard = [
@@ -220,7 +280,7 @@ export async function handleTelegramUpdate(update, env) {
         chat_id: cb.message.chat.id,
         message_id: cb.message.message_id,
         text: menu.text,
-        parse_mode: 'Markdown',
+        parse_mode: 'HTML',
         reply_markup: { inline_keyboard: menu.keyboard }
       });
       await callTelegram(token, 'answerCallbackQuery', { callback_query_id: cb.id });
@@ -237,7 +297,7 @@ export async function handleTelegramUpdate(update, env) {
         chat_id: cb.message.chat.id,
         message_id: cb.message.message_id,
         text: menu.text,
-        parse_mode: 'Markdown',
+        parse_mode: 'HTML',
         reply_markup: { inline_keyboard: menu.keyboard }
       });
       await callTelegram(token, 'answerCallbackQuery', {
@@ -255,7 +315,7 @@ export async function handleTelegramUpdate(update, env) {
         chat_id: cb.message.chat.id,
         message_id: cb.message.message_id,
         text: menu.text,
-        parse_mode: 'Markdown',
+        parse_mode: 'HTML',
         reply_markup: { inline_keyboard: menu.keyboard }
       });
       await callTelegram(token, 'answerCallbackQuery', { callback_query_id: cb.id });
@@ -267,10 +327,10 @@ export async function handleTelegramUpdate(update, env) {
       await putKV(env, `state:${userId}`, { action: 'await_pine_price' }, 600);
       await callTelegram(token, 'sendMessage', {
         chat_id: cb.message.chat.id,
-        text: `🌲 *Введіть нову ціну соснових пелет (грн/т):*\n\n` +
-          `Поточна ціна: *${config.pricing.pine_uah_per_t} грн/т*\n` +
-          `Введіть тільки число (наприклад, \`14800\`):`,
-        parse_mode: 'Markdown',
+        text: `🌲 <b>Введіть нову ціну соснових пелет (грн/т):</b>\n\n` +
+          `Поточна ціна: <b>${config.pricing.pine_uah_per_t} грн/т</b>\n` +
+          `Введіть тільки число (наприклад: <code>14800</code>):`,
+        parse_mode: 'HTML',
         reply_markup: {
           inline_keyboard: [[{ text: '❌ Скасувати', callback_data: 'cancel_input' }]]
         }
@@ -284,10 +344,10 @@ export async function handleTelegramUpdate(update, env) {
       await putKV(env, `state:${userId}`, { action: 'await_acacia_price' }, 600);
       await callTelegram(token, 'sendMessage', {
         chat_id: cb.message.chat.id,
-        text: `🌳 *Введіть нову ціну пелет міксу (акація+берест) в грн/т:*\n\n` +
-          `Поточна ціна: *${config.pricing.acacia_elm_uah_per_t} грн/т*\n` +
-          `Введіть тільки число (наприклад, \`14500\`):`,
-        parse_mode: 'Markdown',
+        text: `🌳 <b>Введіть нову ціну пелет міксу (акація+берест) в грн/т:</b>\n\n` +
+          `Поточна ціна: <b>${config.pricing.acacia_elm_uah_per_t} грн/т</b>\n` +
+          `Введіть тільки число (наприклад: <code>14500</code>):`,
+        parse_mode: 'HTML',
         reply_markup: {
           inline_keyboard: [[{ text: '❌ Скасувати', callback_data: 'cancel_input' }]]
         }
@@ -301,10 +361,10 @@ export async function handleTelegramUpdate(update, env) {
       await putKV(env, `state:${userId}`, { action: 'await_min_delivery' }, 600);
       await callTelegram(token, 'sendMessage', {
         chat_id: cb.message.chat.id,
-        text: `💰 *Введіть мінімальну вартість рейсу доставки (грн):*\n\n` +
-          `Поточний мінімум: *${config.delivery.min_delivery_uah} грн*\n` +
-          `Введіть тільки число (наприклад, \`16000\`):`,
-        parse_mode: 'Markdown',
+        text: `💰 <b>Введіть мінімальну вартість рейсу доставки (грн):</b>\n\n` +
+          `Поточний мінімум: <b>${config.delivery.min_delivery_uah} грн</b>\n` +
+          `Введіть тільки число (наприклад: <code>16000</code>):`,
+        parse_mode: 'HTML',
         reply_markup: {
           inline_keyboard: [[{ text: '❌ Скасувати', callback_data: 'cancel_input' }]]
         }
@@ -318,10 +378,10 @@ export async function handleTelegramUpdate(update, env) {
       await putKV(env, `state:${userId}`, { action: 'await_driver_rate' }, 600);
       await callTelegram(token, 'sendMessage', {
         chat_id: cb.message.chat.id,
-        text: `📏 *Введіть тариф водія за км (грн/км):*\n\n` +
-          `Поточний тариф: *${config.delivery.driver_uah_per_km} грн/км*\n` +
-          `Введіть число (наприклад, \`4.5\` або \`5\`):`,
-        parse_mode: 'Markdown',
+        text: `📏 <b>Введіть тариф водія за км (грн/км):</b>\n\n` +
+          `Поточний тариф: <b>${config.delivery.driver_uah_per_km} грн/км</b>\n` +
+          `Введіть число (наприклад: <code>4.5</code> або <code>5</code>):`,
+        parse_mode: 'HTML',
         reply_markup: {
           inline_keyboard: [[{ text: '❌ Скасувати', callback_data: 'cancel_input' }]]
         }
@@ -335,10 +395,10 @@ export async function handleTelegramUpdate(update, env) {
       await putKV(env, `state:${userId}`, { action: 'await_min_tons' }, 600);
       await callTelegram(token, 'sendMessage', {
         chat_id: cb.message.chat.id,
-        text: `📦 *Введіть мінімальну партію для доставки (тонн):*\n\n` +
-          `Поточний поріг: *${config.delivery.min_tons} т*\n` +
-          `Введіть число (наприклад, \`15\` чи \`20\`):`,
-        parse_mode: 'Markdown',
+        text: `📦 <b>Введіть мінімальну партію для доставки (тонн):</b>\n\n` +
+          `Поточний поріг: <b>${config.delivery.min_tons} т</b>\n` +
+          `Введіть число (наприклад: <code>15</code> чи <code>20</code>):`,
+        parse_mode: 'HTML',
         reply_markup: {
           inline_keyboard: [[{ text: '❌ Скасувати', callback_data: 'cancel_input' }]]
         }
@@ -379,11 +439,11 @@ export async function handleTelegramUpdate(update, env) {
 
       await callTelegram(token, 'sendMessage', {
         chat_id: cb.message.chat.id,
-        text: `🔗 *Персональне посилання-запрошення для нового співробітника:*\n\n` +
-          `\`${inviteUrl}\`\n\n` +
+        text: `🔗 <b>Персональне посилання-запрошення для нового співробітника:</b>\n\n` +
+          `<code>${inviteUrl}</code>\n\n` +
           `📩 Перешліть це повідомлення завідувачу виробництва або менеджеру.\n` +
-          `Коли він перейде за посиланням і натисне *Start*, йому автоматично буде надано доступ до зміни цін та статусу доставки.`,
-        parse_mode: 'Markdown',
+          `Коли він перейде за посиланням і натисне <b>Start</b>, йому автоматично буде надано доступ до зміни цін та статусу доставки.`,
+        parse_mode: 'HTML',
         reply_markup: {
           inline_keyboard: [[{ text: '⬅️ До головного меню', callback_data: 'back_to_main' }]]
         }
@@ -401,19 +461,19 @@ export async function handleTelegramUpdate(update, env) {
       const users = (await getKV(env, 'auth:users')) || {};
       const userList = Object.values(users);
 
-      let text = `👥 *Авторизовані користувачі бота:*\n\n` +
-        `👑 *Власник:* ID \`${ownerId}\`\n\n`;
+      let text = `👥 <b>Авторизовані користувачі бота:</b>\n\n` +
+        `👑 <b>Власник:</b> ID <code>${ownerId}</code>\n\n`;
 
       const keyboard = [];
       if (userList.length === 0) {
-        text += `_Додаткових менеджерів поки немає. Створіть посилання через кнопку «Запросити менеджера»._`;
+        text += `<i>Додаткових менеджерів поки немає. Створіть посилання через кнопку «Запросити менеджера».</i>`;
       } else {
-        text += `*Менеджери з доступом до зміни цін:*\n`;
+        text += `<b>Менеджери з доступом до зміни цін:</b>\n`;
         for (const u of userList) {
-          const uLabel = u.username ? `@${u.username}` : (u.name || `ID ${u.id}`);
+          const uLabel = u.username ? `@${escapeHtml(u.username)}` : escapeHtml(u.name || `ID ${u.id}`);
           const date = u.added_at ? new Date(u.added_at).toLocaleDateString('uk-UA') : '';
           text += `• ${uLabel} (додано: ${date})\n`;
-          keyboard.push([{ text: `❌ Видалити доступ ${uLabel}`, callback_data: `revoke_${u.id}` }]);
+          keyboard.push([{ text: `❌ Видалити доступ ${u.username ? '@' + u.username : u.id}`, callback_data: `revoke_${u.id}` }]);
         }
       }
 
@@ -422,7 +482,7 @@ export async function handleTelegramUpdate(update, env) {
       await callTelegram(token, 'sendMessage', {
         chat_id: cb.message.chat.id,
         text,
-        parse_mode: 'Markdown',
+        parse_mode: 'HTML',
         reply_markup: { inline_keyboard: keyboard }
       });
       await callTelegram(token, 'answerCallbackQuery', { callback_query_id: cb.id });
@@ -461,7 +521,7 @@ export async function handleTelegramUpdate(update, env) {
       await callTelegram(token, 'sendMessage', {
         chat_id: cb.message.chat.id,
         text: menu.text,
-        parse_mode: 'Markdown',
+        parse_mode: 'HTML',
         reply_markup: { inline_keyboard: menu.keyboard }
       });
       return;
@@ -499,8 +559,8 @@ export async function handleTelegramUpdate(update, env) {
         const menu = renderMainMenu(config, 'manager', userName);
         await callTelegram(token, 'sendMessage', {
           chat_id: msg.chat.id,
-          text: `🎉 *Вітаємо! Доступ успішно активовано!*\n\nВам надано права менеджера заводу *UkrEcoPelleta*. Ви можете оперативно оновлювати ціни на сосну, мікс порід та статус доставки на сайті ukrecopelleta.org.\n\n` + menu.text,
-          parse_mode: 'Markdown',
+          text: `🎉 <b>Вітаємо! Доступ успішно активовано!</b>\n\nВам надано права менеджера заводу <b>UkrEcoPelleta</b>. Ви можете оперативно оновлювати ціни на сосну, мікс порід та статус доставки на сайті ukrecopelleta.org.\n\n` + menu.text,
+          parse_mode: 'HTML',
           reply_markup: { inline_keyboard: menu.keyboard }
         });
 
@@ -508,16 +568,16 @@ export async function handleTelegramUpdate(update, env) {
         try {
           await callTelegram(token, 'sendMessage', {
             chat_id: ownerId,
-            text: `🔔 *Новий співробітник активований!*\n\nКористувач ${userName} (ID: \`${userId}\`) використав запрошення та отримав доступ до зміни цін.`,
-            parse_mode: 'Markdown'
+            text: `🔔 <b>Новий співробітник активований!</b>\n\nКористувач ${escapeHtml(userName)} (ID: <code>${userId}</code>) використав запрошення та отримав доступ до зміни цін.`,
+            parse_mode: 'HTML'
           });
         } catch (_) {}
         return;
       } else {
         await callTelegram(token, 'sendMessage', {
           chat_id: msg.chat.id,
-          text: '❌ *Це посилання-запрошення недійсне або вже було використане.*\n\nЗверніться до керівництва за новим запрошенням.',
-          parse_mode: 'Markdown'
+          text: '❌ <b>Це посилання-запрошення недійсне або вже було використане.</b>\n\nЗверніться до керівництва за новим запрошенням.',
+          parse_mode: 'HTML'
         });
         return;
       }
@@ -528,8 +588,8 @@ export async function handleTelegramUpdate(update, env) {
     if (!auth.authorized) {
       await callTelegram(token, 'sendMessage', {
         chat_id: msg.chat.id,
-        text: `⛔️ *Доступ обмежено.*\n\nЦей бот призначений виключно для уповноважених співробітників заводу *UkrEcoPelleta*.\n\nЯкщо ви співробітник заводу, попросіть керівництво надіслати вам персональне посилання-запрошення.`,
-        parse_mode: 'Markdown'
+        text: `⛔️ <b>Доступ обмежено.</b>\n\nЦей бот призначений виключно для уповноважених співробітників заводу <b>UkrEcoPelleta</b>.\n\nЯкщо ви співробітник заводу, попросіть керівництво надіслати вам персональне посилання-запрошення.`,
+        parse_mode: 'HTML'
       });
       return;
     }
@@ -543,8 +603,8 @@ export async function handleTelegramUpdate(update, env) {
         if (isNaN(numVal) || numVal < 5000 || numVal > 50000) {
           await callTelegram(token, 'sendMessage', {
             chat_id: msg.chat.id,
-            text: '⚠️ *Будь ласка, введіть реальну ціну в межах від 5 000 до 50 000 грн/т.* Спробуйте ще раз або натисніть «Скасувати»:',
-            parse_mode: 'Markdown',
+            text: '⚠️ <b>Будь ласка, введіть реальну ціну в межах від 5 000 до 50 000 грн/т.</b> Спробуйте ще раз або натисніть «Скасувати»:',
+            parse_mode: 'HTML',
             reply_markup: { inline_keyboard: [[{ text: '❌ Скасувати', callback_data: 'cancel_input' }]] }
           });
           return;
@@ -555,8 +615,8 @@ export async function handleTelegramUpdate(update, env) {
 
         await callTelegram(token, 'sendMessage', {
           chat_id: msg.chat.id,
-          text: `✅ *Ціну соснових пелет оновлено: ${Math.round(numVal).toLocaleString('uk-UA')} грн/т!*\nСайт ukrecopelleta.org вже показує актуальну ціну.\n\n` + menu.text,
-          parse_mode: 'Markdown',
+          text: `✅ <b>Ціну соснових пелет оновлено: ${Math.round(numVal).toLocaleString('uk-UA')} грн/т!</b>\nСайт ukrecopelleta.org вже показує актуальну ціну.\n\n` + menu.text,
+          parse_mode: 'HTML',
           reply_markup: { inline_keyboard: menu.keyboard }
         });
 
@@ -565,7 +625,8 @@ export async function handleTelegramUpdate(update, env) {
           try {
             await callTelegram(token, 'sendMessage', {
               chat_id: ownerId,
-              text: `📢 *Менеджер ${userName} оновив ціну сосни:* ${Math.round(numVal).toLocaleString('uk-UA')} грн/т`
+              text: `📢 <b>Менеджер ${escapeHtml(userName)} оновив ціну сосни:</b> ${Math.round(numVal).toLocaleString('uk-UA')} грн/т`,
+              parse_mode: 'HTML'
             });
           } catch (_) {}
         }
@@ -576,8 +637,8 @@ export async function handleTelegramUpdate(update, env) {
         if (isNaN(numVal) || numVal < 5000 || numVal > 50000) {
           await callTelegram(token, 'sendMessage', {
             chat_id: msg.chat.id,
-            text: '⚠️ *Будь ласка, введіть реальну ціну в межах від 5 000 до 50 000 грн/т.* Спробуйте ще раз:',
-            parse_mode: 'Markdown',
+            text: '⚠️ <b>Будь ласка, введіть реальну ціну в межах від 5 000 до 50 000 грн/т.</b> Спробуйте ще раз:',
+            parse_mode: 'HTML',
             reply_markup: { inline_keyboard: [[{ text: '❌ Скасувати', callback_data: 'cancel_input' }]] }
           });
           return;
@@ -588,8 +649,8 @@ export async function handleTelegramUpdate(update, env) {
 
         await callTelegram(token, 'sendMessage', {
           chat_id: msg.chat.id,
-          text: `✅ *Ціну міксу (акація+берест) оновлено: ${Math.round(numVal).toLocaleString('uk-UA')} грн/т!*\nСайт ukrecopelleta.org вже показує актуальну ціну.\n\n` + menu.text,
-          parse_mode: 'Markdown',
+          text: `✅ <b>Ціну міксу (акація+берест) оновлено: ${Math.round(numVal).toLocaleString('uk-UA')} грн/т!</b>\nСайт ukrecopelleta.org вже показує актуальну ціну.\n\n` + menu.text,
+          parse_mode: 'HTML',
           reply_markup: { inline_keyboard: menu.keyboard }
         });
         return;
@@ -599,7 +660,8 @@ export async function handleTelegramUpdate(update, env) {
         if (isNaN(numVal) || numVal < 1000 || numVal > 100000) {
           await callTelegram(token, 'sendMessage', {
             chat_id: msg.chat.id,
-            text: '⚠️ Введіть коректну мінімальну суму доставки (від 1 000 до 100 000 грн):',
+            text: '⚠️ <b>Введіть коректну мінімальну суму доставки (від 1 000 до 100 000 грн):</b>',
+            parse_mode: 'HTML',
             reply_markup: { inline_keyboard: [[{ text: '❌ Скасувати', callback_data: 'cancel_input' }]] }
           });
           return;
@@ -609,8 +671,8 @@ export async function handleTelegramUpdate(update, env) {
         const menu = renderTariffsMenu(updated);
         await callTelegram(token, 'sendMessage', {
           chat_id: msg.chat.id,
-          text: `✅ *Мінімальну вартість рейсу доставки оновлено: ${Math.round(numVal).toLocaleString('uk-UA')} грн!*\n\n` + menu.text,
-          parse_mode: 'Markdown',
+          text: `✅ <b>Мінімальну вартість рейсу доставки оновлено: ${Math.round(numVal).toLocaleString('uk-UA')} грн!</b>\n\n` + menu.text,
+          parse_mode: 'HTML',
           reply_markup: { inline_keyboard: menu.keyboard }
         });
         return;
@@ -620,7 +682,8 @@ export async function handleTelegramUpdate(update, env) {
         if (isNaN(numVal) || numVal < 1 || numVal > 50) {
           await callTelegram(token, 'sendMessage', {
             chat_id: msg.chat.id,
-            text: '⚠️ Введіть коректну ставку водія за км (від 1 до 50 грн/км):',
+            text: '⚠️ <b>Введіть коректну ставку водія за км (від 1 до 50 грн/км):</b>',
+            parse_mode: 'HTML',
             reply_markup: { inline_keyboard: [[{ text: '❌ Скасувати', callback_data: 'cancel_input' }]] }
           });
           return;
@@ -630,8 +693,8 @@ export async function handleTelegramUpdate(update, env) {
         const menu = renderTariffsMenu(updated);
         await callTelegram(token, 'sendMessage', {
           chat_id: msg.chat.id,
-          text: `✅ *Ставку водія оновлено: ${numVal.toFixed(2)} грн/км!*\n\n` + menu.text,
-          parse_mode: 'Markdown',
+          text: `✅ <b>Ставку водія оновлено: ${numVal.toFixed(2)} грн/км!</b>\n\n` + menu.text,
+          parse_mode: 'HTML',
           reply_markup: { inline_keyboard: menu.keyboard }
         });
         return;
@@ -641,7 +704,8 @@ export async function handleTelegramUpdate(update, env) {
         if (isNaN(numVal) || numVal < 1 || numVal > 50) {
           await callTelegram(token, 'sendMessage', {
             chat_id: msg.chat.id,
-            text: '⚠️ Введіть мінімальну кількість тонн для доставки (наприклад, 15 чи 22):',
+            text: '⚠️ <b>Введіть мінімальну кількість тонн для доставки (наприклад, 15 чи 22):</b>',
+            parse_mode: 'HTML',
             reply_markup: { inline_keyboard: [[{ text: '❌ Скасувати', callback_data: 'cancel_input' }]] }
           });
           return;
@@ -651,8 +715,8 @@ export async function handleTelegramUpdate(update, env) {
         const menu = renderTariffsMenu(updated);
         await callTelegram(token, 'sendMessage', {
           chat_id: msg.chat.id,
-          text: `✅ *Поріг доставки оновлено: від ${Math.round(numVal)} тонн!*\n\n` + menu.text,
-          parse_mode: 'Markdown',
+          text: `✅ <b>Поріг доставки оновлено: від ${Math.round(numVal)} тонн!</b>\n\n` + menu.text,
+          parse_mode: 'HTML',
           reply_markup: { inline_keyboard: menu.keyboard }
         });
         return;
@@ -665,7 +729,7 @@ export async function handleTelegramUpdate(update, env) {
     await callTelegram(token, 'sendMessage', {
       chat_id: msg.chat.id,
       text: menu.text,
-      parse_mode: 'Markdown',
+      parse_mode: 'HTML',
       reply_markup: { inline_keyboard: menu.keyboard }
     });
   }
