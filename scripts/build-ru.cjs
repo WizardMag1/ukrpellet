@@ -66,8 +66,9 @@ for (const page of PAGES) {
           <a class="lang-btn active" data-lang="ru" href="${ruPath(page.slug)}" aria-current="page">RU</a>
         </div>`);
 
+  html = html.replace(/\r\n/g, '\n');
   const out = path.join(OUT_DIR, page.file);
-  if (!fs.existsSync(out) || fs.readFileSync(out, 'utf8') !== html) fs.writeFileSync(out, html);
+  if (!fs.existsSync(out) || fs.readFileSync(out, 'utf8') !== html) fs.writeFileSync(out, html, 'utf8');
   console.log(`✓ ru/${page.file}`);
 }
 

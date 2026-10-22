@@ -290,6 +290,7 @@ function buildPlaceField(page) {
 // truth stays assets/css/styles.css; edit it, then re-run this script. Comments and indentation are dropped.
 function inlineCss() {
   const css = fs.readFileSync(path.join(ROOT, 'assets/css/styles.css'), 'utf8')
+    .replace(/\r\n/g, '\n')
     .replace(/url\('\.\.\/fonts\//g, "url('/assets/fonts/") // paths were relative to /assets/css/
     .replace(/\/\*[\s\S]*?\*\//g, '')
     .replace(/\n\s+/g, '\n')
@@ -418,7 +419,8 @@ for (const [file, page] of Object.entries(PAGES)) {
   // 7. Analytics setup scripts must not block the first paint.
   html = html.replace(/<script src="(\/assets\/js\/analytics(?:-config)?\.js\?v=[\w.-]+)"><\/script>/g, '<script defer src="$1"></script>');
 
-  fs.writeFileSync(full, html);
+  html = html.replace(/\r\n/g, '\n');
+  fs.writeFileSync(full, html, 'utf8');
   console.log(`✓ ${file}`);
 }
 if (failed) process.exit(1);

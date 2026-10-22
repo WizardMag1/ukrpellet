@@ -61,8 +61,13 @@ for (const txtFile of ['llms.txt', 'llms-full.txt']) {
 const ruTransPath = path.join(ROOT, 'data', 'ru', 'translations.json');
 if (fs.existsSync(ruTransPath)) {
   let ruJson = fs.readFileSync(ruTransPath, 'utf8');
-  ruJson = ruJson.replace(/14\s*500/g, priceFmt);
-  fs.writeFileSync(ruTransPath, ruJson, 'utf8');
+  const minPrice = Math.min(pinePrice, acaciaPrice);
+  const minFmt = fmtUa(minPrice);
+  const ruObj = JSON.parse(ruJson);
+  ruObj[`від ${minFmt}`] = `от ${minFmt}`;
+  ruObj[`від ${priceFmt}`] = `от ${priceFmt}`;
+  ruObj[priceFmt] = priceFmt;
+  fs.writeFileSync(ruTransPath, JSON.stringify(ruObj, null, 2).replace(/\r\n/g, '\n'), 'utf8');
   console.log('✓ Updated data/ru/translations.json');
 }
 
@@ -94,7 +99,7 @@ for (const relPath of htmlFiles) {
   html = html.replace(/(<li>)[\d\s]+(грн\/т на складі)/gi, `$1${priceFmt} $2`);
 
   if (html !== original) {
-    fs.writeFileSync(fullPath, html, 'utf8');
+    fs.writeFileSync(fullPath, html.replace(/\r\n/g, '\n'), 'utf8');
     updatedHtmlCount++;
   }
 }
