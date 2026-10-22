@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import { handleTelegramUpdate } from '../cloudflare/bot.js';
+import { handleTelegramUpdate, getPricingConfig } from '../cloudflare/bot.js';
 
 let ghToken = '';
 try {
@@ -15,9 +15,7 @@ const env = {
 };
 
 console.log('Bot runner started. Listening for updates from @ukrecopelleta_bot...');
-if (ghToken) {
-  console.log('GitHub sync enabled: Live website updates on every price change!');
-}
+console.log('Full SEO, Ads & Schema synchronization enabled!');
 
 let offset = 0;
 while (true) {
@@ -27,8 +25,29 @@ while (true) {
     if (data.ok && Array.isArray(data.result)) {
       for (const update of data.result) {
         offset = update.update_id + 1;
-        console.log(`[Update ${update.update_id}] received:`, update.message ? update.message.text : update.callback_query ? update.callback_query.data : 'other');
+        const actionType = update.message ? update.message.text : update.callback_query ? update.callback_query.data : 'other';
+        console.log(`[Update ${update.update_id}] received:`, actionType);
+
+        const beforeConfig = await getPricingConfig(env);
         await handleTelegramUpdate(update, env);
+        const afterConfig = await getPricingConfig(env);
+
+        // If pricing or delivery was modified, run system-wide sync across all 22 HTML pages, schemas, and git
+        if (
+          beforeConfig.pricing.pine_uah_per_t !== afterConfig.pricing.pine_uah_per_t ||
+          beforeConfig.pricing.acacia_elm_uah_per_t !== afterConfig.pricing.acacia_elm_uah_per_t ||
+          beforeConfig.delivery.enabled !== afterConfig.delivery.enabled ||
+          beforeConfig.delivery.min_delivery_uah !== afterConfig.delivery.min_delivery_uah
+        ) {
+          console.log('Change detected! Running system-wide SEO & Schema sync...');
+          try {
+            execSync('node scripts/sync-pricing.cjs', { stdio: 'inherit' });
+            execSync('git add -A && git commit -m "chore(pricing): system-wide sync from @ukrecopelleta_bot" && git push origin master', { stdio: 'inherit' });
+            console.log('✓ System-wide sync pushed to master!');
+          } catch (syncErr) {
+            console.error('Local sync/push error:', syncErr.message);
+          }
+        }
       }
     }
   } catch (err) {

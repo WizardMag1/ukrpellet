@@ -6,11 +6,13 @@
  * 2. Meta tags (<meta name="description">, og:description)
  * 3. Static HTML prices (<dd><strong>, lead paragraphs, bullet points, FAQ blocks)
  * 4. analytics-config.js (Google Ads & Meta Pixel conversion tracking defaults)
- * 5. llms.txt & llms-full.txt (AI Search engines: ChatGPT, Gemini, Perplexity)
+ * 5. data/ru/translations.json & ru/*.html layout sync
+ * 6. llms.txt & llms-full.txt (AI Search engines: ChatGPT, Gemini, Perplexity)
  */
 
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 const ROOT = path.join(__dirname, '..');
 const PRICING_FILE = path.join(ROOT, 'data', 'pricing.json');
@@ -55,12 +57,17 @@ for (const txtFile of ['llms.txt', 'llms-full.txt']) {
   }
 }
 
-// 3. Update all HTML files (Root + ru/)
-const htmlFiles = fs.readdirSync(ROOT).filter(f => f.endsWith('.html'));
-const ruDir = path.join(ROOT, 'ru');
-if (fs.existsSync(ruDir)) {
-  fs.readdirSync(ruDir).filter(f => f.endsWith('.html')).forEach(f => htmlFiles.push(path.join('ru', f)));
+// 3. Update data/ru/translations.json so Russian mirrors stay 100% in step
+const ruTransPath = path.join(ROOT, 'data', 'ru', 'translations.json');
+if (fs.existsSync(ruTransPath)) {
+  let ruJson = fs.readFileSync(ruTransPath, 'utf8');
+  ruJson = ruJson.replace(/14\s*500/g, priceFmt);
+  fs.writeFileSync(ruTransPath, ruJson, 'utf8');
+  console.log('✓ Updated data/ru/translations.json');
 }
+
+// 4. Update all root HTML files
+const htmlFiles = fs.readdirSync(ROOT).filter(f => f.endsWith('.html'));
 
 let updatedHtmlCount = 0;
 for (const relPath of htmlFiles) {
@@ -69,35 +76,32 @@ for (const relPath of htmlFiles) {
   const original = html;
 
   // A. Schema.org JSON-LD
-  // "lowPrice": "14500" -> "lowPrice": "15500"
   html = html.replace(/"lowPrice":\s*"\d+"/g, `"lowPrice": "${pinePrice}"`);
   html = html.replace(/"highPrice":\s*"\d+"/g, `"highPrice": "${pinePrice}"`);
   html = html.replace(/"priceRange":\s*"\d+\s*UAH\/t"/g, `"priceRange": "${pinePrice} UAH/t"`);
   html = html.replace(/("priceSpecification":\s*\{\s*"@type":\s*"UnitPriceSpecification",\s*"price":\s*)"\d+"/g, `$1"${pinePrice}"`);
 
-  // B. FAQ Schema JSON-LD text:
-  // "text": "Ціна: 14 500 грн за тонну..." -> "... 15 500 грн ..."
+  // B. FAQ Schema JSON-LD text
   html = html.replace(/(Ціна[^":]*?[—:]\s*)[\d\s]+(грн за тонну)/gi, `$1${priceFmt} $2`);
-  html = html.replace(/(Цена[^":]*?[—:]\s*)[\d\s]+(грн за тонну|грн\/т)/gi, `$1${priceFmt} $2`);
 
   // C. Meta description
-  html = html.replace(/(від|от|ціна|цена|—)\s*[\d\s]+(грн\/т|грн за тонну)/gi, (match, prefix, suffix) => {
+  html = html.replace(/(від|ціна|—)\s*[\d\s]+(грн\/т|грн за тонну)/gi, (match, prefix, suffix) => {
     return `${prefix} ${priceFmt} ${suffix}`;
   });
 
   // D. Static HTML Visual Content
-  // <dd><strong>14 500</strong> <span data-i18n="facts.price_unit">грн/т...</span></dd>
   html = html.replace(/(<dd><strong>)[\d\s]+(<\/strong>\s*<span[^>]*data-i18n="facts\.price_unit")/gi, `$1${priceFmt}$2`);
-
-  // Paragraphs & lists
   html = html.replace(/(<li>)[\d\s]+(грн\/т на складі)/gi, `$1${priceFmt} $2`);
-  html = html.replace(/(<li>)[\d\s]+(грн\/т на складе)/gi, `$1${priceFmt} $2`);
 
   if (html !== original) {
     fs.writeFileSync(fullPath, html, 'utf8');
     updatedHtmlCount++;
   }
 }
+
+// 5. Re-run sync-layout.cjs to rebuild Russian pages (/ru/) and align layout
+console.log('Synchronizing layout & Russian translations (/ru/)...');
+execSync('node scripts/sync-layout.cjs', { cwd: ROOT, stdio: 'inherit' });
 
 console.log(`✓ Synchronized ${updatedHtmlCount} HTML landing pages for Search Console & Rich Snippets.`);
 console.log('✓ System-wide pricing synchronization complete.');
