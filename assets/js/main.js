@@ -4,6 +4,33 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Live dynamic pricing hydration across all pages (Google Ads conversion value & on-page badges)
+  fetch('/data/pricing.json', { cache: 'no-cache' })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((data) => {
+      if (!data) return;
+      if (data.pricing) {
+        if (!window.APP_CONFIG) window.APP_CONFIG = {};
+        if (!window.APP_CONFIG.PRICING) window.APP_CONFIG.PRICING = {};
+        if (data.pricing.pine_uah_per_t) {
+          window.APP_CONFIG.PRICING.pine_uah_per_t = Number(data.pricing.pine_uah_per_t);
+          const formatted = Number(data.pricing.pine_uah_per_t).toLocaleString('uk-UA');
+          document.querySelectorAll('.js-dynamic-price, [data-dynamic-price="pine"]').forEach((el) => {
+            el.textContent = formatted;
+          });
+        }
+        if (data.pricing.acacia_elm_uah_per_t) {
+          window.APP_CONFIG.PRICING.acacia_elm_uah_per_t = Number(data.pricing.acacia_elm_uah_per_t);
+        }
+      }
+      if (data.delivery) {
+        if (!window.APP_CONFIG) window.APP_CONFIG = {};
+        if (!window.APP_CONFIG.DELIVERY) window.APP_CONFIG.DELIVERY = {};
+        window.APP_CONFIG.DELIVERY.enabled = data.delivery.enabled !== false;
+        if (data.delivery.min_delivery_uah) window.APP_CONFIG.DELIVERY.min_delivery_uah = Number(data.delivery.min_delivery_uah);
+      }
+    })
+    .catch(() => {});
   // 1. Mobile Menu Toggle
   const mobileToggle = document.getElementById('mobile-menu-toggle');
   const navMenu = document.getElementById('nav-menu');
