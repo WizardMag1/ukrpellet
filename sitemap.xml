@@ -67,6 +67,22 @@
     <xhtml:link rel="alternate" hreflang="ru" href="https://ukrecopelleta.org/ru/pelety-pavlohrad" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ukrecopelleta.org/pelety-pavlohrad" />
   </url>
+  <url>
+    <loc>https://ukrecopelleta.org/pelety-zaporizhzhia</loc>
+    <lastmod>2026-10-22</lastmod>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://ukrecopelleta.org/pelety-zaporizhzhia" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://ukrecopelleta.org/ru/pelety-zaporizhzhia" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ukrecopelleta.org/pelety-zaporizhzhia" />
+  </url>
+  <url>
+    <loc>https://ukrecopelleta.org/pelety-kyiv</loc>
+    <lastmod>2026-10-22</lastmod>
+    <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://ukrecopelleta.org/pelety-kyiv" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://ukrecopelleta.org/ru/pelety-kyiv" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ukrecopelleta.org/pelety-kyiv" />
+  </url>
 
   <!-- Legal pages (Ukrainian only) -->
   <url>
@@ -144,6 +160,22 @@
     <xhtml:link rel="alternate" hreflang="uk" href="https://ukrecopelleta.org/pelety-pavlohrad" />
     <xhtml:link rel="alternate" hreflang="ru" href="https://ukrecopelleta.org/ru/pelety-pavlohrad" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ukrecopelleta.org/pelety-pavlohrad" />
+  </url>
+  <url>
+    <loc>https://ukrecopelleta.org/ru/pelety-zaporizhzhia</loc>
+    <lastmod>2026-10-22</lastmod>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://ukrecopelleta.org/pelety-zaporizhzhia" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://ukrecopelleta.org/ru/pelety-zaporizhzhia" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ukrecopelleta.org/pelety-zaporizhzhia" />
+  </url>
+  <url>
+    <loc>https://ukrecopelleta.org/ru/pelety-kyiv</loc>
+    <lastmod>2026-10-22</lastmod>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://ukrecopelleta.org/pelety-kyiv" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://ukrecopelleta.org/ru/pelety-kyiv" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ukrecopelleta.org/pelety-kyiv" />
   </url>
 
 </urlset>

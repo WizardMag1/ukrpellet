@@ -314,6 +314,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // calculator can show a price before that file has loaded.
   const PRESETS = {
     dnipro: ['Дніпро', 'Dnipro', ['Дніпровський', 'Дніпропетровська', 'Dniprovskyi', 'Dnipropetrovska'], 2],
+    zaporizhzhia: ['Запоріжжя', 'Zaporizhzhia', ['Запорізький', 'Запорізька', 'Zaporizkyi', 'Zaporizka'], 2],
+    kyiv: ['Київ', 'Kyiv', ['Київ', 'Київська', 'Kyiv', 'Kyivska'], 2],
     kamianske: ['Кам’янське', 'Kamianske', ['Кам’янський', 'Дніпропетровська', 'Kamianskyi', 'Dnipropetrovska'], 2],
     kryvyi_rih: ['Кривий Ріг', 'Kryvyi Rih', ['Криворізький', 'Дніпропетровська', 'Kryvorizkyi', 'Dnipropetrovska'], 2],
     pavlohrad: ['Павлоград', 'Pavlohrad', ['Павлоградський', 'Дніпропетровська', 'Pavlohradskyi', 'Dnipropetrovska'], 2],

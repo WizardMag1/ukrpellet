@@ -29,6 +29,8 @@ const PAGES = {
   'pelety-kryvyi-rih.html': { pagePath: '/pelety-kryvyi-rih', interactive: true, city: 'kryvyi_rih' },
   'pelety-kamianske.html': { pagePath: '/pelety-kamianske', interactive: true, city: 'kamianske' },
   'pelety-pavlohrad.html': { pagePath: '/pelety-pavlohrad', interactive: true, city: 'pavlohrad' },
+  'pelety-zaporizhzhia.html': { pagePath: '/pelety-zaporizhzhia', interactive: true, city: 'zaporizhzhia' },
+  'pelety-kyiv.html': { pagePath: '/pelety-kyiv', interactive: true, city: 'kyiv' },
   'pelety-optom.html': { pagePath: '/pelety-optom', interactive: true },
   'oferta.html': { pagePath: '/oferta', interactive: false },
   'privacy.html': { pagePath: '/privacy', interactive: false },

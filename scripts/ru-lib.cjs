@@ -18,6 +18,8 @@ const PAGES = [
   { file: 'pelety-kryvyi-rih.html', slug: 'pelety-kryvyi-rih' },
   { file: 'pelety-kamianske.html', slug: 'pelety-kamianske' },
   { file: 'pelety-pavlohrad.html', slug: 'pelety-pavlohrad' },
+  { file: 'pelety-zaporizhzhia.html', slug: 'pelety-zaporizhzhia' },
+  { file: 'pelety-kyiv.html', slug: 'pelety-kyiv' },
 ];
 
 const CYR = /[А-Яа-яІіЇїЄєҐґ]/;
