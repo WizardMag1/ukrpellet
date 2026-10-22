@@ -63,6 +63,16 @@
       "source": "/pelety-pavlohrad.html",
       "destination": "/pelety-pavlohrad",
       "permanent": true
+    },
+    {
+      "source": "/pelety-zaporizhzhia.html",
+      "destination": "/pelety-zaporizhzhia",
+      "permanent": true
+    },
+    {
+      "source": "/pelety-kyiv.html",
+      "destination": "/pelety-kyiv",
+      "permanent": true
     }
   ],
   "headers": [
