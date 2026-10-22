@@ -14,7 +14,12 @@ const fail = (msg) => errors.push(msg);
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
 
 // URL path -> file on disk ("/" -> index.html, "/pellets" -> pellets.html)
-const fileFor = (urlPath) => (urlPath === '/' ? 'index.html' : urlPath.replace(/^\//, '') + '.html');
+// "/ru" -> ru/index.html (a folder's index page, the Russian home)
+const fileFor = (urlPath) => {
+  if (urlPath === '/') return 'index.html';
+  const clean = urlPath.replace(/^\//, '');
+  return fs.existsSync(path.join(ROOT, clean, 'index.html')) ? `${clean}/index.html` : clean + '.html';
+};
 
 // 1. Sitemap <-> files
 const sitemap = read('sitemap.xml');
@@ -27,7 +32,10 @@ for (const loc of locs) {
   if (!fs.existsSync(path.join(ROOT, file))) fail(`sitemap: ${loc} -> missing ${file}`);
   else pages.push({ file, urlPath, loc });
 }
-const publicHtml = fs.readdirSync(ROOT).filter((f) => f.endsWith('.html'));
+const publicHtml = [
+  ...fs.readdirSync(ROOT).filter((f) => f.endsWith('.html')),
+  ...fs.readdirSync(path.join(ROOT, 'ru')).filter((f) => f.endsWith('.html')).map((f) => `ru/${f}`),
+];
 for (const f of publicHtml) {
   if (!pages.some((p) => p.file === f)) fail(`${f}: public page not listed in sitemap.xml`);
 }
@@ -47,6 +55,16 @@ for (const { file, loc } of pages) {
   if (!canon) fail(`${file}: missing canonical`);
   else if (canon[1] !== loc) fail(`${file}: canonical ${canon[1]} != sitemap ${loc}`);
 
+  // Language rule: Ukrainian is x-default everywhere; Russian pages say lang="ru" and are never the default.
+  const xdef = html.match(/hreflang="x-default" href="([^"]+)"/);
+  if (xdef && xdef[1].includes('/ru')) fail(`${file}: x-default must be the Ukrainian page, not ${xdef[1]}`);
+  if (file.startsWith('ru/') !== /<html lang="ru">/.test(html)) fail(`${file}: wrong <html lang> for its folder`);
+  const ruAlt = html.match(/hreflang="ru" href="([^"]+)"/);
+  if (ruAlt) {
+    const ruFile = fileFor(ruAlt[1].slice(DOMAIN.length));
+    if (!fs.existsSync(path.join(ROOT, ruFile))) fail(`${file}: hreflang ru -> missing ${ruFile}`);
+  }
+
   [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/gi)].forEach((m, i) => {
     try { JSON.parse(m[1]); } catch (e) { fail(`${file}: JSON-LD block #${i + 1}: ${e.message}`); }
   });
@@ -56,7 +74,8 @@ for (const { file, loc } of pages) {
     if (/^(https?:|mailto:|tel:|viber:|tg:|\/\/|javascript:)/.test(href)) continue;
     const clean = href.replace(/^\//, '');
     const target = clean === '' ? 'index.html' : clean;
-    const exists = fs.existsSync(path.join(ROOT, target)) || fs.existsSync(path.join(ROOT, target + '.html'));
+    const exists = fs.existsSync(path.join(ROOT, target + '.html')) || fs.existsSync(path.join(ROOT, target, 'index.html'))
+      || (fs.existsSync(path.join(ROOT, target)) && fs.statSync(path.join(ROOT, target)).isFile());
     if (!exists) fail(`${file}: broken internal link ${href}`);
   }
 }
