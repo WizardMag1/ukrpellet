@@ -118,8 +118,10 @@ export async function savePricingConfig(env, newConfig, user) {
   };
   await putKV(env, 'config:pricing', updated);
 
-  // Sync directly to GitHub repository so Vercel & the live website update immediately
-  const ghToken = env?.GITHUB_TOKEN || (typeof process !== 'undefined' ? process.env.GITHUB_TOKEN : '') || '';
+  // Sync directly to GitHub repository if running in Cloudflare Workers (where Git CLI is absent)
+  // When running in Node.js daemon (dev-bot.mjs), dev-bot.mjs performs an atomic git commit + push for all files
+  const isCloudflare = typeof process === 'undefined' || !process.cwd;
+  const ghToken = isCloudflare ? (env?.GITHUB_TOKEN || '') : '';
   if (ghToken) {
     try {
       const apiUrl = 'https://api.github.com/repos/WizardMag1/ukrpellet/contents/data/pricing.json';
