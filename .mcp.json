@@ -26,6 +26,19 @@
       "args": [
         "chrome-devtools-mcp@latest"
       ]
+    },
+    "openseo": {
+      "type": "http",
+      "url": "https://app.openseo.so/mcp"
+    },
+    "seo": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "seo",
+        "mcp",
+        "serve"
+      ]
     }
   }
 }

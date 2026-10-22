@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ASSET_VERSION = '20261019-2';
+const ASSET_VERSION = '20261022-1';
 const ROOT = path.join(__dirname, '..');
 // Pages with a Russian copy under /ru/ (built by scripts/build-ru.cjs at the end of this script).
 const { PAGES: RU_PAGES, SITE } = require('./ru-lib.cjs');

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * UkrEcoPelleta & ТОВ «УКРЕКОПЕЛЕТА» — Bilingual Localization Engine (Ukrainian & English)
  */
 
@@ -48,7 +48,7 @@ const translations = {
 
     // Hero Pellets Landing (pellets.html)
     "hero.pellet_badge": "Спеціальні умови для Дніпропетровської області",
-    "hero.pellet_title": "Деревні паливні пелети оптом від виробника у м. Нікополь",
+    "hero.pellet_title": "Деревні паливні гранули 6 мм ENplus A1: характеристики, сертифікати, розрахунок витрати",
     "hero.pellet_desc": "Високоефективні гранули без хімічних домішок для промислових котелень, підприємств та приватних комплексів. Пряма відвантаження зі складу, паспорт якості, доставка по Дніпропетровській області та Україні.",
     "hero.pellet_regional_strong": "Регіональне постачання: Дніпропетровська область та прилеглі райони",
     "hero.pellet_regional_sub": "Мінімальне замовлення для доставки по області — не менше 15 тонн (≈23 біг-беги). Самовивіз у м. Нікополь — за домовленістю.",
@@ -328,7 +328,7 @@ const translations = {
 
     // Hero Pellets Landing (pellets.html)
     "hero.pellet_badge": "Direct Wholesale for Dnipro Region & Ukraine",
-    "hero.pellet_title": "Premium Wood Fuel Pellets Direct from Manufacturer in Nikopol",
+    "hero.pellet_title": "Wood Fuel Pellets 6 mm ENplus A1: Specifications, Certificates & Fuel Calculation",
     "hero.pellet_desc": "High-efficiency biofuel pellets without synthetic additives for industrial heating boilers, agricultural facilities, and commercial buildings. Direct warehouse shipping, quality certificates, delivery across Dnipropetrovsk region and Ukraine.",
     "hero.pellet_regional_strong": "Regional Logistics: Dnipro Region & Surrounding Areas",
     "hero.pellet_regional_sub": "Minimum order for regional delivery: at least 15 tonnes (≈23 big bags). Warehouse pickup in Nikopol available upon prior agreement.",
