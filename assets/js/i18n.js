@@ -41,14 +41,14 @@ const translations = {
 
     // Hero Corporate (index.html)
     "hero.corp_badge": "Екологічне біопаливо європейського стандарту",
-    "hero.corp_title": "Промислове виробництво деревних паливних гранул в Україні",
+    "hero.corp_title": "Купити деревні пелети від виробника — завод у Нікополі",
     "hero.corp_desc": "ТОВ «УКРЕКОПЕЛЕТА» (UkrEcoPelleta) — надійний український виробник твердого біопалива. Сучасні автоматизовані лінії гранулювання у м. Нікополь, стабільні оптові поставки, суворий контроль якості та енергонезалежність для вашого бізнесу.",
     "hero.corp_btn_catalog": "Каталог пелет та оптові умови",
     "hero.corp_btn_about": "Про наші потужності",
 
     // Hero Pellets Landing (pellets.html)
     "hero.pellet_badge": "Спеціальні умови для Дніпропетровської області",
-    "hero.pellet_title": "Деревні паливні гранули 6 мм ENplus A1: характеристики, сертифікати, розрахунок витрати",
+    "hero.pellet_title": "Пелети 6 мм ENplus A1: ціна, характеристики, сертифікати",
     "hero.pellet_desc": "Високоефективні гранули без хімічних домішок для промислових котелень, підприємств та приватних комплексів. Пряма відвантаження зі складу, паспорт якості, доставка по Дніпропетровській області та Україні.",
     "hero.pellet_regional_strong": "Регіональне постачання: Дніпропетровська область та прилеглі райони",
     "hero.pellet_regional_sub": "Мінімальне замовлення для доставки по області — не менше 15 тонн (≈23 біг-беги). Самовивіз у м. Нікополь — за домовленістю.",
@@ -321,14 +321,14 @@ const translations = {
 
     // Hero Corporate (index.html)
     "hero.corp_badge": "Eco-friendly Biofuel of European Standard",
-    "hero.corp_title": "Industrial Wood Fuel Pellet Manufacturing in Ukraine",
+    "hero.corp_title": "Buy Wood Pellets Direct from the Manufacturer — Nikopol Plant",
     "hero.corp_desc": "UKREKOPELLET, LLC (UkrEcoPelleta) is a reliable Ukrainian solid biofuel producer. Automated pelletizing lines in Nikopol, steady wholesale supplies, strict quality lab control, and energy independence for your enterprise.",
     "hero.corp_btn_catalog": "Wood Pellet Catalog & Wholesale Terms",
     "hero.corp_btn_about": "Our Production Capacity",
 
     // Hero Pellets Landing (pellets.html)
     "hero.pellet_badge": "Direct Wholesale for Dnipro Region & Ukraine",
-    "hero.pellet_title": "Wood Fuel Pellets 6 mm ENplus A1: Specifications, Certificates & Fuel Calculation",
+    "hero.pellet_title": "Wood Pellets 6 mm ENplus A1: Price, Specs, Certificates",
     "hero.pellet_desc": "High-efficiency biofuel pellets without synthetic additives for industrial heating boilers, agricultural facilities, and commercial buildings. Direct warehouse shipping, quality certificates, delivery across Dnipropetrovsk region and Ukraine.",
     "hero.pellet_regional_strong": "Regional Logistics: Dnipro Region & Surrounding Areas",
     "hero.pellet_regional_sub": "Minimum order for regional delivery: at least 15 tonnes (≈23 big bags). Warehouse pickup in Nikopol available upon prior agreement.",
