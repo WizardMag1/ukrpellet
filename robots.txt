@@ -4,7 +4,9 @@
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /*?*
+# No rule for "?" addresses: every script and stylesheet is loaded as /assets/...?v=<version>, and
+# blocking "?" stops Google from loading them to render the page. Pages reached with ?city= or ?utm_
+# carry a canonical link to the clean address, which is how Google merges them.
 
 # Explicit permissions for AI assistants and web crawlers
 User-agent: GPTBot

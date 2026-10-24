@@ -41,14 +41,14 @@ const translations = {
 
     // Hero Corporate (index.html)
     "hero.corp_badge": "Екологічне біопаливо європейського стандарту",
-    "hero.corp_title": "Промислове виробництво деревних паливних гранул в Україні",
+    "hero.corp_title": "Купити деревні пелети від виробника — завод у Нікополі",
     "hero.corp_desc": "ТОВ «УКРЕКОПЕЛЕТА» (UkrEcoPelleta) — надійний український виробник твердого біопалива. Сучасні автоматизовані лінії гранулювання у м. Нікополь, стабільні оптові поставки, суворий контроль якості та енергонезалежність для вашого бізнесу.",
     "hero.corp_btn_catalog": "Каталог пелет та оптові умови",
     "hero.corp_btn_about": "Про наші потужності",
 
     // Hero Pellets Landing (pellets.html)
     "hero.pellet_badge": "Спеціальні умови для Дніпропетровської області",
-    "hero.pellet_title": "Деревні паливні гранули 6 мм ENplus A1: характеристики, сертифікати, розрахунок витрати",
+    "hero.pellet_title": "Пелети 6 мм ENplus A1: ціна, характеристики, сертифікати",
     "hero.pellet_desc": "Високоефективні гранули без хімічних домішок для промислових котелень, підприємств та приватних комплексів. Пряма відвантаження зі складу, паспорт якості, доставка по Дніпропетровській області та Україні.",
     "hero.pellet_regional_strong": "Регіональне постачання: Дніпропетровська область та прилеглі райони",
     "hero.pellet_regional_sub": "Мінімальне замовлення для доставки по області — не менше 15 тонн (≈23 біг-беги). Самовивіз у м. Нікополь — за домовленістю.",
@@ -176,10 +176,10 @@ const translations = {
     "deliv.title": "Швидка доставка по Дніпропетровській області",
     "deliv.lead": "Завдяки вигідній локації у м. Нікополь ми оперативно закриваємо потреби в паливі для промисловості та агросектору регіону.",
     "deliv.city_nikopol": "Нікополь (База заводу)",
-    "deliv.city_dnipro": "Дніпро (~120 км)",
+    "deliv.city_dnipro": "Дніпро (~125 км)",
     "deliv.city_kr": "Кривий Ріг (~100 км)",
-    "deliv.city_kam": "Кам'янське (~140 км)",
-    "deliv.city_pavl": "Павлоград (~190 км)",
+    "deliv.city_kam": "Кам'янське (~150 км)",
+    "deliv.city_pavl": "Павлоград (~200 км)",
     "deliv.city_marg": "Марганець / Покров",
     "deliv.city_ua": "Вся Україна",
     "deliv.city_pl": "Польща (Експортний напрямок)",
@@ -321,14 +321,14 @@ const translations = {
 
     // Hero Corporate (index.html)
     "hero.corp_badge": "Eco-friendly Biofuel of European Standard",
-    "hero.corp_title": "Industrial Wood Fuel Pellet Manufacturing in Ukraine",
+    "hero.corp_title": "Buy Wood Pellets Direct from the Manufacturer — Nikopol Plant",
     "hero.corp_desc": "UKREKOPELLET, LLC (UkrEcoPelleta) is a reliable Ukrainian solid biofuel producer. Automated pelletizing lines in Nikopol, steady wholesale supplies, strict quality lab control, and energy independence for your enterprise.",
     "hero.corp_btn_catalog": "Wood Pellet Catalog & Wholesale Terms",
     "hero.corp_btn_about": "Our Production Capacity",
 
     // Hero Pellets Landing (pellets.html)
     "hero.pellet_badge": "Direct Wholesale for Dnipro Region & Ukraine",
-    "hero.pellet_title": "Wood Fuel Pellets 6 mm ENplus A1: Specifications, Certificates & Fuel Calculation",
+    "hero.pellet_title": "Wood Pellets 6 mm ENplus A1: Price, Specs, Certificates",
     "hero.pellet_desc": "High-efficiency biofuel pellets without synthetic additives for industrial heating boilers, agricultural facilities, and commercial buildings. Direct warehouse shipping, quality certificates, delivery across Dnipropetrovsk region and Ukraine.",
     "hero.pellet_regional_strong": "Regional Logistics: Dnipro Region & Surrounding Areas",
     "hero.pellet_regional_sub": "Minimum order for regional delivery: at least 15 tonnes (≈23 big bags). Warehouse pickup in Nikopol available upon prior agreement.",
@@ -456,10 +456,10 @@ const translations = {
     "deliv.title": "Fast Freight Across Dnipro Region",
     "deliv.lead": "Benefiting from our strategic manufacturing hub in Nikopol, we reliably fulfill fuel requirements for industries and utilities across the region.",
     "deliv.city_nikopol": "Nikopol (Plant Base)",
-    "deliv.city_dnipro": "Dnipro (~120 km)",
+    "deliv.city_dnipro": "Dnipro (~125 km)",
     "deliv.city_kr": "Kryvyi Rih (~100 km)",
-    "deliv.city_kam": "Kamianske (~140 km)",
-    "deliv.city_pavl": "Pavlohrad (~190 km)",
+    "deliv.city_kam": "Kamianske (~150 km)",
+    "deliv.city_pavl": "Pavlohrad (~200 km)",
     "deliv.city_marg": "Marhanets / Pokrov",
     "deliv.city_ua": "All Ukraine",
     "deliv.city_pl": "Poland (Export Route)",

@@ -324,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const PRESETS = {
     dnipro: ['Дніпро', 'Dnipro', ['Дніпровський', 'Дніпропетровська', 'Dniprovskyi', 'Dnipropetrovska'], 2],
     zaporizhzhia: ['Запоріжжя', 'Zaporizhzhia', ['Запорізький', 'Запорізька', 'Zaporizkyi', 'Zaporizka'], 2],
-    kyiv: ['Київ', 'Kyiv', ['Київ', 'Київська', 'Kyiv', 'Kyivska'], 2],
+    kyiv: ['Київ', 'Kyiv', ['Київ', 'Київ', 'Kyiv', 'Kyiv'], 2],
     kamianske: ['Кам’янське', 'Kamianske', ['Кам’янський', 'Дніпропетровська', 'Kamianskyi', 'Dnipropetrovska'], 2],
     kryvyi_rih: ['Кривий Ріг', 'Kryvyi Rih', ['Криворізький', 'Дніпропетровська', 'Kryvorizkyi', 'Dnipropetrovska'], 2],
     pavlohrad: ['Павлоград', 'Pavlohrad', ['Павлоградський', 'Дніпропетровська', 'Pavlohradskyi', 'Dnipropetrovska'], 2],
