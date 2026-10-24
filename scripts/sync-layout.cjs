@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ASSET_VERSION = '20261022-2';
+const ASSET_VERSION = '20261024-1';
 const ROOT = path.join(__dirname, '..');
 // Pages with a Russian copy under /ru/ (built by scripts/build-ru.cjs at the end of this script).
 const { PAGES: RU_PAGES, SITE } = require('./ru-lib.cjs');
@@ -47,6 +47,19 @@ const NAV = [
 
 const PHONE_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>';
 const MENU_ICON = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
+
+// City and wholesale pages in the footer, so every landing page has links from every other one.
+// Add a new city page here and re-run, otherwise it is reachable only from the sitemap.
+const FOOTER_CITIES = [
+  ['/pelety-nikopol', 'Пелети Нікополь'],
+  ['/pelety-dnipro', 'Пелети Дніпро та область'],
+  ['/pelety-optom', 'Пелети оптом'],
+  ['/pelety-kryvyi-rih', 'Пелети Кривий Ріг'],
+  ['/pelety-kamianske', "Пелети Кам'янське"],
+  ['/pelety-pavlohrad', 'Пелети Павлоград'],
+  ['/pelety-zaporizhzhia', 'Пелети Запоріжжя'],
+  ['/pelety-kyiv', 'Пелети Київ'],
+];
 
 // Same-page links become bare #hashes so they scroll instead of reloading.
 function resolveHref(href, page, html) {
@@ -326,6 +339,10 @@ for (const [file, page] of Object.entries(PAGES)) {
 
   // 2. Footer brand block: old decorative icon container -> the real mark.
   html = html.replace(/<div class="brand-icon">\s*(?:<svg[\s\S]*?<\/svg>|<img[^>]*>)\s*<\/div>/g, FOOTER_MARK);
+
+  // 2b. Footer city links (the run of /pelety-* links in the footer navigation).
+  html = html.replace(/([ \t]*)<a href="\/pelety-[a-z-]+" class="footer-link">[^<]*<\/a>\n(?:[ \t]*<a href="\/pelety-[a-z-]+" class="footer-link">[^<]*<\/a>\n)*/,
+    (_, indent) => FOOTER_CITIES.map(([href, label]) => `${indent}<a href="${href}" class="footer-link">${label}</a>\n`).join(''));
 
   // 3. Google Fonts are replaced by self-hosted Fixel (Cyrillic support).
   html = html.replace(/[ \t]*<link rel="preconnect" href="https:\/\/fonts\.(?:googleapis|gstatic)\.com"[^>]*>\n/g, '');

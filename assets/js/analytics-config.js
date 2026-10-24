@@ -59,7 +59,9 @@ window.APP_CONFIG = {
       dnipro: 125,
       kamianske: 150,
       novomoskovsk: 151, // Самар
-      pavlohrad: 200
+      pavlohrad: 200,
+      zaporizhzhia: 82,
+      kyiv: 600
     }
   },
 
