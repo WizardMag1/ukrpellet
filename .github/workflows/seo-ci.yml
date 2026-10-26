@@ -14,7 +14,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Checks and tests (npm test: SEO check, lead API, phone, fuel rule, webhook, Worker config)
+      - name: Checks and tests (npm test - SEO check, lead API, phone, fuel rule, webhook, bot sync, Worker config)
         run: npm test
       - name: Pages in step with the shared layout and styles.css (re-run scripts/sync-layout.cjs if this fails)
         run: node scripts/sync-layout.cjs && git diff --exit-code -- '*.html'
