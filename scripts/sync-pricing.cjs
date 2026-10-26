@@ -68,7 +68,7 @@ if (fs.existsSync(ruTransPath)) {
   ruObj[`від ${minFmt}`] = `от ${minFmt}`;
   ruObj[`від ${priceFmt}`] = `от ${priceFmt}`;
   ruObj[priceFmt] = priceFmt;
-  fs.writeFileSync(ruTransPath, JSON.stringify(ruObj, null, 2).replace(/\r\n/g, '\n'), 'utf8');
+  fs.writeFileSync(ruTransPath, JSON.stringify(ruObj, null, 2).replace(/\r\n/g, '\n') + '\n', 'utf8');
   console.log('✓ Updated data/ru/translations.json');
 }
 

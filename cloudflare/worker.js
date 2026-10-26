@@ -32,9 +32,10 @@ export default {
 
     // 2. Telegram Webhook for Bot (@ukrecopelleta_bot)
     if (url.pathname === '/api/telegram-webhook' && request.method === 'POST') {
+      // Telegram sends the secret registered with setWebhook; without it anyone could post a forged update
+      // as the owner and change prices. No secret configured means the webhook is closed.
       const secret = request.headers.get('X-Telegram-Bot-Api-Secret-Token');
-      const expectedSecret = env.TELEGRAM_WEBHOOK_SECRET || 'ukr_sec_98890c83_pelleta';
-      if (secret && secret !== expectedSecret) {
+      if (!env.TELEGRAM_WEBHOOK_SECRET || secret !== env.TELEGRAM_WEBHOOK_SECRET) {
         return new Response('Unauthorized', { status: 401 });
       }
       try {
@@ -51,11 +52,11 @@ export default {
     // 3. Admin Webhook Registration Helper
     if (url.pathname === '/api/admin/setup-webhook') {
       const key = url.searchParams.get('key');
-      const expectedKey = env.TELEGRAM_WEBHOOK_SECRET || 'ukr_sec_98890c83_pelleta';
-      if (key !== expectedKey) {
+      const expectedKey = env.TELEGRAM_WEBHOOK_SECRET;
+      if (!expectedKey || key !== expectedKey) {
         return new Response('Forbidden', { status: 403 });
       }
-      const token = env.TELEGRAM_BOT_TOKEN || '8962858456:AAF0rwGGHsK6ViCBvqELVJeSnU19pe-wajw';
+      const token = env.TELEGRAM_BOT_TOKEN;
       const webhookUrl = `https://${host}/api/telegram-webhook`;
       const tgRes = await fetch(`https://api.telegram.org/bot${token}/setWebhook`, {
         method: 'POST',

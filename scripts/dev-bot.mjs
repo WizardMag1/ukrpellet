@@ -6,11 +6,16 @@ try {
   ghToken = execSync('gh auth token').toString().trim();
 } catch (e) {}
 
+// Local fallback for when the Cloudflare webhook is off: TELEGRAM_BOT_TOKEN=<token> node scripts/dev-bot.mjs
+// Do not run it while the webhook is set (Telegram refuses getUpdates then); docs/BOT_DEPLOY.md has the switch.
+if (!process.env.TELEGRAM_BOT_TOKEN) {
+  console.error('Set TELEGRAM_BOT_TOKEN first (the token from @BotFather).');
+  process.exit(1);
+}
 const env = {
-  TELEGRAM_BOT_TOKEN: '8962858456:AAF0rwGGHsK6ViCBvqELVJeSnU19pe-wajw',
+  TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
   TELEGRAM_ADMIN_ID: '788872538',
   TELEGRAM_BOT_USERNAME: 'ukrecopelleta_bot',
-  TELEGRAM_WEBHOOK_SECRET: 'ukr_sec_98890c83_pelleta',
   GITHUB_TOKEN: ghToken
 };
 

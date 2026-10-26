@@ -15,23 +15,20 @@ routes = [
 
 # KV store for dynamic pricing, delivery tariffs, and Telegram bot state
 kv_namespaces = [
-  { binding = "PRICING_KV", id = "ukrecopelleta_pricing_kv" }
+  { binding = "PRICING_KV", id = "6fc72d9fc4fe47eb9851925977a2aaaf" }
 ]
 
+# TELEGRAM_BOT_TOKEN, TELEGRAM_WEBHOOK_SECRET and GITHUB_TOKEN are Worker secrets (docs/BOT_DEPLOY.md), never set here.
 [vars]
 ORIGIN = "ukrpellet-ua.vercel.app"
 CANONICAL_HOST = "ukrecopelleta.org"
-TELEGRAM_BOT_TOKEN = "8962858456:AAF0rwGGHsK6ViCBvqELVJeSnU19pe-wajw"
 TELEGRAM_ADMIN_ID = "788872538"
 TELEGRAM_BOT_USERNAME = "ukrecopelleta_bot"
-TELEGRAM_WEBHOOK_SECRET = "ukr_sec_98890c83_pelleta"
 
 # Previews don't inherit the production settings above. No CANONICAL_HOST: a preview answers on its own
 # workers.dev URL instead of redirecting to the live domain. Production routes never apply to previews.
 [previews.vars]
 ORIGIN = "ukrpellet-ua.vercel.app"
 CANONICAL_HOST = ""
-TELEGRAM_BOT_TOKEN = "8962858456:AAF0rwGGHsK6ViCBvqELVJeSnU19pe-wajw"
 TELEGRAM_ADMIN_ID = "788872538"
 TELEGRAM_BOT_USERNAME = "ukrecopelleta_bot"
-TELEGRAM_WEBHOOK_SECRET = "ukr_sec_98890c83_pelleta"
