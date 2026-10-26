@@ -14,19 +14,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: SEO check (sitemap, canonicals, JSON-LD, links, stale domains)
-        run: npm run check
-      - name: Lead API syntax
-        run: node --check api/lead.js
-      - name: Lead API reports success only when the team was notified
-        run: node scripts/lead-api.test.mjs
-      - name: Quote form phone check (what it accepts, corrects and refuses)
-        run: node scripts/phone.test.mjs
-      - name: Diesel price rule tests
-        run: node scripts/update-fuel.test.cjs
-      - name: Telegram webhook refuses requests without the secret
-        run: node scripts/worker-webhook.test.mjs
-      - name: Worker config in step (root and cloudflare/)
-        run: node scripts/check-wrangler.cjs
+      - name: Checks and tests (npm test - SEO check, lead API, phone, fuel rule, webhook, bot sync, Worker config)
+        run: npm test
       - name: Pages in step with the shared layout and styles.css (re-run scripts/sync-layout.cjs if this fails)
         run: node scripts/sync-layout.cjs && git diff --exit-code -- '*.html'

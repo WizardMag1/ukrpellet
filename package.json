@@ -7,7 +7,9 @@
     "start": "npx serve . -l 3000",
     "dev": "npx serve . -l 3000",
     "preview": "npx serve .",
-    "check": "node scripts/seo-check.cjs"
+    "check": "node scripts/seo-check.cjs",
+    "sync": "node scripts/sync-layout.cjs",
+    "test": "node scripts/seo-check.cjs && node --check api/lead.js && node scripts/lead-api.test.mjs && node scripts/phone.test.mjs && node scripts/update-fuel.test.cjs && node scripts/worker-webhook.test.mjs && node scripts/bot-sync.test.mjs && node scripts/check-wrangler.cjs"
   },
   "keywords": [
     "wood-pellets",
@@ -19,5 +21,8 @@
     "biomass"
   ],
   "author": "UkrEcoPelleta / ТОВ «УКРЕКОПЕЛЕТА»",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": ">=20"
+  }
 }
