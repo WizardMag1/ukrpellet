@@ -19,6 +19,7 @@ HTML, and hosts the Telegram price bot (`docs/BOT_DEPLOY.md`). Cloudflare Worker
 - `/ru/*` is built from the Ukrainian pages through `data/ru/translations.json`. New Ukrainian text needs a dictionary
   entry or it stays Ukrainian on the RU page.
 - English is a client-side toggle: `assets/js/i18n.js` (`data-i18n` keys, unique per language block).
+- The phone call / quote bar (`.action-bar`) and the buyer-facts block are stamped into every sales page by `sync-layout.cjs`.
 - The sitemap city block and the city list in `pelety-optom.html` are generated.
 - Generated output must be idempotent and must not depend on `data/fuel.json` (it changes daily), or CI turns red.
 

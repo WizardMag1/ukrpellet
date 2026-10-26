@@ -4,6 +4,17 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Phone call / quote bar: shown once the hero buttons have scrolled out of view (CSS shows it on phones only)
+  const actionBar = document.querySelector('.action-bar');
+  if (actionBar) {
+    const heroButtons = document.querySelector('.hero-cta-group, .hero-actions');
+    if (heroButtons && 'IntersectionObserver' in window) {
+      new IntersectionObserver(([entry]) => actionBar.classList.toggle('is-on', !entry.isIntersecting)).observe(heroButtons);
+    } else {
+      actionBar.classList.add('is-on');
+    }
+  }
+
   // Live dynamic pricing hydration across all pages (Google Ads conversion value & on-page badges)
   fetch('/api/pricing')
     .then((r) => (r.ok ? r.json() : null))
