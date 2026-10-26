@@ -1,7 +1,7 @@
 // Edge entry for ukrecopelleta.org: serves the Vercel-hosted site under the real domain.
 // Intercepts /api/pricing (dynamic pellet prices and delivery tariffs from KV)
 // Intercepts /api/telegram-webhook (Telegram management bot for the factory owner and managers)
-// www -> apex 301; everything else is proxied to the Vercel origin.
+// http -> https and www -> apex 301 (one hop); everything else is proxied to the Vercel origin.
 
 import { getPricingConfig, handleTelegramUpdate } from './bot.js';
 
@@ -10,9 +10,11 @@ export default {
     const url = new URL(request.url);
     const host = env.CANONICAL_HOST || url.hostname;
 
-    // Apex canonical redirect
-    if (env.CANONICAL_HOST && url.hostname !== env.CANONICAL_HOST) {
+    // Canonical redirect: apex host and https, in a single hop. Only where CANONICAL_HOST is set, so
+    // `wrangler dev` (http://localhost) and Worker Previews keep answering on their own address.
+    if (env.CANONICAL_HOST && (url.hostname !== env.CANONICAL_HOST || url.protocol !== 'https:')) {
       url.hostname = env.CANONICAL_HOST;
+      url.protocol = 'https:';
       return Response.redirect(url.toString(), 301);
     }
 
