@@ -50,8 +50,8 @@
 ### Крок 1. Пропишіть ваші ID у конфігурації
 Відкрийте `assets/js/analytics-config.js` та вставте ваші дані з кабінету Google Ads:
 ```javascript
-GOOGLE_ADS_CONVERSION_ID: 'AW-123456789',   // Ваш ID тегу Google Ads
-GOOGLE_ADS_CONVERSION_LABEL: 'AbCdEfGhIjKl'  // Ярлик дії-конверсії
+GOOGLE_ADS_CONVERSION_ID: 'AW-18476871721',   // Ваш ID тегу Google Ads
+GOOGLE_ADS_CONVERSION_LABEL: 'mysCCKzYwaodEKnguupE'  // Ярлик дії-конверсії
 ```
 
 ### Крок 2. Миттєвий тест у браузері без запуску платної реклами
