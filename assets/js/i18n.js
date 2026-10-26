@@ -67,7 +67,7 @@ const translations = {
 
     // Corporate Overview ("What we have & what we do")
     "corp.tag": "Потужності та напрямки діяльності",
-    "corp.title": "Що ми маємо та чим займаємось",
+    "corp.title": "Завод деревних пелет у Нікополі: що ми виробляємо",
     "corp.lead": "ТОВ «УКРЕКОПЕЛЕТА» (UkrEcoPelleta) об'єднує повний виробничий цикл переробки натуральної деревини в якісне біопаливо з власною складською та логістичною інфраструктурою.",
     
     "corp.f1_title": "Сучасне обладнання у м. Нікополь",
@@ -173,7 +173,20 @@ const translations = {
 
     // Regional Delivery Info
     "deliv.tag": "Географія постачання",
-    "deliv.title": "Швидка доставка по Дніпропетровській області",
+    "home.wholesale_title": "Пелети оптом для підприємств і котелень по всій Україні",
+    "home.faq_title": "Відповіді на запитання покупців",
+    "home.faq_q1": "Скільки коштують пелети за тонну?",
+    "home.faq_a1_from": "Від",
+    "home.faq_a1_rest": "грн за тонну зі складу в Нікополі без ПДВ. Ціну з доставкою у ваше місто покаже калькулятор на сайті.",
+    "home.faq_q2": "Яка мінімальна партія?",
+    "home.faq_a2": "15 тонн (≈23 біг-беги). Менший обсяг — від одного біг-бега — можна забрати самовивозом зі складу заводу в Нікополі.",
+    "home.faq_q3": "Чи доставляєте ви по всій Україні?",
+    "home.faq_a3": "Так, тентованими фурами 22–24 т у будь-яке місто чи село підконтрольної території. Відстані до обласних центрів — у списку міст доставки, точну ціну покаже калькулятор.",
+    "home.faq_q4": "Чи працюєте ви з ПДВ і бюджетними установами?",
+    "home.faq_a4": "Так: безготівковий розрахунок з ПДВ, ТТН і паспорт якості на кожну партію, пакет документів для закупівель через Prozorro.",
+    "home.faq_q5": "Які пелети ви виробляєте?",
+    "home.faq_a5": "Деревні гранули 6 мм класу A1 із чистої сосни або суміші акації з берестом, без хімічних добавок. Фасування — біг-беги по 650 кг.",
+    "deliv.title": "Доставка пелет по Україні від заводу в Нікополі",
     "deliv.lead": "Завдяки вигідній локації у м. Нікополь ми оперативно закриваємо потреби в паливі для промисловості та агросектору регіону.",
     "deliv.city_nikopol": "Нікополь (База заводу)",
     "deliv.city_dnipro": "Дніпро (~125 км)",
@@ -347,7 +360,7 @@ const translations = {
 
     // Corporate Overview ("What we have & what we do")
     "corp.tag": "Capabilities & Core Operations",
-    "corp.title": "What We Have & What We Do",
+    "corp.title": "Wood Pellet Plant in Nikopol: What We Make",
     "corp.lead": "UKREKOPELLET, LLC (UkrEcoPelleta) integrates a complete manufacturing cycle transforming natural wood into high-grade biomass fuel, backed by extensive storage and logistics infrastructure.",
     
     "corp.f1_title": "Modern Equipment in Nikopol",
@@ -453,7 +466,20 @@ const translations = {
 
     // Regional Delivery Info
     "deliv.tag": "Regional Logistics",
-    "deliv.title": "Fast Freight Across Dnipro Region",
+    "home.wholesale_title": "Wholesale Pellets for Businesses and Boiler Houses Across Ukraine",
+    "home.faq_title": "Answers to Buyers’ Questions",
+    "home.faq_q1": "How much do pellets cost per tonne?",
+    "home.faq_a1_from": "From",
+    "home.faq_a1_rest": "UAH per tonne ex-warehouse in Nikopol, excl. VAT. The calculator on this site shows the price delivered to your town.",
+    "home.faq_q2": "What is the minimum order?",
+    "home.faq_a2": "15 tonnes (≈23 big bags). Smaller amounts, from one big bag, can be collected from the plant warehouse in Nikopol.",
+    "home.faq_q3": "Do you deliver across Ukraine?",
+    "home.faq_a3": "Yes, by 22–24 t curtain-sider trucks to any town or village in government-controlled territory. Distances to regional centres are in the list of delivery cities; the calculator gives the exact price.",
+    "home.faq_q4": "Do you invoice with VAT and supply public institutions?",
+    "home.faq_a4": "Yes: bank transfer with VAT, a waybill and quality certificate with every load, and the documents for Prozorro tenders.",
+    "home.faq_q5": "What pellets do you make?",
+    "home.faq_a5": "6 mm class A1 wood pellets from pure pine or an acacia and elm mix, with no chemical additives. Packed in 650 kg big bags.",
+    "deliv.title": "Pellet Delivery Across Ukraine from Our Nikopol Plant",
     "deliv.lead": "Benefiting from our strategic manufacturing hub in Nikopol, we reliably fulfill fuel requirements for industries and utilities across the region.",
     "deliv.city_nikopol": "Nikopol (Plant Base)",
     "deliv.city_dnipro": "Dnipro (~125 km)",

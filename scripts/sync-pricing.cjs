@@ -96,6 +96,9 @@ for (const relPath of htmlFiles) {
   // C. Meta description & content text prices
   html = html.replace(/(\b\d{2}\s\d{3}\b)(?=\s*грн(?:\/т|\s*за\s*тонну)?)/gi, priceFmt);
 
+  // D2. Price in its own element (the words around it are translated by i18n.js), e.g. the home FAQ
+  html = html.replace(/(<span data-dynamic-price="pine">)[^<]*(<\/span>)/g, `$1${priceFmt}$2`);
+
   // D. Static HTML Visual Content
   html = html.replace(/(<dd><strong[^>]*>)[^<]+(<\/strong>\s*<span[^>]*data-i18n="facts\.price_unit")/gi, `$1${priceFmt}$2`);
 
