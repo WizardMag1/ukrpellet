@@ -136,47 +136,66 @@ export async function savePricingConfig(env, newConfig, user) {
   };
   await putKV(env, 'config:pricing', updated);
 
-  // Sync directly to GitHub repository if running in Cloudflare Workers (where Git CLI is absent)
-  // When running in Node.js daemon (dev-bot.mjs), dev-bot.mjs performs an atomic git commit + push for all files
-  const isCloudflare = typeof process === 'undefined' || !process.cwd;
-  const ghToken = isCloudflare ? (env?.GITHUB_TOKEN || '') : '';
-  if (ghToken) {
-    try {
-      const apiUrl = 'https://api.github.com/repos/WizardMag1/ukrpellet/contents/data/pricing.json';
-      const getRes = await fetch(apiUrl, {
-        headers: {
-          'Authorization': `Bearer ${ghToken}`,
-          'User-Agent': 'ukrecopelleta-bot',
-          'Accept': 'application/vnd.github.v3+json'
+  // Sync directly to GitHub repository if running in Cloudflare Workers (where Git CLI is absent).
+  // The Worker has the PRICING_KV binding; when the Node daemon (dev-bot.mjs) runs, it performs an atomic
+  // git commit + push for all files itself, so it must not also write through the API.
+  if (env?.PRICING_KV) {
+    const warnOwner = async (reason) => {
+      console.error('[GitHub sync]', reason);
+      try {
+        await callTelegram(env.TELEGRAM_BOT_TOKEN, 'sendMessage', {
+          chat_id: Number(env.TELEGRAM_ADMIN_ID || 788872538),
+          text: `⚠️ <b>Ціну збережено на сайті, але не записано в GitHub.</b>\n${escapeHtml(reason)}\n` +
+            'Заголовки сторінок і мікророзмітка Google залишаться зі старою ціною, доки це не виправити.',
+          parse_mode: 'HTML'
+        });
+      } catch (_) {}
+    };
+    const ghToken = env.GITHUB_TOKEN || '';
+    if (!ghToken) {
+      await warnOwner('У Worker немає секрету GITHUB_TOKEN (docs/BOT_DEPLOY.md, крок 2 і 5).');
+    } else {
+      try {
+        const apiUrl = 'https://api.github.com/repos/WizardMag1/ukrpellet/contents/data/pricing.json';
+        const getRes = await fetch(apiUrl, {
+          headers: {
+            'Authorization': `Bearer ${ghToken}`,
+            'User-Agent': 'ukrecopelleta-bot',
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+        let sha = null;
+        if (getRes.ok) {
+          const fileObj = await getRes.json();
+          sha = fileObj.sha;
+        } else if (getRes.status !== 404) {
+          await warnOwner(`GitHub відповів ${getRes.status} на читання data/pricing.json (перевірте права токена: Contents, Read and write).`);
+          return updated;
         }
-      });
-      let sha = null;
-      if (getRes.ok) {
-        const fileObj = await getRes.json();
-        sha = fileObj.sha;
-      }
-      const jsonStr = JSON.stringify(updated, null, 2);
-      const b64 = typeof Buffer !== 'undefined'
-        ? Buffer.from(jsonStr).toString('base64')
-        : btoa(unescape(encodeURIComponent(jsonStr)));
+        const jsonStr = JSON.stringify(updated, null, 2);
+        const b64 = typeof Buffer !== 'undefined'
+          ? Buffer.from(jsonStr).toString('base64')
+          : btoa(unescape(encodeURIComponent(jsonStr)));
 
-      const putRes = await fetch(apiUrl, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${ghToken}`,
-          'User-Agent': 'ukrecopelleta-bot',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          message: `Price update: Pine ${updated.pricing.pine_uah_per_t} UAH, Delivery ${updated.delivery.enabled ? 'ON' : 'OFF'} (via @ukrecopelleta_bot)`,
-          content: b64,
-          sha: sha || undefined
-        })
-      });
-      const putData = await putRes.json();
-      console.log('[GitHub sync successful]:', putData?.commit?.sha || putData);
-    } catch (err) {
-      console.error('[GitHub sync error]:', err.message);
+        const putRes = await fetch(apiUrl, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${ghToken}`,
+            'User-Agent': 'ukrecopelleta-bot',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: `Price update: Pine ${updated.pricing.pine_uah_per_t} UAH, Delivery ${updated.delivery.enabled ? 'ON' : 'OFF'} (via @ukrecopelleta_bot)`,
+            content: b64,
+            sha: sha || undefined
+          })
+        });
+        if (!putRes.ok) {
+          await warnOwner(`GitHub відповів ${putRes.status} на запис data/pricing.json (перевірте права токена: Contents, Read and write).`);
+        }
+      } catch (err) {
+        await warnOwner(`Помилка зв'язку з GitHub: ${err.message}`);
+      }
     }
   }
 
