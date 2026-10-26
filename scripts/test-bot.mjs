@@ -12,7 +12,7 @@ import {
 console.log('Testing bot and pricing engine...');
 
 const mockEnv = {
-  TELEGRAM_BOT_TOKEN: '8962858456:AAF0rwGGHsK6ViCBvqELVJeSnU19pe-wajw',
+  TELEGRAM_BOT_TOKEN: 'test-token',
   TELEGRAM_ADMIN_ID: '788872538',
   TELEGRAM_BOT_USERNAME: 'ukrecopelleta_bot',
   TELEGRAM_WEBHOOK_SECRET: 'test_secret'

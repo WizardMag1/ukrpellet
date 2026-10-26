@@ -24,6 +24,8 @@ jobs:
         run: node scripts/phone.test.mjs
       - name: Diesel price rule tests
         run: node scripts/update-fuel.test.cjs
+      - name: Telegram webhook refuses requests without the secret
+        run: node scripts/worker-webhook.test.mjs
       - name: Worker config in step (root and cloudflare/)
         run: node scripts/check-wrangler.cjs
       - name: Pages in step with the shared layout and styles.css (re-run scripts/sync-layout.cjs if this fails)

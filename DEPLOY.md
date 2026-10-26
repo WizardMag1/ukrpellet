@@ -6,6 +6,7 @@ custom domain. It 301-redirects `www` and plain `http` to `https://ukrecopelleta
 `cd cloudflare && npx wrangler deploy`. Site changes only need `git push`; the Worker needs no changes.
 Cloudflare Workers Builds runs from the repo root, so the root `wrangler.toml` is a copy of
 `cloudflare/wrangler.toml` with `main` pointing into `cloudflare/`. Change both; `scripts/check-wrangler.cjs` (CI) fails if they differ.
+The Telegram price bot also runs in this Worker: setup in `docs/BOT_DEPLOY.md`.
 Before every deploy, run `npm run check`. It must print `✓ SEO check passed`; CI runs the same check.
 
 ## A. First deploy (one time, ~30 min)

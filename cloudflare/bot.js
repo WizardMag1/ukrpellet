@@ -87,9 +87,7 @@ export async function deleteKV(env, key) {
   }
 }
 
-export async function getPricingConfig(env) {
-  const saved = await getKV(env, 'config:pricing');
-  if (!saved) return DEFAULT_CONFIG;
+function normalizeConfig(saved) {
   return {
     pricing: {
       pine_uah_per_t: Number(saved.pricing?.pine_uah_per_t) || DEFAULT_CONFIG.pricing.pine_uah_per_t,
@@ -105,6 +103,26 @@ export async function getPricingConfig(env) {
     updated_by: saved.updated_by || null,
     updated_by_name: saved.updated_by_name || null
   };
+}
+
+// KV is empty until the first price change in the bot. Until then the Worker would serve DEFAULT_CONFIG and
+// stamp those prices over the pages, so it reads the committed data/pricing.json from the Vercel origin instead.
+async function readCommittedConfig(env) {
+  if (!env?.ORIGIN) return null;
+  try {
+    const res = await fetch(`https://${env.ORIGIN}/api/pricing`, { cf: { cacheTtl: 60 } });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data?.pricing?.pine_uah_per_t ? data : null;
+  } catch (e) {
+    console.error('[committed pricing read error]', e);
+    return null;
+  }
+}
+
+export async function getPricingConfig(env) {
+  const saved = (await getKV(env, 'config:pricing')) || (await readCommittedConfig(env));
+  return saved ? normalizeConfig(saved) : DEFAULT_CONFIG;
 }
 
 export async function savePricingConfig(env, newConfig, user) {
@@ -279,7 +297,7 @@ export function renderTariffsMenu(config) {
  * Handle incoming Telegram webhook updates
  */
 export async function handleTelegramUpdate(update, env) {
-  const token = env.TELEGRAM_BOT_TOKEN || '8962858456:AAF0rwGGHsK6ViCBvqELVJeSnU19pe-wajw';
+  const token = env.TELEGRAM_BOT_TOKEN;
   const ownerId = Number(env.TELEGRAM_ADMIN_ID || 788872538);
 
   // 1. Handle Inline Button Clicks (Callback Queries)

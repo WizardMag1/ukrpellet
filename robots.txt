@@ -3,6 +3,8 @@
 
 User-agent: *
 Allow: /
+# Pages read the live price from /api/pricing while rendering, so crawlers must be able to fetch it.
+Allow: /api/pricing
 Disallow: /api/
 # No rule for "?" addresses: every script and stylesheet is loaded as /assets/...?v=<version>, and
 # blocking "?" stops Google from loading them to render the page. Pages reached with ?city= or ?utm_

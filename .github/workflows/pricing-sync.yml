@@ -1,0 +1,43 @@
+name: Price sync
+
+# The Telegram bot (Cloudflare Worker) commits data/pricing.json when a manager changes a price.
+# This job then rewrites every page, the RU copies, JSON-LD, llms*.txt and the sitemap to match
+# (scripts/sync-pricing.cjs), so the static HTML Google reads agrees with the price on the live site.
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - data/pricing.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pricing-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Rewrite pages from data/pricing.json
+        run: node scripts/sync-pricing.cjs
+      - name: Check the result
+        run: npm run check
+      - name: Commit if changed
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Pages already match data/pricing.json"
+            exit 0
+          fi
+          git config user.name "pricing-sync-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Price sync: pages follow data/pricing.json"
+          git pull --rebase origin master
+          git push
