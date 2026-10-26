@@ -59,30 +59,32 @@
   // 3. Initialize Google Analytics 4 & Google Ads Conversion Tracking
   const googleTrackingId = config.GA4_MEASUREMENT_ID || config.GOOGLE_ADS_CONVERSION_ID;
   if (googleTrackingId && !googleTrackingId.includes('XXXXX')) {
-    // gtag.js (~100 KB) loads once the page has finished loading and the browser is idle, so it never
-    // competes with the page itself. Calls made before then wait in dataLayer and are sent when it arrives.
-    const loadTag = () => {
-      const gaScript = document.createElement('script');
-      gaScript.async = true;
-      gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${googleTrackingId}`;
-      document.head.appendChild(gaScript);
-    };
-    const whenIdle = () => ('requestIdleCallback' in window ? requestIdleCallback(loadTag, { timeout: 3000 }) : setTimeout(loadTag, 1500));
-    if (document.readyState === 'complete') whenIdle();
-    else window.addEventListener('load', whenIdle, { once: true });
-
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    window.gtag = gtag;
-    gtag('js', new Date());
+    if (typeof window.gtag !== 'function') {
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+    }
+
+    const hasTagScript = Boolean(document.querySelector('script[src*="googletagmanager.com/gtag/js"]'));
+    if (!hasTagScript) {
+      const loadTag = () => {
+        const gaScript = document.createElement('script');
+        gaScript.async = true;
+        gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${googleTrackingId}`;
+        document.head.appendChild(gaScript);
+      };
+      const whenIdle = () => ('requestIdleCallback' in window ? requestIdleCallback(loadTag, { timeout: 3000 }) : setTimeout(loadTag, 1500));
+      if (document.readyState === 'complete') whenIdle();
+      else window.addEventListener('load', whenIdle, { once: true });
+    }
 
     if (config.GA4_MEASUREMENT_ID && !config.GA4_MEASUREMENT_ID.includes('XXXXX')) {
-      gtag('config', config.GA4_MEASUREMENT_ID);
+      window.gtag('config', config.GA4_MEASUREMENT_ID);
       console.log('[Analytics] Google Analytics 4 Initialized:', config.GA4_MEASUREMENT_ID);
     }
 
     if (config.GOOGLE_ADS_CONVERSION_ID && !config.GOOGLE_ADS_CONVERSION_ID.includes('XXXXX')) {
-      gtag('config', config.GOOGLE_ADS_CONVERSION_ID);
+      window.gtag('config', config.GOOGLE_ADS_CONVERSION_ID);
       console.log('[Analytics] Google Ads Tracking Initialized:', config.GOOGLE_ADS_CONVERSION_ID);
     }
   }

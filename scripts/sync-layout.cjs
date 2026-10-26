@@ -467,6 +467,16 @@ for (const [file, page] of Object.entries(PAGES)) {
   // 7. Analytics setup scripts must not block the first paint.
   html = html.replace(/<script src="(\/assets\/js\/analytics(?:-config)?\.js\?v=[\w.-]+)"><\/script>/g, '<script defer src="$1"></script>');
 
+  // 7b. Google tag (gtag.js) for Google Ads (AW-18476871721) detection and tracking
+  const googleTagSnippet = `  <!-- Google tag (gtag.js) -->\n  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18476871721"></script>\n  <script>\n    window.dataLayer = window.dataLayer || [];\n    function gtag(){dataLayer.push(arguments);}\n    gtag('js', new Date());\n    gtag('config', 'AW-18476871721');\n  </script>`;
+
+  const existingGtag = /[ \t]*<!-- Google tag \(gtag\.js\) -->[\s\S]*?gtag\('config',\s*'AW-18476871721'\);\s*<\/script>\n?/;
+  if (existingGtag.test(html)) {
+    html = html.replace(existingGtag, `${googleTagSnippet}\n`);
+  } else {
+    html = html.replace(/([ \t]*<script defer src="\/assets\/js\/analytics-config\.js)/, `${googleTagSnippet}\n$1`);
+  }
+
   html = html.replace(/\r\n/g, '\n');
   fs.writeFileSync(full, html, 'utf8');
   console.log(`✓ ${file}`);
