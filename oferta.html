@@ -41,8 +41,8 @@
   </script>
   
   <!-- Favicon & PWA Icons -->
-  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg?v=20261024-2">
-  <link rel="alternate icon" href="/assets/images/favicon.svg?v=20261024-2">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg?v=20261026-1">
+  <link rel="alternate icon" href="/assets/images/favicon.svg?v=20261026-1">
   <link rel="apple-touch-icon" href="/assets/images/icon-180.png">
   <link rel="manifest" href="site.webmanifest">
 
@@ -232,6 +232,49 @@ padding-block: 0.2rem;
 }
 .fact-list li::marker {
 color: var(--pellet-ink);
+}
+.km-table {
+width: 100%;
+max-width: 34rem;
+margin: 1rem 0;
+border-collapse: collapse;
+font-size: 0.95rem;
+}
+.km-table th,
+.km-table td {
+padding: 0.5rem 0.75rem;
+border-bottom: 1px solid var(--line);
+text-align: left;
+}
+.km-table th {
+font-weight: 600;
+color: var(--ink-muted);
+}
+.km-table td + td,
+.km-table th + th {
+text-align: right;
+font-variant-numeric: tabular-nums;
+white-space: nowrap;
+}
+.city-list {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+gap: 0.25rem 2rem;
+margin: 1rem 0 0;
+padding: 0;
+list-style: none;
+}
+.city-list li {
+display: flex;
+justify-content: space-between;
+gap: 1rem;
+padding: 0.45rem 0;
+border-bottom: 1px solid var(--line);
+}
+.city-list span {
+color: var(--ink-muted);
+font-variant-numeric: tabular-nums;
+white-space: nowrap;
 }
 .see-also {
 margin-top: 2.5rem;
@@ -1961,7 +2004,7 @@ max-width: 46rem;
   <header class="site-header">
     <div class="container header-inner">
       <a href="/" class="brand-logo" aria-label="UkrEcoPelleta — головна">
-        <img class="brand-mark" src="/assets/images/favicon.svg?v=20261024-2" alt="" width="40" height="40">
+        <img class="brand-mark" src="/assets/images/favicon.svg?v=20261026-1" alt="" width="40" height="40">
         <span class="brand-text">
           <span class="brand-title">UkrEcoPelleta</span>
           <span class="brand-subtitle">Пелетний завод у Нікополі</span>
@@ -2105,13 +2148,13 @@ max-width: 46rem;
     </div>
   </footer>
 
-  <script defer src="/assets/js/analytics-config.js?v=20261024-2"></script>
-  <script defer src="/assets/js/analytics.js?v=20261024-2"></script>
+  <script defer src="/assets/js/analytics-config.js?v=20261026-1"></script>
+  <script defer src="/assets/js/analytics.js?v=20261026-1"></script>
   <!-- Vercel Web Analytics + Speed Insights -->
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
   <script>window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };</script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
-  <script defer src="/assets/js/main.js?v=20261024-2"></script>
+  <script defer src="/assets/js/main.js?v=20261026-1"></script>
 </body>
 </html>

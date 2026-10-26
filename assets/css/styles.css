@@ -244,6 +244,58 @@ h1, h2, h3, h4, h5, h6, .footer-heading {
 }
 
 /* Links to the other regional pages */
+/* City pages: road distance from the warehouse to the towns of the oblast (scripts/build-cities.cjs) */
+.km-table {
+  width: 100%;
+  max-width: 34rem;
+  margin: 1rem 0;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.km-table th,
+.km-table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.km-table th {
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.km-table td + td,
+.km-table th + th {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* /pelety-optom#cities: every city page with its distance */
+.city-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.25rem 2rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.city-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.city-list span {
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .see-also {
   margin-top: 2.5rem;
   padding-top: 1.25rem;

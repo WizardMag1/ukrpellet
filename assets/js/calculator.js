@@ -399,15 +399,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Starting destination: from ?city= on the city pages, otherwise Dnipro
   (function initDestination() {
-    const param = new URLSearchParams(window.location.search).get('city') || 'dnipro';
+    const params = new URLSearchParams(window.location.search);
+    const param = params.get('city') || 'dnipro';
     const mode = param === 'nikopol_pickup' ? 'pickup' : param === 'poland' ? 'export' : 'delivery';
     const radio = document.querySelector(`input[name="calc-mode"][value="${mode}"]`);
     if (radio) radio.checked = true;
     // Also fill a place for pickup/export, so switching to delivery starts somewhere sensible
-    const key = Object.hasOwn(PRESETS, param) ? param : param === 'nikopol_pickup' ? 'nikopol_deliv' : param === 'other_ua' ? null : 'dnipro';
+    // The oblast-centre pages (scripts/build-cities.cjs) pass the town and its oblast, ?city=vinnytsia&obl=Vinnytska,
+    // and the town is looked up in places.json (the oblast tells apart towns of the same name)
+    const obl = params.get('obl');
+    const lookup = !Object.hasOwn(PRESETS, param) && obl;
+    const key = lookup ? null : Object.hasOwn(PRESETS, param) ? param : param === 'nikopol_pickup' ? 'nikopol_deliv' : param === 'other_ua' ? null : 'dnipro';
     if (key && presetKm[key] != null) {
       selectedPlace = toPlace(PRESETS[key], presetKm[key]);
       if (placeInput) placeInput.value = placeName(selectedPlace);
+    }
+    if (lookup && combo) {
+      const slug = (s) => s.toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '');
+      window.Places.load().then(() => {
+        const p = (places.rows || []).find((r) => r.type === 2 && r.region[3] === obl && slug(r.en) === param);
+        // Fill it only if the buyer hasn't started typing a place meanwhile
+        if (p && !selectedPlace && !placeInput.value) combo.choose(p);
+        else renderHint();
+      });
     }
     renderHint();
   })();

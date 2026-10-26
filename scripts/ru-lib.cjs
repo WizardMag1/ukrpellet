@@ -20,6 +20,7 @@ const PAGES = [
   { file: 'pelety-pavlohrad.html', slug: 'pelety-pavlohrad' },
   { file: 'pelety-zaporizhzhia.html', slug: 'pelety-zaporizhzhia' },
   { file: 'pelety-kyiv.html', slug: 'pelety-kyiv' },
+  ...require('./data/cities.cjs').cities.map((c) => ({ file: `pelety-${c.slug}.html`, slug: `pelety-${c.slug}` })),
 ];
 
 const CYR = /[А-Яа-яІіЇїЄєҐґ]/;
