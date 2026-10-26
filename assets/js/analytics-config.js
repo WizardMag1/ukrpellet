@@ -27,8 +27,8 @@ window.APP_CONFIG = {
   // 5. Prices, UAH per tonne, ex-warehouse Nikopol, without VAT (ПДВ) (set by the owner, Sep 2026).
   // Keep the JSON-LD "lowPrice"/"highPrice"/"priceRange" and the FAQ price answers on the pages in step.
   PRICING: {
-    pine_uah_per_t: 15000,
-    acacia_elm_uah_per_t: 15500
+    pine_uah_per_t: 18500,
+    acacia_elm_uah_per_t: 18500
   },
 
   // 5b. Delivery cost model used by the calculator: fuel + driver pay, own trucks.
