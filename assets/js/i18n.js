@@ -43,8 +43,9 @@ const translations = {
     "hero.corp_badge": "Екологічне біопаливо європейського стандарту",
     "hero.corp_title": "Купити деревні пелети від виробника — завод у Нікополі",
     "hero.corp_desc": "ТОВ «УКРЕКОПЕЛЕТА» (UkrEcoPelleta) — надійний український виробник твердого біопалива. Сучасні автоматизовані лінії гранулювання у м. Нікополь, стабільні оптові поставки, суворий контроль якості та енергонезалежність для вашого бізнесу.",
-    "hero.corp_btn_catalog": "Каталог пелет та оптові умови",
-    "hero.corp_btn_about": "Про наші потужності",
+    "hero.corp_btn_calc": "Розрахувати ціну з доставкою",
+    "bar.call": "Подзвонити",
+    "bar.quote": "Ціна з доставкою",
 
     // Hero Pellets Landing (pellets.html)
     "hero.pellet_badge": "Спеціальні умови для Дніпропетровської області",
@@ -336,8 +337,9 @@ const translations = {
     "hero.corp_badge": "Eco-friendly Biofuel of European Standard",
     "hero.corp_title": "Buy Wood Pellets Direct from the Manufacturer — Nikopol Plant",
     "hero.corp_desc": "UKREKOPELLET, LLC (UkrEcoPelleta) is a reliable Ukrainian solid biofuel producer. Automated pelletizing lines in Nikopol, steady wholesale supplies, strict quality lab control, and energy independence for your enterprise.",
-    "hero.corp_btn_catalog": "Wood Pellet Catalog & Wholesale Terms",
-    "hero.corp_btn_about": "Our Production Capacity",
+    "hero.corp_btn_calc": "Get a price with delivery",
+    "bar.call": "Call us",
+    "bar.quote": "Price with delivery",
 
     // Hero Pellets Landing (pellets.html)
     "hero.pellet_badge": "Direct Wholesale for Dnipro Region & Ukraine",
