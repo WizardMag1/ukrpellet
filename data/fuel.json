@@ -1,11 +1,14 @@
 {
   "diesel_uah_per_l": 104.42,
   "effective_date": "2026-11-10",
-  "checked_date": "2026-11-10",
+  "checked_date": "2026-11-11",
   "source": "index.minfin.com.ua/markets/fuel/ (середня ціна ДП на АЗС України)",
   "market": {
-    "price": 104.42,
-    "date": "2026-11-10"
+    "price": 104.31,
+    "date": "2026-11-11"
   },
-  "pending_decrease": null
+  "pending_decrease": {
+    "since": "2026-11-11",
+    "highest_seen": 104.31
+  }
 }
